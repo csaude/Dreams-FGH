@@ -1,0 +1,6 @@
+
+Options +FollowSymLinks 
+RewriteEngine on
+RewriteCond %{HTTP_HOST} .
+RewriteCond %{HTTP_HOST} !^backend\.com
+RewriteRule (.*) .././backend/web/index.php$1 [R=301,L]

@@ -1,0 +1,141 @@
+a:8:{s:6:"config";a:5:{s:10:"phpVersion";s:6:"5.6.30";s:10:"yiiVersion";s:5:"2.0.8";s:11:"application";a:4:{s:3:"yii";s:5:"2.0.8";s:4:"name";s:14:"My Application";s:3:"env";s:4:"prod";s:5:"debug";b:0;}s:3:"php";a:4:{s:7:"version";s:6:"5.6.30";s:6:"xdebug";b:0;s:3:"apc";b:0;s:8:"memcache";b:0;}s:10:"extensions";a:38:{s:35:"2amigos/yii2-dosamigos-asset-bundle";a:3:{s:4:"name";s:35:"2amigos/yii2-dosamigos-asset-bundle";s:7:"version";s:7:"0.1.0.0";s:5:"alias";a:1:{s:17:"@dosamigos/assets";s:88:"/var/www/vhosts/dreams.co.mz/app.dreams.co.mz/vendor/2amigos/yii2-dosamigos-asset-bundle";}}s:32:"2amigos/yii2-table-export-widget";a:3:{s:4:"name";s:32:"2amigos/yii2-table-export-widget";s:7:"version";s:7:"0.1.0.0";s:5:"alias";a:1:{s:22:"@dosamigos/tableexport";s:85:"/var/www/vhosts/dreams.co.mz/app.dreams.co.mz/vendor/2amigos/yii2-table-export-widget";}}s:18:"kartik-v/yii2-mpdf";a:3:{s:4:"name";s:18:"kartik-v/yii2-mpdf";s:7:"version";s:7:"1.0.0.0";s:5:"alias";a:1:{s:12:"@kartik/mpdf";s:71:"/var/www/vhosts/dreams.co.mz/app.dreams.co.mz/vendor/kartik-v/yii2-mpdf";}}s:28:"arturoliveira/yii2-excelview";a:3:{s:4:"name";s:28:"arturoliveira/yii2-excelview";s:7:"version";s:7:"1.0.0.0";s:5:"alias";a:1:{s:14:"@arturoliveira";s:81:"/var/www/vhosts/dreams.co.mz/app.dreams.co.mz/vendor/arturoliveira/yii2-excelview";}}s:18:"dektrium/yii2-user";a:4:{s:4:"name";s:18:"dektrium/yii2-user";s:7:"version";s:11:"9999999-dev";s:5:"alias";a:1:{s:14:"@dektrium/user";s:71:"/var/www/vhosts/dreams.co.mz/app.dreams.co.mz/vendor/dektrium/yii2-user";}s:9:"bootstrap";s:23:"dektrium\user\Bootstrap";}s:34:"miloschuman/yii2-highcharts-widget";a:3:{s:4:"name";s:34:"miloschuman/yii2-highcharts-widget";s:7:"version";s:11:"9999999-dev";s:5:"alias";a:1:{s:23:"@miloschuman/highcharts";s:91:"/var/www/vhosts/dreams.co.mz/app.dreams.co.mz/vendor/miloschuman/yii2-highcharts-widget/src";}}s:20:"yiisoft/yii2-mongodb";a:3:{s:4:"name";s:20:"yiisoft/yii2-mongodb";s:7:"version";s:7:"2.0.1.0";s:5:"alias";a:1:{s:12:"@yii/mongodb";s:73:"/var/www/vhosts/dreams.co.mz/app.dreams.co.mz/vendor/yiisoft/yii2-mongodb";}}s:24:"yiisoft/yii2-swiftmailer";a:3:{s:4:"name";s:24:"yiisoft/yii2-swiftmailer";s:7:"version";s:7:"2.0.5.0";s:5:"alias";a:1:{s:16:"@yii/swiftmailer";s:77:"/var/www/vhosts/dreams.co.mz/app.dreams.co.mz/vendor/yiisoft/yii2-swiftmailer";}}s:22:"yiisoft/yii2-bootstrap";a:3:{s:4:"name";s:22:"yiisoft/yii2-bootstrap";s:7:"version";s:7:"2.0.6.0";s:5:"alias";a:1:{s:14:"@yii/bootstrap";s:75:"/var/www/vhosts/dreams.co.mz/app.dreams.co.mz/vendor/yiisoft/yii2-bootstrap";}}s:25:"kartik-v/yii2-krajee-base";a:3:{s:4:"name";s:25:"kartik-v/yii2-krajee-base";s:7:"version";s:7:"1.8.5.0";s:5:"alias";a:1:{s:12:"@kartik/base";s:78:"/var/www/vhosts/dreams.co.mz/app.dreams.co.mz/vendor/kartik-v/yii2-krajee-base";}}s:18:"kartik-v/yii2-grid";a:3:{s:4:"name";s:18:"kartik-v/yii2-grid";s:7:"version";s:7:"3.1.1.0";s:5:"alias";a:1:{s:12:"@kartik/grid";s:71:"/var/www/vhosts/dreams.co.mz/app.dreams.co.mz/vendor/kartik-v/yii2-grid";}}s:24:"yiisoft/yii2-codeception";a:3:{s:4:"name";s:24:"yiisoft/yii2-codeception";s:7:"version";s:7:"2.0.5.0";s:5:"alias";a:1:{s:16:"@yii/codeception";s:77:"/var/www/vhosts/dreams.co.mz/app.dreams.co.mz/vendor/yiisoft/yii2-codeception";}}s:18:"yiisoft/yii2-debug";a:3:{s:4:"name";s:18:"yiisoft/yii2-debug";s:7:"version";s:7:"2.0.6.0";s:5:"alias";a:1:{s:10:"@yii/debug";s:71:"/var/www/vhosts/dreams.co.mz/app.dreams.co.mz/vendor/yiisoft/yii2-debug";}}s:16:"yiisoft/yii2-gii";a:3:{s:4:"name";s:16:"yiisoft/yii2-gii";s:7:"version";s:7:"2.0.5.0";s:5:"alias";a:1:{s:8:"@yii/gii";s:69:"/var/www/vhosts/dreams.co.mz/app.dreams.co.mz/vendor/yiisoft/yii2-gii";}}s:18:"yiisoft/yii2-faker";a:3:{s:4:"name";s:18:"yiisoft/yii2-faker";s:7:"version";s:7:"2.0.3.0";s:5:"alias";a:1:{s:10:"@yii/faker";s:71:"/var/www/vhosts/dreams.co.mz/app.dreams.co.mz/vendor/yiisoft/yii2-faker";}}s:23:"yiisoft/yii2-authclient";a:3:{s:4:"name";s:23:"yiisoft/yii2-authclient";s:7:"version";s:7:"2.0.5.0";s:5:"alias";a:1:{s:15:"@yii/authclient";s:76:"/var/www/vhosts/dreams.co.mz/app.dreams.co.mz/vendor/yiisoft/yii2-authclient";}}s:16:"yiisoft/yii2-jui";a:3:{s:4:"name";s:16:"yiisoft/yii2-jui";s:7:"version";s:7:"2.0.5.0";s:5:"alias";a:1:{s:8:"@yii/jui";s:69:"/var/www/vhosts/dreams.co.mz/app.dreams.co.mz/vendor/yiisoft/yii2-jui";}}s:30:"kartik-v/yii2-widget-typeahead";a:3:{s:4:"name";s:30:"kartik-v/yii2-widget-typeahead";s:7:"version";s:7:"1.0.1.0";s:5:"alias";a:1:{s:17:"@kartik/typeahead";s:83:"/var/www/vhosts/dreams.co.mz/app.dreams.co.mz/vendor/kartik-v/yii2-widget-typeahead";}}s:30:"kartik-v/yii2-widget-touchspin";a:3:{s:4:"name";s:30:"kartik-v/yii2-widget-touchspin";s:7:"version";s:7:"1.2.1.0";s:5:"alias";a:1:{s:17:"@kartik/touchspin";s:83:"/var/www/vhosts/dreams.co.mz/app.dreams.co.mz/vendor/kartik-v/yii2-widget-touchspin";}}s:31:"kartik-v/yii2-widget-timepicker";a:3:{s:4:"name";s:31:"kartik-v/yii2-widget-timepicker";s:7:"version";s:7:"1.0.1.0";s:5:"alias";a:1:{s:12:"@kartik/time";s:84:"/var/www/vhosts/dreams.co.mz/app.dreams.co.mz/vendor/kartik-v/yii2-widget-timepicker";}}s:32:"kartik-v/yii2-widget-switchinput";a:3:{s:4:"name";s:32:"kartik-v/yii2-widget-switchinput";s:7:"version";s:7:"1.3.1.0";s:5:"alias";a:1:{s:19:"@kartik/switchinput";s:85:"/var/www/vhosts/dreams.co.mz/app.dreams.co.mz/vendor/kartik-v/yii2-widget-switchinput";}}s:28:"kartik-v/yii2-widget-spinner";a:3:{s:4:"name";s:28:"kartik-v/yii2-widget-spinner";s:7:"version";s:7:"1.0.0.0";s:5:"alias";a:1:{s:15:"@kartik/spinner";s:81:"/var/www/vhosts/dreams.co.mz/app.dreams.co.mz/vendor/kartik-v/yii2-widget-spinner";}}s:28:"kartik-v/yii2-widget-sidenav";a:3:{s:4:"name";s:28:"kartik-v/yii2-widget-sidenav";s:7:"version";s:7:"1.0.0.0";s:5:"alias";a:1:{s:15:"@kartik/sidenav";s:81:"/var/www/vhosts/dreams.co.mz/app.dreams.co.mz/vendor/kartik-v/yii2-widget-sidenav";}}s:28:"kartik-v/yii2-widget-select2";a:3:{s:4:"name";s:28:"kartik-v/yii2-widget-select2";s:7:"version";s:7:"2.0.8.0";s:5:"alias";a:1:{s:15:"@kartik/select2";s:81:"/var/www/vhosts/dreams.co.mz/app.dreams.co.mz/vendor/kartik-v/yii2-widget-select2";}}s:27:"kartik-v/yii2-widget-rating";a:3:{s:4:"name";s:27:"kartik-v/yii2-widget-rating";s:7:"version";s:7:"1.0.2.0";s:5:"alias";a:1:{s:14:"@kartik/rating";s:80:"/var/www/vhosts/dreams.co.mz/app.dreams.co.mz/vendor/kartik-v/yii2-widget-rating";}}s:31:"kartik-v/yii2-widget-rangeinput";a:3:{s:4:"name";s:31:"kartik-v/yii2-widget-rangeinput";s:7:"version";s:7:"1.0.1.0";s:5:"alias";a:1:{s:13:"@kartik/range";s:84:"/var/www/vhosts/dreams.co.mz/app.dreams.co.mz/vendor/kartik-v/yii2-widget-rangeinput";}}s:26:"kartik-v/yii2-widget-growl";a:3:{s:4:"name";s:26:"kartik-v/yii2-widget-growl";s:7:"version";s:7:"1.1.1.0";s:5:"alias";a:1:{s:13:"@kartik/growl";s:79:"/var/www/vhosts/dreams.co.mz/app.dreams.co.mz/vendor/kartik-v/yii2-widget-growl";}}s:30:"kartik-v/yii2-widget-fileinput";a:3:{s:4:"name";s:30:"kartik-v/yii2-widget-fileinput";s:7:"version";s:7:"1.0.4.0";s:5:"alias";a:1:{s:12:"@kartik/file";s:83:"/var/www/vhosts/dreams.co.mz/app.dreams.co.mz/vendor/kartik-v/yii2-widget-fileinput";}}s:28:"kartik-v/yii2-widget-depdrop";a:3:{s:4:"name";s:28:"kartik-v/yii2-widget-depdrop";s:7:"version";s:7:"1.0.4.0";s:5:"alias";a:1:{s:15:"@kartik/depdrop";s:81:"/var/www/vhosts/dreams.co.mz/app.dreams.co.mz/vendor/kartik-v/yii2-widget-depdrop";}}s:35:"kartik-v/yii2-widget-datetimepicker";a:3:{s:4:"name";s:35:"kartik-v/yii2-widget-datetimepicker";s:7:"version";s:7:"1.4.2.0";s:5:"alias";a:1:{s:16:"@kartik/datetime";s:88:"/var/www/vhosts/dreams.co.mz/app.dreams.co.mz/vendor/kartik-v/yii2-widget-datetimepicker";}}s:31:"kartik-v/yii2-widget-datepicker";a:3:{s:4:"name";s:31:"kartik-v/yii2-widget-datepicker";s:7:"version";s:7:"1.3.9.0";s:5:"alias";a:1:{s:12:"@kartik/date";s:84:"/var/www/vhosts/dreams.co.mz/app.dreams.co.mz/vendor/kartik-v/yii2-widget-datepicker";}}s:31:"kartik-v/yii2-widget-colorinput";a:3:{s:4:"name";s:31:"kartik-v/yii2-widget-colorinput";s:7:"version";s:7:"1.0.3.0";s:5:"alias";a:1:{s:13:"@kartik/color";s:84:"/var/www/vhosts/dreams.co.mz/app.dreams.co.mz/vendor/kartik-v/yii2-widget-colorinput";}}s:26:"kartik-v/yii2-widget-alert";a:3:{s:4:"name";s:26:"kartik-v/yii2-widget-alert";s:7:"version";s:7:"1.1.0.0";s:5:"alias";a:1:{s:13:"@kartik/alert";s:79:"/var/www/vhosts/dreams.co.mz/app.dreams.co.mz/vendor/kartik-v/yii2-widget-alert";}}s:26:"kartik-v/yii2-widget-affix";a:3:{s:4:"name";s:26:"kartik-v/yii2-widget-affix";s:7:"version";s:7:"1.0.0.0";s:5:"alias";a:1:{s:13:"@kartik/affix";s:79:"/var/www/vhosts/dreams.co.mz/app.dreams.co.mz/vendor/kartik-v/yii2-widget-affix";}}s:31:"kartik-v/yii2-widget-activeform";a:3:{s:4:"name";s:31:"kartik-v/yii2-widget-activeform";s:7:"version";s:7:"1.4.7.0";s:5:"alias";a:1:{s:12:"@kartik/form";s:84:"/var/www/vhosts/dreams.co.mz/app.dreams.co.mz/vendor/kartik-v/yii2-widget-activeform";}}s:21:"kartik-v/yii2-widgets";a:3:{s:4:"name";s:21:"kartik-v/yii2-widgets";s:7:"version";s:7:"3.4.0.0";s:5:"alias";a:1:{s:15:"@kartik/widgets";s:74:"/var/www/vhosts/dreams.co.mz/app.dreams.co.mz/vendor/kartik-v/yii2-widgets";}}s:18:"mdmsoft/yii2-admin";a:3:{s:4:"name";s:18:"mdmsoft/yii2-admin";s:7:"version";s:11:"9999999-dev";s:5:"alias";a:1:{s:10:"@mdm/admin";s:71:"/var/www/vhosts/dreams.co.mz/app.dreams.co.mz/vendor/mdmsoft/yii2-admin";}}s:25:"kartik-v/yii2-datecontrol";a:3:{s:4:"name";s:25:"kartik-v/yii2-datecontrol";s:7:"version";s:11:"9999999-dev";s:5:"alias";a:1:{s:19:"@kartik/datecontrol";s:78:"/var/www/vhosts/dreams.co.mz/app.dreams.co.mz/vendor/kartik-v/yii2-datecontrol";}}}}s:7:"request";a:14:{s:7:"flashes";a:0:{}s:10:"statusCode";i:200;s:14:"requestHeaders";a:13:{s:6:"accept";s:3:"*/*";s:12:"x-csrf-token";s:56:"ODI3djQ5eGtpV1ksfX8BWlJcTR0FXyspXVxmBgFUSw9vc0AGdWw7Hg==";s:16:"x-requested-with";s:14:"XMLHttpRequest";s:7:"referer";s:74:"https://app.dreams.co.mz/backend/web/index.php/beneficiarios/create.dreams";s:15:"accept-language";s:5:"pt-PT";s:15:"accept-encoding";s:13:"gzip, deflate";s:10:"user-agent";s:61:"Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko";s:4:"host";s:16:"app.dreams.co.mz";s:14:"content-length";s:1:"0";s:3:"dnt";s:1:"1";s:10:"connection";s:10:"Keep-Alive";s:13:"cache-control";s:8:"no-cache";s:6:"cookie";s:484:"_ga=GA1.3.300509682.1499423360; _gid=GA1.3.932824936.1500066266; PHPSESSID=et5jtr8cgi6a6e6om9p640ie96; _csrf=3617ea13fcb07bdc9351a586e8070a13333c61d490fac7b294d575bcc1e10cf5a%3A2%3A%7Bi%3A0%3Bs%3A5%3A%22_csrf%22%3Bi%3A1%3Bs%3A32%3A%22QenZIFy1jnzk1fSBenQp5m3dWAwpAUCu%22%3B%7D; _identity=eb71f58f48ec85a01dc59827eaee0e8f944183879672efe67574de572f85722ea%3A2%3A%7Bi%3A0%3Bs%3A9%3A%22_identity%22%3Bi%3A1%3Bs%3A47%3A%22%5B54%2C%229MKCe2MYR04sx03Ewo32j-lvg-YNu2JM%22%2C2592000%5D%22%3B%7D";}s:15:"responseHeaders";a:6:{s:12:"X-Powered-By";s:10:"PHP/5.6.30";s:7:"Expires";s:29:"Thu, 19 Nov 1981 08:52:00 GMT";s:13:"Cache-Control";s:62:"no-store, no-cache, must-revalidate, post-check=0, pre-check=0";s:6:"Pragma";s:8:"no-cache";s:12:"Content-Type";s:24:"text/html; charset=UTF-8";s:10:"Set-Cookie";s:281:"_identity=eb71f58f48ec85a01dc59827eaee0e8f944183879672efe67574de572f85722ea%3A2%3A%7Bi%3A0%3Bs%3A9%3A%22_identity%22%3Bi%3A1%3Bs%3A47%3A%22%5B54%2C%229MKCe2MYR04sx03Ewo32j-lvg-YNu2JM%22%2C2592000%5D%22%3B%7D; expires=Sun, 13-Aug-2017 12:17:18 GMT; Max-Age=2592000; path=/; httponly";}s:5:"route";s:25:"beneficiarios/localidades";s:6:"action";s:64:"backend\controllers\BeneficiariosController::actionLocalidades()";s:12:"actionParams";a:1:{i:0;s:1:"1";}s:11:"requestBody";a:0:{}s:6:"SERVER";a:40:{s:4:"USER";s:8:"dreamsco";s:4:"HOME";s:28:"/var/www/vhosts/dreams.co.mz";s:9:"FCGI_ROLE";s:9:"RESPONDER";s:9:"PATH_INFO";s:33:"/beneficiarios/localidades.dreams";s:15:"SCRIPT_FILENAME";s:67:"/var/www/vhosts/dreams.co.mz/app.dreams.co.mz/backend/web/index.php";s:12:"QUERY_STRING";s:4:"id=1";s:14:"REQUEST_METHOD";s:4:"POST";s:12:"CONTENT_TYPE";s:0:"";s:14:"CONTENT_LENGTH";s:1:"0";s:11:"SCRIPT_NAME";s:22:"/backend/web/index.php";s:11:"REQUEST_URI";s:60:"/backend/web/index.php/beneficiarios/localidades.dreams?id=1";s:12:"DOCUMENT_URI";s:55:"/backend/web/index.php/beneficiarios/localidades.dreams";s:13:"DOCUMENT_ROOT";s:45:"/var/www/vhosts/dreams.co.mz/app.dreams.co.mz";s:15:"SERVER_PROTOCOL";s:8:"HTTP/1.1";s:14:"REQUEST_SCHEME";s:5:"https";s:5:"HTTPS";s:2:"on";s:17:"GATEWAY_INTERFACE";s:7:"CGI/1.1";s:15:"SERVER_SOFTWARE";s:13:"nginx/1.11.10";s:11:"REMOTE_ADDR";s:14:"197.219.102.18";s:11:"REMOTE_PORT";s:5:"52329";s:11:"SERVER_ADDR";s:14:"196.10.148.165";s:11:"SERVER_PORT";s:3:"443";s:11:"SERVER_NAME";s:16:"app.dreams.co.mz";s:15:"REDIRECT_STATUS";s:3:"200";s:11:"HTTP_ACCEPT";s:3:"*/*";s:17:"HTTP_X_CSRF_TOKEN";s:56:"ODI3djQ5eGtpV1ksfX8BWlJcTR0FXyspXVxmBgFUSw9vc0AGdWw7Hg==";s:21:"HTTP_X_REQUESTED_WITH";s:14:"XMLHttpRequest";s:12:"HTTP_REFERER";s:74:"https://app.dreams.co.mz/backend/web/index.php/beneficiarios/create.dreams";s:20:"HTTP_ACCEPT_LANGUAGE";s:5:"pt-PT";s:20:"HTTP_ACCEPT_ENCODING";s:13:"gzip, deflate";s:15:"HTTP_USER_AGENT";s:61:"Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko";s:9:"HTTP_HOST";s:16:"app.dreams.co.mz";s:19:"HTTP_CONTENT_LENGTH";s:1:"0";s:8:"HTTP_DNT";s:1:"1";s:15:"HTTP_CONNECTION";s:10:"Keep-Alive";s:18:"HTTP_CACHE_CONTROL";s:8:"no-cache";s:11:"HTTP_COOKIE";s:484:"_ga=GA1.3.300509682.1499423360; _gid=GA1.3.932824936.1500066266; PHPSESSID=et5jtr8cgi6a6e6om9p640ie96; _csrf=3617ea13fcb07bdc9351a586e8070a13333c61d490fac7b294d575bcc1e10cf5a%3A2%3A%7Bi%3A0%3Bs%3A5%3A%22_csrf%22%3Bi%3A1%3Bs%3A32%3A%22QenZIFy1jnzk1fSBenQp5m3dWAwpAUCu%22%3B%7D; _identity=eb71f58f48ec85a01dc59827eaee0e8f944183879672efe67574de572f85722ea%3A2%3A%7Bi%3A0%3Bs%3A9%3A%22_identity%22%3Bi%3A1%3Bs%3A47%3A%22%5B54%2C%229MKCe2MYR04sx03Ewo32j-lvg-YNu2JM%22%2C2592000%5D%22%3B%7D";s:8:"PHP_SELF";s:55:"/backend/web/index.php/beneficiarios/localidades.dreams";s:18:"REQUEST_TIME_FLOAT";d:1500034637.991653;s:12:"REQUEST_TIME";i:1500034637;}s:3:"GET";a:1:{s:2:"id";s:1:"1";}s:4:"POST";a:0:{}s:6:"COOKIE";a:5:{s:3:"_ga";s:26:"GA1.3.300509682.1499423360";s:4:"_gid";s:26:"GA1.3.932824936.1500066266";s:9:"PHPSESSID";s:26:"et5jtr8cgi6a6e6om9p640ie96";s:5:"_csrf";s:130:"3617ea13fcb07bdc9351a586e8070a13333c61d490fac7b294d575bcc1e10cf5a:2:{i:0;s:5:"_csrf";i:1;s:32:"QenZIFy1jnzk1fSBenQp5m3dWAwpAUCu";}";s:9:"_identity";s:149:"eb71f58f48ec85a01dc59827eaee0e8f944183879672efe67574de572f85722ea:2:{i:0;s:9:"_identity";i:1;s:47:"[54,"9MKCe2MYR04sx03Ewo32j-lvg-YNu2JM",2592000]";}";}s:5:"FILES";a:0:{}s:7:"SESSION";a:3:{s:7:"__flash";a:0:{}s:11:"__returnUrl";s:13:"/backend/web/";s:4:"__id";i:54;}}s:3:"log";a:1:{s:8:"messages";a:9:{i:0;a:5:{i:0;s:15:"Session started";i:1;i:4;i:2;s:21:"yii\web\Session::open";i:3;d:1500034638.0439861;i:4;a:0:{}}i:1;a:5:{i:0;s:29:"SHOW FULL COLUMNS FROM `user`";i:1;i:4;i:2;s:21:"yii\db\Command::query";i:3;d:1500034638.0481141;i:4;a:0:{}}i:2;a:5:{i:0;s:63:"Opening DB connection: mysql:host=localhost;dbname=dreamsco_app";i:1;i:4;i:2;s:23:"yii\db\Connection::open";i:3;d:1500034638.048135;i:4;a:0:{}}i:7;a:5:{i:0;s:595:"SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'user' AND kcu.table_name = 'user'";i:1;i:4;i:2;s:21:"yii\db\Command::query";i:3;d:1500034638.0509889;i:4;a:0:{}}i:10;a:5:{i:0;s:34:"SELECT * FROM `user` WHERE `id`=54";i:1;i:4;i:2;s:21:"yii\db\Command::query";i:3;d:1500034638.0545311;i:4;a:0:{}}i:13;a:5:{i:0;s:70:"SELECT COUNT(*) FROM `app_dream_localidades` WHERE `c_distrito_id`='1'";i:1;i:4;i:2;s:21:"yii\db\Command::query";i:3;d:1500034638.060564;i:4;a:0:{}}i:16;a:5:{i:0;s:63:"SELECT * FROM `app_dream_localidades` WHERE `c_distrito_id`='1'";i:1;i:4;i:2;s:21:"yii\db\Command::query";i:3;d:1500034638.060966;i:4;a:0:{}}i:19;a:5:{i:0;s:46:"SHOW FULL COLUMNS FROM `app_dream_localidades`";i:1;i:4;i:2;s:21:"yii\db\Command::query";i:3;d:1500034638.0612979;i:4;a:0:{}}i:22;a:5:{i:0;s:629:"SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'app_dream_localidades' AND kcu.table_name = 'app_dream_localidades'";i:1;i:4;i:2;s:21:"yii\db\Command::query";i:3;d:1500034638.0623331;i:4;a:0:{}}}}s:9:"profiling";a:3:{s:6:"memory";i:8850096;s:4:"time";d:0.067188024520874023;s:8:"messages";a:16:{i:3;a:5:{i:0;s:63:"Opening DB connection: mysql:host=localhost;dbname=dreamsco_app";i:1;i:80;i:2;s:23:"yii\db\Connection::open";i:3;d:1500034638.0481441;i:4;a:0:{}}i:4;a:5:{i:0;s:63:"Opening DB connection: mysql:host=localhost;dbname=dreamsco_app";i:1;i:96;i:2;s:23:"yii\db\Connection::open";i:3;d:1500034638.048682;i:4;a:0:{}}i:5;a:5:{i:0;s:29:"SHOW FULL COLUMNS FROM `user`";i:1;i:80;i:2;s:21:"yii\db\Command::query";i:3;d:1500034638.0486979;i:4;a:0:{}}i:6;a:5:{i:0;s:29:"SHOW FULL COLUMNS FROM `user`";i:1;i:96;i:2;s:21:"yii\db\Command::query";i:3;d:1500034638.049685;i:4;a:0:{}}i:8;a:5:{i:0;s:595:"SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'user' AND kcu.table_name = 'user'";i:1;i:80;i:2;s:21:"yii\db\Command::query";i:3;d:1500034638.0510099;i:4;a:0:{}}i:9;a:5:{i:0;s:595:"SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'user' AND kcu.table_name = 'user'";i:1;i:96;i:2;s:21:"yii\db\Command::query";i:3;d:1500034638.051435;i:4;a:0:{}}i:11;a:5:{i:0;s:34:"SELECT * FROM `user` WHERE `id`=54";i:1;i:80;i:2;s:21:"yii\db\Command::query";i:3;d:1500034638.0545499;i:4;a:0:{}}i:12;a:5:{i:0;s:34:"SELECT * FROM `user` WHERE `id`=54";i:1;i:96;i:2;s:21:"yii\db\Command::query";i:3;d:1500034638.0548389;i:4;a:0:{}}i:14;a:5:{i:0;s:70:"SELECT COUNT(*) FROM `app_dream_localidades` WHERE `c_distrito_id`='1'";i:1;i:80;i:2;s:21:"yii\db\Command::query";i:3;d:1500034638.0605831;i:4;a:0:{}}i:15;a:5:{i:0;s:70:"SELECT COUNT(*) FROM `app_dream_localidades` WHERE `c_distrito_id`='1'";i:1;i:96;i:2;s:21:"yii\db\Command::query";i:3;d:1500034638.060822;i:4;a:0:{}}i:17;a:5:{i:0;s:63:"SELECT * FROM `app_dream_localidades` WHERE `c_distrito_id`='1'";i:1;i:80;i:2;s:21:"yii\db\Command::query";i:3;d:1500034638.0609839;i:4;a:0:{}}i:18;a:5:{i:0;s:63:"SELECT * FROM `app_dream_localidades` WHERE `c_distrito_id`='1'";i:1;i:96;i:2;s:21:"yii\db\Command::query";i:3;d:1500034638.0612309;i:4;a:0:{}}i:20;a:5:{i:0;s:46:"SHOW FULL COLUMNS FROM `app_dream_localidades`";i:1;i:80;i:2;s:21:"yii\db\Command::query";i:3;d:1500034638.061311;i:4;a:0:{}}i:21;a:5:{i:0;s:46:"SHOW FULL COLUMNS FROM `app_dream_localidades`";i:1;i:96;i:2;s:21:"yii\db\Command::query";i:3;d:1500034638.0619421;i:4;a:0:{}}i:23;a:5:{i:0;s:629:"SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'app_dream_localidades' AND kcu.table_name = 'app_dream_localidades'";i:1;i:80;i:2;s:21:"yii\db\Command::query";i:3;d:1500034638.0623529;i:4;a:0:{}}i:24;a:5:{i:0;s:629:"SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'app_dream_localidades' AND kcu.table_name = 'app_dream_localidades'";i:1;i:96;i:2;s:21:"yii\db\Command::query";i:3;d:1500034638.0627279;i:4;a:0:{}}}}s:2:"db";a:1:{s:8:"messages";a:14:{i:5;a:5:{i:0;s:29:"SHOW FULL COLUMNS FROM `user`";i:1;i:80;i:2;s:21:"yii\db\Command::query";i:3;d:1500034638.0486979;i:4;a:0:{}}i:6;a:5:{i:0;s:29:"SHOW FULL COLUMNS FROM `user`";i:1;i:96;i:2;s:21:"yii\db\Command::query";i:3;d:1500034638.049685;i:4;a:0:{}}i:8;a:5:{i:0;s:595:"SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'user' AND kcu.table_name = 'user'";i:1;i:80;i:2;s:21:"yii\db\Command::query";i:3;d:1500034638.0510099;i:4;a:0:{}}i:9;a:5:{i:0;s:595:"SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'user' AND kcu.table_name = 'user'";i:1;i:96;i:2;s:21:"yii\db\Command::query";i:3;d:1500034638.051435;i:4;a:0:{}}i:11;a:5:{i:0;s:34:"SELECT * FROM `user` WHERE `id`=54";i:1;i:80;i:2;s:21:"yii\db\Command::query";i:3;d:1500034638.0545499;i:4;a:0:{}}i:12;a:5:{i:0;s:34:"SELECT * FROM `user` WHERE `id`=54";i:1;i:96;i:2;s:21:"yii\db\Command::query";i:3;d:1500034638.0548389;i:4;a:0:{}}i:14;a:5:{i:0;s:70:"SELECT COUNT(*) FROM `app_dream_localidades` WHERE `c_distrito_id`='1'";i:1;i:80;i:2;s:21:"yii\db\Command::query";i:3;d:1500034638.0605831;i:4;a:0:{}}i:15;a:5:{i:0;s:70:"SELECT COUNT(*) FROM `app_dream_localidades` WHERE `c_distrito_id`='1'";i:1;i:96;i:2;s:21:"yii\db\Command::query";i:3;d:1500034638.060822;i:4;a:0:{}}i:17;a:5:{i:0;s:63:"SELECT * FROM `app_dream_localidades` WHERE `c_distrito_id`='1'";i:1;i:80;i:2;s:21:"yii\db\Command::query";i:3;d:1500034638.0609839;i:4;a:0:{}}i:18;a:5:{i:0;s:63:"SELECT * FROM `app_dream_localidades` WHERE `c_distrito_id`='1'";i:1;i:96;i:2;s:21:"yii\db\Command::query";i:3;d:1500034638.0612309;i:4;a:0:{}}i:20;a:5:{i:0;s:46:"SHOW FULL COLUMNS FROM `app_dream_localidades`";i:1;i:80;i:2;s:21:"yii\db\Command::query";i:3;d:1500034638.061311;i:4;a:0:{}}i:21;a:5:{i:0;s:46:"SHOW FULL COLUMNS FROM `app_dream_localidades`";i:1;i:96;i:2;s:21:"yii\db\Command::query";i:3;d:1500034638.0619421;i:4;a:0:{}}i:23;a:5:{i:0;s:629:"SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'app_dream_localidades' AND kcu.table_name = 'app_dream_localidades'";i:1;i:80;i:2;s:21:"yii\db\Command::query";i:3;d:1500034638.0623529;i:4;a:0:{}}i:24;a:5:{i:0;s:629:"SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'app_dream_localidades' AND kcu.table_name = 'app_dream_localidades'";i:1;i:96;i:2;s:21:"yii\db\Command::query";i:3;d:1500034638.0627279;i:4;a:0:{}}}}s:6:"assets";a:0:{}s:4:"mail";a:0:{}s:7:"summary";a:9:{s:3:"tag";s:13:"5968b64e08938";s:3:"url";s:84:"https://app.dreams.co.mz/backend/web/index.php/beneficiarios/localidades.dreams?id=1";s:4:"ajax";i:1;s:6:"method";s:4:"POST";s:2:"ip";s:14:"197.219.102.18";s:4:"time";i:1500034638;s:10:"statusCode";i:200;s:8:"sqlCount";i:7;s:9:"mailCount";i:0;}}
