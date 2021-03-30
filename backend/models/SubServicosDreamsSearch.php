@@ -18,7 +18,7 @@ class SubServicosDreamsSearch extends SubServicosDreams
     public function rules()
     {
         return [
-            [['id', 'servico_id', 'status', 'criado_por', 'actualizado_por'], 'integer'],
+            [['id', 'servico_id', 'status', 'criado_por', 'actualizado_por', 'mandatory'], 'integer'],
             [['name', 'description', 'criado_em', 'actualizado_em', 'user_location', 'user_location2'], 'safe'],
         ];
     }
@@ -70,6 +70,7 @@ class SubServicosDreamsSearch extends SubServicosDreams
 
         $query->andFilterWhere(['like', 'name', $this->name])
             ->andFilterWhere(['like', 'description', $this->description])
+            ->andFilterWhere(['like', 'mandatory', $this->mandatory])
             ->andFilterWhere(['like', 'user_location', $this->user_location])
             ->andFilterWhere(['like', 'user_location2', $this->user_location2]);
 
