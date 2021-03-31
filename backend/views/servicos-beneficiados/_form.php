@@ -182,7 +182,7 @@ if (isset($_REQUEST['ts'])&&($_REQUEST['ts']>0)) {echo Html::activeDropDownList(
           <?= Html::submitButton($model->isNewRecord ? 'Atender' : 'Actualizar', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     <?php } else { ?>
         <?= Html::submitButton($model->isNewRecord ? 'Salvar' : 'Actualizar', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
-		<button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+        <?= Html::a('<i class="glyphicon glyphicon-backward"></i>', ['index'], ['class' => 'btn btn-warning']) ?> 
 <?php }?> 
     </div>
 </div>
