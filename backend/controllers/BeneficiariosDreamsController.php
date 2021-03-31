@@ -145,12 +145,23 @@ class BeneficiariosDreamsController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $model->encarregado_educacao= explode(',', $model->encarregado_educacao); 
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['/beneficiarios/view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post()) ) {
+            if(!empty($_POST['BeneficiariosDreams']['encarregado_educacao'])) {
+                $model->encarregado_educacao= implode(", ",$_POST['BeneficiariosDreams']['encarregado_educacao']); 
+            } else {
+
+            }
+
+            if($model->save()) {
+                Yii::$app->db->close();
+                Yii::$app->db->open();
+                return $this->redirect(['/beneficiarios/view', 'id' => $model->id]);
+            }
         } else {
             return $this->render('/beneficiarios/update', [
-                'model' => $model,
+            'model' => $model,
             ]);
         }
     }

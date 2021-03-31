@@ -35,8 +35,8 @@ class SubServicosDreams extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['servico_id', 'status', 'criado_por', 'actualizado_por', 'oculto'], 'integer'],
-            [['servico_id','name', 'status'], 'required'],
+            [['servico_id', 'status', 'criado_por', 'actualizado_por', 'oculto', 'mandatory'], 'integer'],
+            [['servico_id','name', 'status', 'mandatory'], 'required'],
             [['criado_em', 'actualizado_em'], 'safe'],
             [['name', 'description'], 'string', 'max' => 250],
             [['user_location', 'user_location2'], 'string', 'max' => 100],
@@ -61,6 +61,7 @@ class SubServicosDreams extends \yii\db\ActiveRecord
             'user_location' => Yii::t('app', 'User Location'),
             'user_location2' => Yii::t('app', 'User Location2'),
             'oculto' => Yii::t('app', 'Oculto'),
+            'mandatory' => Yii::t('app', 'Mandatório'),
         ];
     }
     

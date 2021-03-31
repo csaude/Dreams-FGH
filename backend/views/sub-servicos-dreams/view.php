@@ -33,6 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'name',
             'description',
 			'status',
+            'mandatory',
           /*  'criado_por',
             'actualizado_por',
             'criado_em',

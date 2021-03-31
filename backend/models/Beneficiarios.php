@@ -95,11 +95,17 @@ class Beneficiarios extends \yii\db\ActiveRecord
             [['emp_firstname'], 'match', 'not'=>true, 'pattern' => '/[^a-zA-Z_-àáâãèéêìíòóõúçÀÁÂÃÈÉÊÌÍÒÓÕÚÇ]/', 'message'=>'Apenas letras são válidas!'],
             [['emp_lastname'], 'match', 'not'=>true, 'pattern' => '/[^a-zA-Z_-àáâãèéêìíòóõúçÀÁÂÃÈÉÊÌÍÒÓÕÚÇ\s]/', 'message'=>'Apenas letras são válidas!'],
             [['emp_number', 'parceiro_benificiario_id', 'membro_zona', 'membro_circulo', 'membro_celula', 'membro_localidade_id', 'emp_smoker', 'nation_code', 'emp_gender', 'emp_status', 'job_title_code', 'eeo_cat_code', 'work_station', 'termination_id', 'criado_por', 'actualizado_por','us_id','parceiro_id','via', 'vbg_tempo', 'vbg_vsex_tempo'], 'integer'],
+<<<<<<< HEAD
+		    [['emp_mobile'], 'integer', 'message' => 'O valor do {attribute} só pode ter números'],
+            [['idade_anos'], 'integer', 'min' => 10, 'message' => 'O valor da {attribute} não pode ser menor que 10'],
+            [['parceiro_id'],'integer','message'=>'O Valor {attribute} não existe'],
+=======
 		[['emp_mobile'], 'integer', 'message' => 'O valor do {attribute} só pode ter números'],
 [['idade_anos'], 'integer', 'min' => 9, 'message' => 'O valor da {attribute} não pode ser menor que 9'],
 [['parceiro_id'],'integer','message'=>'O Valor {attribute} não existe'],
+>>>>>>> master
             [['emp_birthday','district_code','emp_lastname','emp_firstname', 'emp_gender', 'provin_code','ponto_entrada','bairro_id','encarregado_educacao'], 'required'],
-            [['emp_dri_lice_exp_date', 'joined_date', 'criado_em', 'actualizado_em','deficiencia_tipo','estudante','estudante_classe','estudante_escola','gravida','filhos','deficiencia','house_sustainer','married_before','pregant_or_breastfeed','employed','tested_hiv','vbg_vitima_trafico','vbg_exploracao_sexual','vbg_migrante_trafico','vbg_sexual_activa','vbg_relacao_multipla','vbg_vitima','vbg_sex_worker'], 'safe'],
+            [['emp_dri_lice_exp_date', 'joined_date', 'criado_em', 'actualizado_em','deficiencia_tipo','estudante','estudante_classe','estudante_escola','gravida','filhos','deficiencia','house_sustainer','married_before','pregant_or_breastfeed','employed','tested_hiv','vbg_vitima_trafico','vbg_exploracao_sexual','vbg_migrante_trafico','vbg_sexual_activa','vbg_relacao_multipla','vbg_vitima','vbg_sex_worker','alcohol_drugs_use','sti_history'], 'safe'],
             [['member_id', 'membro_caratao_eleitor', 'membro_cargo_partido_id', 'emp_hm_telephone',  'emp_work_telephone', 'emp_work_email', 'emp_oth_email', 'bi_data_i', 'bi_data_f', 'nuit_data_i', 'nuit_data_f', 'user_location'], 'string', 'max' => 50],
             [['emp_lastname', 'emp_firstname', 'emp_middle_name', 'emp_nick_name', 'emp_ssn_num', 'emp_sin_num', 'emp_other_id', 'emp_dri_lice_num', 'emp_military_service', 'emp_street1', 'emp_street2', 'city_code', 'coun_code', 'provin_code', 'district_code'], 'string', 'max' => 100],
             [['emp_birthday','membro_data_admissao', 'emp_marital_status', 'emp_zipcode'], 'string', 'max' => 20],
@@ -140,13 +146,13 @@ public function getFullName() {
             'member_id' => 'Código do Beneficiário',
             'fullName' => Yii::t('app', 'Nome Completo'),
             'emp_lastname' => 'Apelido',
-	    'ponto_entrada'=> 'Ponto de Entrada',
+	        'ponto_entrada'=> 'Ponto de Entrada',
             'emp_firstname' => 'Nome',
             'emp_middle_name' => 'Nome do meio',
             'emp_nick_name' => 'Alcunha',
             'parceiro_id' =>'Parceiro Dreams',
           	'parceiro_benificiario_id' => 'NUI do Parceiro do Beneficiario',
-	    'via'=>'Segunda Via',
+	        'via'=>'Segunda Via',
             'idade_anos' =>'Idade (em anos)',
             'estudante' =>'Vai a Escola',
             'estudante_classe' =>'Classe',
@@ -154,7 +160,7 @@ public function getFullName() {
             'gravida' =>'Já esteve Gravida?',
             'filhos' =>'Tem Filhos?',
             'bairro_id' =>'Onde Mora', 
-	    'us_id'=>'Ponto de Entrada',
+	        'us_id'=>'Ponto de Entrada',
             'encarregado_educacao' =>'Com quem mora?',
             'deficiencia' =>'Tem Deficiência',
             'deficiencia_tipo'=>'Tipo de Deficiência',
@@ -232,6 +238,8 @@ public function getFullName() {
             'vbg_tempo' => 'Tempo: ',
             'vbg_vsex_tempo' => 'Tempo: ',
           	'parceiro_benificiario_id' => ' ',
+            'alcohol_drugs_use' => 'Uso de Álcool e Drogas',
+            'sti_history' => 'Histórico de ITS',
         ];
     }
 

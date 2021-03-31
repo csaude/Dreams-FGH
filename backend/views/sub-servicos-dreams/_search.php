@@ -25,6 +25,8 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'description') ?>
 
+    <?= $form->field($model, 'mandatory') ?>
+
     <?php // echo $form->field($model, 'criado_por') ?>
 
     <?php // echo $form->field($model, 'actualizado_por') ?>
