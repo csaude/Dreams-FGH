@@ -113,10 +113,9 @@ class BeneficiariosDreams extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-<<<<<<< HEAD
          [['emp_number', 'membro_zona', 'membro_circulo', 'membro_celula', 'membro_localidade_id', 'emp_smoker', 'nation_code', 'emp_gender', 'emp_status', 'job_title_code', 'eeo_cat_code', 'work_station', 'termination_id', 'criado_por', 'actualizado_por','us_id','parceiro_id','via'], 'integer'],
          [['emp_mobile'], 'integer', 'message' => 'O valor do {attribute} só pode ter números'],
-         [['idade_anos'], 'integer', 'min' => 10, 'message' => 'O valor da {attribute} não pode ser menor que 10'],
+         [['idade_anos'], 'integer', 'min' => 9, 'message' => 'O valor da {attribute} não pode ser menor que 9'],
          [['district_code','emp_lastname','emp_firstname', 'emp_gender', 'provin_code','ponto_entrada','bairro_id','encarregado_educacao'], 'required'],
          [['emp_dri_lice_exp_date', 'joined_date', 'criado_em', 'actualizado_em','deficiencia_tipo','estudante','estudante_classe','estudante_escola','gravida','filhos','deficiencia','house_sustainer','married_before','pregant_or_breastfeed','employed','tested_hiv','vbg_exploracao_sexual','vbg_migrante_trafico','vbg_sexual_activa','vbg_relacao_multipla','vbg_vitima','vbg_vitima_trafico','alcohol_drugs_use','sti_history'], 'safe'],
          [['member_id', 'membro_caratao_eleitor', 'membro_cargo_partido_id', 'emp_birthday', 'emp_hm_telephone',  'emp_work_telephone', 'emp_work_email', 'emp_oth_email', 'bi_data_i', 'bi_data_f', 'nuit_data_i', 'nuit_data_f', 'user_location'], 'string', 'max' => 50],
@@ -126,27 +125,6 @@ class BeneficiariosDreams extends \yii\db\ActiveRecord
          [['bi', 'nuit', 'passaporte', 'dire'], 'string', 'max' => 15],
          [['custom3', 'other_prof_info', 'custom7', 'custom8', 'custom9', 'custom10'], 'string', 'max' => 250],
          [['user_location2'], 'string', 'max' => 200],
-=======
-          [['emp_number', 'membro_zona', 'membro_circulo', 'membro_celula', 'membro_localidade_id', 'emp_smoker', 'nation_code', 'emp_gender', 'emp_status', 'job_title_code', 'eeo_cat_code', 'work_station', 'termination_id', 'criado_por', 'actualizado_por','us_id','parceiro_id','via'], 'integer'],
-
-  [['emp_mobile'], 'integer', 'message' => 'O valor do {attribute} só pode ter números'],
-[['idade_anos'], 'integer', 'min' => 9, 'message' => 'O valor da {attribute} não pode ser menor que 9'],
-          [['district_code','emp_lastname','emp_firstname', 'emp_gender', 'provin_code','ponto_entrada','bairro_id','encarregado_educacao'], 'required'],
-          [['emp_dri_lice_exp_date', 'joined_date', 'criado_em', 'actualizado_em','deficiencia_tipo','estudante','estudante_classe','estudante_escola','gravida','filhos','deficiencia','house_sustainer','married_before','pregant_or_breastfeed','employed','tested_hiv',
-
-          'vbg_exploracao_sexual','vbg_migrante_trafico','vbg_sexual_activa','vbg_relacao_multipla','vbg_vitima','vbg_vitima_trafico'
-
-
-
-        ], 'safe'],
-          [['member_id', 'membro_caratao_eleitor', 'membro_cargo_partido_id', 'emp_birthday', 'emp_hm_telephone',  'emp_work_telephone', 'emp_work_email', 'emp_oth_email', 'bi_data_i', 'bi_data_f', 'nuit_data_i', 'nuit_data_f', 'user_location'], 'string', 'max' => 50],
-          [['emp_lastname', 'emp_firstname', 'emp_middle_name', 'emp_nick_name', 'emp_ssn_num', 'emp_sin_num', 'emp_other_id', 'emp_dri_lice_num', 'emp_military_service', 'emp_street1', 'emp_street2', 'city_code', 'coun_code', 'provin_code', 'district_code'], 'string', 'max' => 100],
-          [['membro_data_admissao', 'emp_marital_status', 'emp_zipcode'], 'string', 'max' => 20],
-          [['ethnic_race_code', 'sal_grd_code'], 'string', 'max' => 13],
-          [['bi', 'nuit', 'passaporte', 'dire'], 'string', 'max' => 15],
-          [['custom3', 'other_prof_info', 'custom7', 'custom8', 'custom9', 'custom10'], 'string', 'max' => 250],
-          [['user_location2'], 'string', 'max' => 200],
->>>>>>> master
       ];
     }
 
