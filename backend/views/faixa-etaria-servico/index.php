@@ -43,7 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
         //    'value'=>'faixaEtaria.nivel_intervencao_id',
             'filter'=> ArrayHelper::map(NivelIntervensao::find()->where(['=','status','1'])->orderBy('id ASC')->asArray()->all(), 'id', 'name'),
     'value' => function ($model) {
-          if($model->faixaEtaria['nivel_intervencao_id']==1) {return "Primario";} elseif($model->faixaEtaria['nivel_intervencao_id']==2){return "Secundario";} else {return "Contextual";}
+          if($model->faixaEtaria['nivel_intervencao_id']==1) {return "Primario";} elseif($model->faixaEtaria['nivel_intervencao_id']==2){return "Secundario";}elseif($model->faixaEtaria['nivel_intervencao_id']==3){return "Contextual";} else {return "N/A";}
       },
           ],
 
