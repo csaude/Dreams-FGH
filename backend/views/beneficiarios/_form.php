@@ -673,6 +673,17 @@ elseif($model->ponto_entrada==2)
   <tr id="teste1"> <td align="right">Tipo de Violéncia: </td><td>&nbsp;</td><td>&nbsp;      <?=  $form->field($model, 'vbg_tipo_violencia')->widget(Select2::classname(),['data' => ['Fisica' => 'Fisica','Sexual' => 'Sexual','Pscologica' => 'Pscologica'],'options' => ['placeholder' => '--Selecione Aqui--'],'pluginOptions' => ['allowClear' => true],])->label(false); ?>
 
   <tr id="teste2"> <td align="right">Tempo: </td><td>&nbsp;</td><td>&nbsp;      <?=  $form->field($model, 'vbg_tempo')->widget(Select2::classname(),['data' => ['0' => ' - 3 Dias','1' => ' + 3 Dias'],'options' => ['placeholder' => '--Selecione Aqui--'],'pluginOptions' => ['allowClear' => true],])->label(false); ?>
+
+  <tr> 
+    <td align="right">Uso de Álcool e Drogas?</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;<?=  $form->field($model,'alcohol_drugs_use')->widget(Select2::classname(),['data' => ['0' => 'Não','1' => 'SIM'],'options' => ['placeholder' => '--Selecione Aqui--'],'pluginOptions' => ['allowClear' => true],])->label(false); ?></td>
+  </tr>
+  <tr> 
+    <td align="right">Histórico de ITS?</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;<?=  $form->field($model,'sti_history')->widget(Select2::classname(),['data' => ['0' => 'Não','1' => 'SIM'],'options' => ['placeholder' => '--Selecione Aqui--'],'pluginOptions' => ['allowClear' => true],])->label(false); ?></td>
+  </tr>
   
 </table>
     

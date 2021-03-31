@@ -375,8 +375,26 @@ return  $model->idade_anos." anos";
            'format' => 'raw',
             'filter'=>array("1"=>"SIM","0"=>"NÃO",""=>"?"),
             'value' => function ($model) {
-        return  $model->vbg_vitima==1 ? '<i class="fa fa-check"></i><span style="display:none !important">S</span>': '<i class="fa fa-times" color="red"></i><span style="display:none !important">N</span>';
-      }, 
+            return  $model->vbg_vitima==1 ? '<i class="fa fa-check"></i><span style="display:none !important">S</span>': '<i class="fa fa-times" color="red"></i><span style="display:none !important">N</span>';
+          }, 
+        ],
+        [
+          'attribute'=>'alcohol_drugs_use',
+          'label'=>'Uso de Álcool e Drogas?',
+          'format' => 'raw',
+           'filter'=>array("1"=>"SIM","0"=>"NÃO",""=>"?"),
+           'value' => function ($model) {
+              return  $model->alcohol_drugs_use==1 ? '<i class="fa fa-check"></i><span style="display:none !important">S</span>': '<i class="fa fa-times" color="red"></i><span style="display:none !important">N</span>';
+            }, 
+        ],
+        [
+          'attribute'=>'sti_history',
+          'label'=>'Histórico de ITS?',
+          'format' => 'raw',
+           'filter'=>array("1"=>"SIM","0"=>"NÃO",""=>"?"),
+           'value' => function ($model) {
+              return  $model->sti_history==1 ? '<i class="fa fa-check"></i><span style="display:none !important">S</span>': '<i class="fa fa-times" color="red"></i><span style="display:none !important">N</span>';
+            }, 
         ],
 
             ['class' => 'yii\grid\ActionColumn'],
