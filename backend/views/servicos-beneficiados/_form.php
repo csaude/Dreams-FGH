@@ -181,8 +181,8 @@ if (isset($_REQUEST['ts'])&&($_REQUEST['ts']>0)) {echo Html::activeDropDownList(
 <?php if(isset($_REQUEST['atender']) &&isset($_REQUEST['m'])&&($_REQUEST['m']>0)&&($_REQUEST['atender']==sha1(1)))   {?>
           <?= Html::submitButton($model->isNewRecord ? 'Atender' : 'Actualizar', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     <?php } else { ?>
+       
         <?= Html::submitButton($model->isNewRecord ? 'Salvar' : 'Actualizar', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
-		<button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
 <?php }?> 
     </div>
 </div>
