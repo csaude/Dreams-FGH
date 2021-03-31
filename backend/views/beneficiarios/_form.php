@@ -201,7 +201,7 @@ k*******************************************************************************
 		   <?php $form->field($model, 'idade_anos')->input('number', ['placeholder'=>'Idade (em anos)', 'min' => 10, 'max' => 24])->label(false) ?>
 <button class="btn btn-warning" data-toggle="collapse" data-target="#idade" disabled>Não Conhece a Data de Nascimento </button>
       <div id="idade" class="">
-	<?= $form->field($model, 'idade_anos')->dropDownList(array_combine(range(10, 24), range(10, 24)),
+	<?= $form->field($model, 'idade_anos')->dropDownList(array_combine(range(9, 24), range(9, 24)),
 	array('prompt'=>'Idade (em anos)','class' => 'form-control')); ?>
 </div>
 	</div>
