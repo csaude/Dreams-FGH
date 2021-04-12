@@ -463,6 +463,12 @@ $ben=Beneficiarios::find()->where(['provin_code'=>5])->andWhere(['emp_status'=>1
                                    <li>
                                 <a href="<?php echo Url::toRoute('tipo-us/index'); ?>"><i class="fa fa-gears"  style="color:green;"></i> <span>Tipos de US<span class="badge pull-right"> <?= TipoUs::find()->count();?></span></span></a>
                                 </li>
+                                <li>
+                                <a href="<?php echo Url::toRoute('curriculum/index'); ?>"><i class="fa fa-gears"  style="color:green;"></i> <span>Curriculum<span class="badge pull-right"> <?= TipoUs::find()->count();?></span></span></a>
+                                </li>
+                                <li>
+                                <a href="<?php echo Url::toRoute('curriculum-servicos/index'); ?>"><i class="fa fa-gears"  style="color:green;"></i> <span>Curriculum-Serviço<span class="badge pull-right"> <?= TipoUs::find()->count();?></span></span></a>
+                                </li>
                         
 
                          
