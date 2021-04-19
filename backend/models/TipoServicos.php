@@ -49,7 +49,7 @@ class TipoServicos extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'name' => Yii::t('app', 'Nome'),
+            'name' => Yii::t('app', 'Tipo de Serviço'),
             'status' => Yii::t('app', 'Status'),
             'description' => Yii::t('app', 'Descrição'),
             'criado_por' => Yii::t('app', 'Criado Por'),
