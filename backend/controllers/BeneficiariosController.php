@@ -219,12 +219,16 @@ O digitadores so visualizam 5 Beneficiarios por lista**/
 			
 			 if(!empty($_POST['Beneficiarios']['encarregado_educacao'])) {
             $model->encarregado_educacao= implode(", ",$_POST['Beneficiarios']['encarregado_educacao']); } else {}
-
+            //Table write lock
+            yii ::$app->db->createcommand("lock tables hs_hr_employee write")->execute ();
 if($model->save()) {
 Yii::$app->db->close();
 Yii::$app->db->open();
+            //Table unlocked
+            yii ::$app->db->createcommand("unlock tables")->execute ();
             return $this->redirect(['update', 'id' => $model->id]);
 }
+yii ::$app->db->createcommand("unlock tables")->execute ();
 
  } else {
             return $this->render('create', [
