@@ -151,7 +151,6 @@ if (isset($_REQUEST['ts'])&&($_REQUEST['ts']>0)) {echo Html::activeDropDownList(
       'singleDatePicker'=>true,
       'hideInput'=>true,
       'showDropdowns'=>true,
-      'maxYear' => 2012,
       'minYear' => 1990,
       'autoclose'=>true,
       'locale' => ['format' => 'DD/MM/YYYY'],
