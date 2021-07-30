@@ -24,11 +24,20 @@ use app\models\Distritos;
 use app\models\ServicosDream;  //para seleccao de intervensoes
 use app\models\Utilizadores;
 use app\models\Profile;
+
+
 /**
  * Vw_agyw_prevController implements the CRUD actions for Vw_agyw_prev model.
  */
 class Vw_agyw_prevController extends Controller
 {
+    var $completaram_pacote_primario = array();
+    var $completaram_servico_primario = array();
+    var $completaram_servico_secundario = array();
+    var $completaram_servico_violencia = array();
+    var $tiveram_intervencao_subsidio_escolar = array();
+    var $iniciaram_servico = array();
+    
     /**
      * @inheritdoc
      */
@@ -49,7 +58,7 @@ class Vw_agyw_prevController extends Controller
     ],
                 'rules' => [
                     [
-                        'actions' => ['index','view','activa','completude'],
+                        'actions' => ['index','view','activa','completude','indicadores'],
 
                         'allow' => true,
                         'roles' => [
@@ -124,11 +133,11 @@ public function actionIndex()
 
     public function actionCompletude()
     {
-        $completaram_pacote_primario = array();
-        $completaram_servico_primario = array();
-        $completaram_servico_secundario = array();
-        $completaram_servico_violencia = array();
-        $tiveram_intervencao_subsidio_escolar = array();
+        // $completaram_pacote_primario = array();
+        // $completaram_servico_primario = array();
+        // $completaram_servico_secundario = array();
+        // $completaram_servico_violencia = array();
+        // $tiveram_intervencao_subsidio_escolar = array();
         $i = 0;
         $query = "select *,
                     sum(case
@@ -219,6 +228,8 @@ public function actionIndex()
                         else 0
                     end) prevencao_violencia_15_mais
                 from app_dream_vw_agyw_prev
+                where vulneravel = 1
+                and data_servico between '2010-09-21' and '2021-06-30'
                 group by beneficiario_id";
 
         $result = Yii::$app->db->createCommand($query)->queryAll();
@@ -258,14 +269,17 @@ public function actionIndex()
                     if($recursos_mandatorios == 15 && $outros_recursos > 6 && $modulos_ogaac == 3 && $sessoes_saaj == 5 && $literacia_financeira == 1 && ($sexualmente_activa == 1 && $testagem_hiv > 0)){
                         $completaram_pacote_primario[$i++] = $beneficiary_id;
                     }
-                    if($recursos_mandatorios == 15 || $outros_recursos > 6 || $modulos_ogaac == 3 || $sessoes_saaj || 5 && $literacia_financeira || 1 && ($sexualmente_activa || 1 && $testagem_hiv > 0)){
+                    if($recursos_mandatorios == 15 || $outros_recursos > 6 || $modulos_ogaac == 3 || $sessoes_saaj == 5 || $literacia_financeira == 1 || ($sexualmente_activa == 1 || $testagem_hiv > 0)){
                         $completaram_servico_primario[$i++] = $beneficiary_id;
                     }
                     if($prevencao_violencia_estudante == 3){
                         $completaram_servico_violencia[$i++] = $beneficiary_id;
                     }
+                    if($recursos_mandatorios > 0 || $outros_recursos > 0 || $modulos_ogaac > 0 && $sessoes_saaj > 0 || $prevencao_violencia_estudante > 3){
+                        $iniciaram_servico[$i++] = $beneficiary_id;
+                    }
                 }
-                else{   // Fora da escula
+                else{   // Fora da escola
                     if($recursos_mandatorios == 8 && $outros_recursos > 4 && $modulos_ogaac == 3 && $sessoes_saaj == 5 && $literacia_financeira == 1 && ($sexualmente_activa == 1 && $testagem_hiv > 0)){
                         $completaram_pacote_primario[$i++] = $beneficiary_id;
                     }
@@ -275,8 +289,11 @@ public function actionIndex()
                     if($prevencao_violencia_rapariga == 5){
                         $completaram_servico_violencia[$i++] = $beneficiary_id;
                     }
+                    if($recursos_mandatorios > 0 || $outros_recursos > 0 || $modulos_ogaac > 0 && $sessoes_saaj > 0 || $prevencao_violencia_rapariga > 3){
+                        $iniciaram_servico[$i++] = $beneficiary_id;
+                    }
                 }
-                if($subsidio_escolar > 0 || $preservativos > 0 || ($sexualmente_activa == 0 && $testagem_hiv > 0) || $cuidados_pos_violencia_us >0 || $cuidados_pos_violencia_comunidade > 0 || $outros_servicos_saaj > 0){
+                if($subsidio_escolar > 0 || $preservativos > 0 || ($sexualmente_activa == 0 && $testagem_hiv > 0) || $cuidados_pos_violencia_us > 0 || $cuidados_pos_violencia_comunidade > 0 || $outros_servicos_saaj > 0){
                     $completaram_servico_secundario[$i++] = $beneficiary_id;
                 }
                 // Antigo curriculo
@@ -288,6 +305,9 @@ public function actionIndex()
                 }
                 if($subsidio_escolar > 0 || ($sexualmente_activa == 0 && ($testagem_hiv > 0 || $preservativos > 0)) || $cuidados_pos_violencia_us >0 || $cuidados_pos_violencia_comunidade > 0 || $outros_servicos_saaj > 0){
                     $completaram_servico_secundario[$i++] = $beneficiary_id;
+                }
+                if($recursos_antigo > 0){
+                    $iniciaram_servico[$i++] = $beneficiary_id;
                 }
             }else{  // 15-24 Anos
                 if($preservativos > 0 && $sessoes_hiv_vbg > 7 && $testagem_hiv > 0 && $literacia_financeira == 1){
@@ -302,6 +322,9 @@ public function actionIndex()
                 if($prevencao_violencia_15_mais == 3){
                     $completaram_servico_violencia[$i++] = $beneficiary_id;
                 }
+                if($sessoes_hiv_vbg > 0 || $prevencao_violencia_15_mais > 0){
+                    $iniciaram_servico[$i++] = $beneficiary_id;
+                }
                 // Antigo curriculo
                 if($preservativos > 0 && $testagem_hiv > 0 && $sessoes_hiv > 0 && $sessoes_vbg > 0){
                     $completaram_pacote_primario[$i++] = $beneficiary_id;
@@ -309,6 +332,9 @@ public function actionIndex()
                 if($faixa_etaria = '15-19'){
                     if($recursos_antigo > 9 || $subsidio_escolar > 0 || $cuidados_pos_violencia_us >0 || $cuidados_pos_violencia_comunidade > 0 || $abordagens_socio_economicas > 0 || $outros_servicos_saaj > 0){
                         $completaram_servico_secundario[$i++] = $beneficiary_id;
+                    }
+                    if($recursos_antigo > 0){
+                        $iniciaram_servico[$i++] = $beneficiary_id;
                     }
                 }else{ //20-24
                     if($cuidados_pos_violencia_us > 0 || $cuidados_pos_violencia_comunidade > 0 || $abordagens_socio_economicas > 0 || $outros_servicos_saaj > 0){
@@ -321,11 +347,16 @@ public function actionIndex()
             }
         }
 
-        if(count($completaram_servico_violencia)>0) {
+        $completaramApenasPacotePrimario = array_diff($completaram_pacote_primario, $completaram_servico_secundario);
+        $completaramPacotePrimarioMaisSevicoSecudario = array_intersect($completaram_pacote_primario, $completaram_servico_secundario);
+        $completaramServicoNaoPacotePrimario = array_diff(array_merge($completaram_servico_primario, $completaram_servico_secundario), $completaram_pacote_primario);
+        $iniciaraServicoNaoCompletaram = array_diff($iniciaram_servico, $completaram_pacote_primario, $completaramApenasPacotePrimario, $completaramPacotePrimarioMaisSevicoSecudario, $completaramServicoNaoPacotePrimario);
 
-            $array=ArrayHelper::getValue($completaram_servico_violencia,'nui');
+        if(count($iniciaraServicoNaoCompletaram)>0) {
+
+            $array=ArrayHelper::getValue($iniciaraServicoNaoCompletaram,'nui');
             Yii::$app->response->format = Response::FORMAT_JSON;
-            return $this->asJson($completaram_servico_violencia);
+            return $this->asJson($iniciaraServicoNaoCompletaram);
 
         }else
         { Yii::$app->response->format = Response::FORMAT_JSON;
@@ -335,6 +366,28 @@ public function actionIndex()
         }
     }
 
+    public function actionIndicadores($dataInicial,$dataFinal)
+    {
+        $this->completude();
+        // $completaramApenasPacotePrimario = array_diff($completaram_pacote_primario, $completaram_servico_secundario);
+        // $completaramPacotePrimarioMaisSevicoSecudario = array_intersect($completaram_pacote_primario, $completaram_servico_secundario);
+        // $completaramServicoNaoPacotePrimario = array_diff(array_merge($completaram_servico_primario, $completaram_servico_secundario), $completaram_pacote_primario);
+        // $iniciaraServicoNaoCompletaram = array_diff(array_merge($completaram_servico_primario, $completaram_servico_secundario), $completaram_pacote_primario, 
+        //     $completaramApenasPacotePrimario, $completaramPacotePrimarioMaisSevicoSecudario, $completaramServicoNaoPacotePrimario);
+
+        if(count($iniciaraServicoNaoCompletaram)>0) {
+
+            $array=ArrayHelper::getValue($iniciaraServicoNaoCompletaram,'beneficiario_id');
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return $this->asJson($iniciaraServicoNaoCompletaram);
+
+        }else
+        { Yii::$app->response->format = Response::FORMAT_JSON;
+            return Json::encode([
+                'message' => 'Sem AGYW`s'
+            ]);
+        }
+    }
 
 }
 
