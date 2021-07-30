@@ -31,13 +31,6 @@ use app\models\Profile;
  */
 class Vw_agyw_prevController extends Controller
 {
-    var $completaram_pacote_primario = array();
-    var $completaram_servico_primario = array();
-    var $completaram_servico_secundario = array();
-    var $completaram_servico_violencia = array();
-    var $tiveram_intervencao_subsidio_escolar = array();
-    var $iniciaram_servico = array();
-    
     /**
      * @inheritdoc
      */
