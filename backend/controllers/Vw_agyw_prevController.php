@@ -103,7 +103,6 @@ class Vw_agyw_prevController extends Controller
         $tiveram_intervencao_subsidio_escolar = array();
         $iniciaram_servico = array();
 
-        $i = 0;
         $query = "select beneficiario_id, faixa_actual, vai_escola, sexualmente_activa,
                     sum(case
                     when (vai_escola=1 and sub_servico_id in (169,170,184,185,186,187,188,189,190,191,192,193,194,207,208)
@@ -237,83 +236,83 @@ class Vw_agyw_prevController extends Controller
             if($faixa_etaria == '9-14'){
                 if($vai_escola == 1){    //Na escola
                     if($recursos_mandatorios == 15 && $outros_recursos > 6 && $modulos_ogaac == 3 && $sessoes_saaj == 5 && $literacia_financeira == 1 && ($sexualmente_activa == 1 && $testagem_hiv > 0)){
-                        $completaram_pacote_primario[$i++] = $beneficiary_id;
+                        array_push($completaram_pacote_primario, $beneficiary_id);
                     }
                     if($recursos_mandatorios == 15 || $outros_recursos > 6 || $modulos_ogaac == 3 || $sessoes_saaj == 5 || $literacia_financeira == 1 || ($sexualmente_activa == 1 || $testagem_hiv > 0)){
-                        $completaram_servico_primario[$i++] = $beneficiary_id;
+                        array_push($completaram_servico_primario, $beneficiary_id);
                     }
                     if($prevencao_violencia_estudante == 3){
-                        $completaram_servico_violencia[$i++] = $beneficiary_id;
+                        array_push($completaram_servico_violencia, $beneficiary_id);
                     }
                     if($recursos_mandatorios > 0 || $outros_recursos > 0 || $modulos_ogaac > 0 && $sessoes_saaj > 0 || $prevencao_violencia_estudante > 3){
-                        $iniciaram_servico[$i++] = $beneficiary_id;
+                        array_push($iniciaram_servico, $beneficiary_id);
                     }
                 }
                 else{   // Fora da escola
                     if($recursos_mandatorios == 8 && $outros_recursos > 4 && $modulos_ogaac == 3 && $sessoes_saaj == 5 && $literacia_financeira == 1 && ($sexualmente_activa == 1 && $testagem_hiv > 0)){
-                        $completaram_pacote_primario[$i++] = $beneficiary_id;
+                        array_push($completaram_pacote_primario, $beneficiary_id);
                     }
                     if($recursos_mandatorios == 8 || $outros_recursos > 4 || $modulos_ogaac == 3 && $sessoes_saaj == 5 || $literacia_financeira == 1 || ($sexualmente_activa == 1 || $testagem_hiv > 0)){
-                        $completaram_servico_primario[$i++] = $beneficiary_id;
+                        array_push($completaram_servico_primario, $beneficiary_id);
                     }
                     if($prevencao_violencia_rapariga == 5){
-                        $completaram_servico_violencia[$i++] = $beneficiary_id;
+                        array_push($completaram_servico_violencia, $beneficiary_id);
                     }
                     if($recursos_mandatorios > 0 || $outros_recursos > 0 || $modulos_ogaac > 0 && $sessoes_saaj > 0 || $prevencao_violencia_rapariga > 3){
-                        $iniciaram_servico[$i++] = $beneficiary_id;
+                        array_push($iniciaram_servico, $beneficiary_id);
                     }
                 }
                 if($subsidio_escolar > 0 || $preservativos > 0 || ($sexualmente_activa == 0 && $testagem_hiv > 0) || $cuidados_pos_violencia_us > 0 || $cuidados_pos_violencia_comunidade > 0 || $outros_servicos_saaj > 0){
-                    $completaram_servico_secundario[$i++] = $beneficiary_id;
+                    array_push($completaram_servico_secundario, $beneficiary_id);
                 }
                 // Antigo curriculo
                 if($recursos_antigo > 9 && $sessoes_saaj == 5 && ($sexualmente_activa == 1 && $preservativos > 0 && $testagem_hiv > 0)){
-                    $completaram_pacote_primario[$i++] = $beneficiary_id;
+                    array_push($completaram_pacote_primario, $beneficiary_id);
                 }
                 if($recursos_antigo > 9 || $sessoes_saaj == 5 || ($sexualmente_activa == 1 || $preservativos > 0 || $testagem_hiv > 0)){
-                    $completaram_servico_primario[$i++] = $beneficiary_id;
+                    array_push($completaram_servico_primario, $beneficiary_id);
                 }
                 if($subsidio_escolar > 0 || ($sexualmente_activa == 0 && ($testagem_hiv > 0 || $preservativos > 0)) || $cuidados_pos_violencia_us >0 || $cuidados_pos_violencia_comunidade > 0 || $outros_servicos_saaj > 0){
-                    $completaram_servico_secundario[$i++] = $beneficiary_id;
+                    array_push($completaram_servico_secundario, $beneficiary_id);
                 }
                 if($recursos_antigo > 0){
-                    $iniciaram_servico[$i++] = $beneficiary_id;
+                    array_push($iniciaram_servico, $beneficiary_id);
                 }
             }else{  // 15-24 Anos
                 if($preservativos > 0 && $sessoes_hiv_vbg > 7 && $testagem_hiv > 0 && $literacia_financeira == 1){
-                    $completaram_pacote_primario[$i++] = $beneficiary_id;
+                    array_push($completaram_pacote_primario, $beneficiary_id);
                 }
                 if($preservativos > 0 || $sessoes_hiv_vbg > 7 || $testagem_hiv > 0 || $literacia_financeira == 1){
-                    $completaram_servico_primario[$i++] = $beneficiary_id;
+                    array_push($completaram_servico_primario, $beneficiary_id);
                 }
                 if($recursos_sociais_15_mais > 0 || $subsidio_escolar > 0 || $cuidados_pos_violencia_us >0 || $cuidados_pos_violencia_comunidade > 0 || $abordagens_socio_economicas > 0 || $outros_servicos_saaj > 0 || $prep > 0){
-                    $completaram_servico_secundario[$i++] = $beneficiary_id;
+                    array_push($completaram_servico_secundario, $beneficiary_id);
                 }
                 if($prevencao_violencia_15_mais == 3){
-                    $completaram_servico_violencia[$i++] = $beneficiary_id;
+                    array_push($completaram_servico_violencia, $beneficiary_id);
                 }
                 if($sessoes_hiv_vbg > 0 || $prevencao_violencia_15_mais > 0){
-                    $iniciaram_servico[$i++] = $beneficiary_id;
+                    array_push($iniciaram_servico, $beneficiary_id);
                 }
                 // Antigo curriculo
                 if($preservativos > 0 && $testagem_hiv > 0 && $sessoes_hiv > 0 && $sessoes_vbg > 0){
-                    $completaram_pacote_primario[$i++] = $beneficiary_id;
+                    array_push($completaram_pacote_primario, $beneficiary_id);
                 }
                 if($faixa_etaria = '15-19'){
                     if($recursos_antigo > 9 || $subsidio_escolar > 0 || $cuidados_pos_violencia_us >0 || $cuidados_pos_violencia_comunidade > 0 || $abordagens_socio_economicas > 0 || $outros_servicos_saaj > 0){
-                        $completaram_servico_secundario[$i++] = $beneficiary_id;
+                        array_push($completaram_servico_secundario, $beneficiary_id);
                     }
                     if($recursos_antigo > 0){
-                        $iniciaram_servico[$i++] = $beneficiary_id;
+                        array_push($iniciaram_servico, $beneficiary_id);
                     }
                 }else{ //20-24
                     if($cuidados_pos_violencia_us > 0 || $cuidados_pos_violencia_comunidade > 0 || $abordagens_socio_economicas > 0 || $outros_servicos_saaj > 0){
-                        $completaram_servico_secundario[$i++] = $beneficiary_id;
+                        array_push($completaram_servico_secundario, $beneficiary_id);
                     }
                 }
             }
             if($subsidio_escolar > 0){
-                $tiveram_intervencao_subsidio_escolar[$i++] = $beneficiary_id;
+                array_push($tiveram_intervencao_subsidio_escolar, $beneficiary_id);
             }
         }
 
