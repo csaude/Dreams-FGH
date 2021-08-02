@@ -243,8 +243,8 @@ class Vw_agyw_prevController extends Controller
         ); 
     }
 
-    function getEnrollmentTimeInMonths($date){
-        return $this->s_datediff("m", $date, date("Y-m-d"));
+    function getEnrollmentTimeInMonths($enrollmentdate, $dataFim){
+        return $this->s_datediff("m", $enrollmentdate, $dataFim);
     }
 
     function addCompletude(&$matrix, $enrollmentTime, $value, $index1, $index3){
@@ -264,12 +264,12 @@ class Vw_agyw_prevController extends Controller
     }
 
     function completude($dataInicio,$dataFim){
-        $completaram_pacote_primario = array();
+        /*$completaram_pacote_primario = array();
         $completaram_servico_primario = array();
         $completaram_servico_secundario = array();
         $completaram_servico_violencia = array();
         $tiveram_intervencao_subsidio_escolar = array();
-        $iniciaram_servico = array();
+        $iniciaram_servico = array();*/
 
         $desagregationMap = $this->generateDesagregationMatrix();
 
@@ -360,11 +360,13 @@ class Vw_agyw_prevController extends Controller
                     sum(case
                         when sub_servico_id in (210,211,212) then 1
                         else 0
-                    end) prevencao_violencia_15_mais
+                    end) prevencao_violencia_15_mais,
+                    min(data_servico) data_servico 
                 from app_dream_vw_agyw_prev
                 where vulneravel = 1 and
                         nui <> '' and
                         data_servico is not null and
+                        data_servico <> '' and
                         (data_servico between :start and :end) 
                 group by beneficiario_id, faixa_actual, vai_escola, sexualmente_activa, data_registo";
 
@@ -403,8 +405,8 @@ class Vw_agyw_prevController extends Controller
             $prevencao_violencia_rapariga = $row['prevencao_violencia_rapariga'];
             $prevencao_violencia_estudante = $row['prevencao_violencia_estudante'];
             $prevencao_violencia_15_mais = $row['prevencao_violencia_15_mais'];
-            $data_registo = $row['data_registo'];
-            $enrollmentTime = $this->getEnrollmentTimeInMonths($data_registo);
+            $data_servico = $row['data_servico'];
+            $enrollmentTime = $this->getEnrollmentTimeInMonths($data_servico, $dataFim);
 
             if($faixa_etaria == '9-14'){
                 if($vai_escola == 1){    //Na escola
