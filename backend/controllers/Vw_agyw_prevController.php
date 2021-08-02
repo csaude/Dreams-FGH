@@ -364,6 +364,8 @@ class Vw_agyw_prevController extends Controller
                     min(data_servico) data_servico 
                 from app_dream_vw_agyw_prev
                 where vulneravel = 1 and
+                        faixa_actual <> '' and
+                        faixa_actual <> 'NA' and
                         nui <> '' and
                         data_servico is not null and
                         data_servico <> '' and
@@ -542,9 +544,47 @@ class Vw_agyw_prevController extends Controller
         $completudes = $this->completude($dataInicio,$dataFim);
 
 
-        // 9-14 0_6
-        $completaramApenasPacotePrimario = array_diff($completudes['9-14']['0_6']['completaram_pacote_primario'], $completudes['9-14']['0_6']['completaram_servico_secundario']);
-        $results['9-14']['0_6'] = count($completaramApenasPacotePrimario);
+        // 9-14
+        $completaramApenasPacotePrimario06 = array_diff($completudes['9-14']['0_6']['completaram_pacote_primario'], $completudes['9-14']['0_6']['completaram_servico_secundario']);
+        $completaramApenasPacotePrimario712 = array_diff($completudes['9-14']['7_12']['completaram_pacote_primario'], $completudes['9-14']['7_12']['completaram_servico_secundario']);
+        $completaramApenasPacotePrimario1324 = array_diff($completudes['9-14']['13_24']['completaram_pacote_primario'], $completudes['9-14']['13_24']['completaram_servico_secundario']);
+        $completaramApenasPacotePrimario25 = array_diff($completudes['9-14']['25+']['completaram_pacote_primario'], $completudes['9-14']['25+']['completaram_servico_secundario']);
+        $results['9-14']['0_6'] = count($completaramApenasPacotePrimario06);
+        $results['9-14']['7_12'] = count($completaramApenasPacotePrimario712);
+        $results['9-14']['13_24'] = count($completaramApenasPacotePrimario1324);
+        $results['9-14']['25+'] = count($completaramApenasPacotePrimario25);
+
+
+        // 15-19
+        $completaramApenasPacotePrimario06 = array_diff($completudes['15-19']['0_6']['completaram_pacote_primario'], $completudes['15-19']['0_6']['completaram_servico_secundario']);
+        $completaramApenasPacotePrimario712 = array_diff($completudes['15-19']['7_12']['completaram_pacote_primario'], $completudes['15-19']['7_12']['completaram_servico_secundario']);
+        $completaramApenasPacotePrimario1324 = array_diff($completudes['15-19']['13_24']['completaram_pacote_primario'], $completudes['15-19']['13_24']['completaram_servico_secundario']);
+        $completaramApenasPacotePrimario25 = array_diff($completudes['15-19']['25+']['completaram_pacote_primario'], $completudes['15-19']['25+']['completaram_servico_secundario']);
+        $results['15-19']['0_6'] = count($completaramApenasPacotePrimario06);
+        $results['15-19']['7_12'] = count($completaramApenasPacotePrimario712);
+        $results['15-19']['13_24'] = count($completaramApenasPacotePrimario1324);
+        $results['15-19']['25+'] = count($completaramApenasPacotePrimario25);
+
+        // 20-24
+        $completaramApenasPacotePrimario06 = array_diff($completudes['20-24']['0_6']['completaram_pacote_primario'], $completudes['20-24']['0_6']['completaram_servico_secundario']);
+        $completaramApenasPacotePrimario712 = array_diff($completudes['20-24']['7_12']['completaram_pacote_primario'], $completudes['20-24']['7_12']['completaram_servico_secundario']);
+        $completaramApenasPacotePrimario1324 = array_diff($completudes['20-24']['13_24']['completaram_pacote_primario'], $completudes['20-24']['13_24']['completaram_servico_secundario']);
+        $completaramApenasPacotePrimario25 = array_diff($completudes['20-24']['25+']['completaram_pacote_primario'], $completudes['20-24']['25+']['completaram_servico_secundario']);
+        $results['20-24']['0_6'] = count($completaramApenasPacotePrimario06);
+        $results['20-24']['7_12'] = count($completaramApenasPacotePrimario712);
+        $results['20-24']['13_24'] = count($completaramApenasPacotePrimario1324);
+        $results['20-24']['25+'] = count($completaramApenasPacotePrimario25);
+
+        // 25-29
+        $completaramApenasPacotePrimario06 = array_diff($completudes['25-29']['0_6']['completaram_pacote_primario'], $completudes['25-29']['0_6']['completaram_servico_secundario']);
+        $completaramApenasPacotePrimario712 = array_diff($completudes['25-29']['7_12']['completaram_pacote_primario'], $completudes['25-29']['7_12']['completaram_servico_secundario']);
+        $completaramApenasPacotePrimario1324 = array_diff($completudes['25-29']['13_24']['completaram_pacote_primario'], $completudes['25-29']['13_24']['completaram_servico_secundario']);
+        $completaramApenasPacotePrimario25 = array_diff($completudes['25-29']['25+']['completaram_pacote_primario'], $completudes['25-29']['25+']['completaram_servico_secundario']);
+        $results['25-29']['0_6'] = count($completaramApenasPacotePrimario06);
+        $results['25-29']['7_12'] = count($completaramApenasPacotePrimario712);
+        $results['25-29']['13_24'] = count($completaramApenasPacotePrimario1324);
+        $results['25-29']['25+'] = count($completaramApenasPacotePrimario25);
+        
 
         Yii::$app->response->format = Response::FORMAT_JSON;
         return $results;
