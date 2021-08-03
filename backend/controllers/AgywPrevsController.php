@@ -12,7 +12,7 @@ class AgywPrevsController extends Controller
     public function actionCreate()
     {
         $model = new AgywPrev();
-       // $modelCanSave = false;
+
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $province = Provincias::find()
                     ->where(['id' => $model->province_code])->one();
@@ -20,10 +20,14 @@ class AgywPrevsController extends Controller
             $district = Distritos::find()
                     ->where(['district_code' => $model->district_code])->one();
 
+            $desagregationResults = $model->getCompletedOnlyFirstPackageDesagregation();
+
+
             return $this->render('view', [
                 'model' => $model,
                 'province' => $province->province_name,
                 'district' => $district->district_name,
+                'completedOnlyFirstPackageDesagregation' => $desagregationResults
             ]);
         }
         
