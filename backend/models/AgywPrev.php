@@ -31,7 +31,8 @@ class AgywPrev extends Model {
 
     public function getCompletedOnlyFirstPackageDesagregation(){
         
-
+        $indicator = $this->desagregationCompletedOnlyFirstPackage($this->start_date, $this->end_date, $this->province_code, $this->district_code);
+        return $indicator;
     }
 
     private function s_datediff( $str_interval, $dt_menor, $dt_maior, $relative=false){
@@ -178,7 +179,7 @@ class AgywPrev extends Model {
         }
     }
 
-    private function completude($dataInicio,$dataFim){
+    private function completude($dataInicio,$dataFim, $province, $district){
        
         $desagregationMap = $this->generateDesagregationMatrix();
 
@@ -272,21 +273,23 @@ class AgywPrev extends Model {
                     end) prevencao_violencia_15_mais,
                     min(data_servico) data_servico 
                 from app_dream_vw_agyw_prev
-                where vulneravel = 1 and
+                where   provincia_id = :province and
+                        distrito_id = :district and
+                        vulneravel = 1 and
                         faixa_actual <> '' and
                         faixa_actual <> 'NA' and
                         nui <> '' and
                         data_servico is not null and
                         data_servico <> '' and
-                        (data_servico between :start and :end) 
+                        (data_servico between :start and :end)
                 group by beneficiario_id, faixa_actual, vai_escola, sexualmente_activa, data_registo";
 
         $preparedQuery = Yii::$app->db->createCommand($query);
+        $preparedQuery->bindParam(":province", $province);
+        $preparedQuery->bindParam(":district", $district);
         $preparedQuery->bindParam(":start", $dataInicio);
         $preparedQuery->bindParam(":end", $dataFim);
         $result = $preparedQuery->queryAll();
-
-
 
         foreach ($result as $row){
             
@@ -406,10 +409,10 @@ class AgywPrev extends Model {
     }
 
 
-    private function desagregationCompletedOnlyFirstPackage($dataInicio,$dataFim){
+    private function desagregationCompletedOnlyFirstPackage($dataInicio,$dataFim, $prov, $district){
 
         $results = $this->generateTotalDesagregationMatrix();
-        $completudes = $this->completude($dataInicio,$dataFim);
+        $completudes = $this->completude($dataInicio,$dataFim, $prov, $district);
 
 
         // 9-14
