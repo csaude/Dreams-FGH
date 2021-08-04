@@ -1,125 +1,41 @@
 <?php
 
-namespace backend\controllers;
+namespace app\models;
 
 use Yii;
-use app\models\Vw_agyw_prev;
-use app\models\Vw_agyw_prevSearch;
-use yii\web\Controller;
-use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
+use yii\base\Model;
 
-use yii\filters\AccessControl;
-use common\models\User;
-use common\components\AccessRule;
+class AgywPrev extends Model {
+    public $province_code;
+    public $district_code;
+    public $start_date;
+    public $end_date;
 
-use yii\helpers\Json;
-use yii\web\Response;
-
-use yii\helpers\ArrayHelper;
-use app\models\ReferenciasPontosDreams;
-use app\models\Organizacoes;
-use app\models\Distritos;
-
-use app\models\ServicosDream;  //para seleccao de intervensoes
-use app\models\Utilizadores;
-use app\models\Profile;
-
-
-/**
- * Vw_agyw_prevController implements the CRUD actions for Vw_agyw_prev model.
- */
-class Vw_agyw_prevController extends Controller
-{
-    /**
-     * @inheritdoc
-     */
-    public function behaviors()
+    public function rules()
     {
         return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
-                ],
-            ],
-
-                        'access' => [
-                'class' => AccessControl::className(),
-                'ruleConfig' => [
-        'class' => AccessRule::className(),
-    ],
-                'rules' => [
-                    [
-                        'actions' => ['index','view','activa','indicator', 'test'],
-
-                        'allow' => true,
-                        'roles' => [
-                User::ROLE_USER,
-                User::ROLE_ADMIN,
-                User::ROLE_GESTOR,
-                User::ROLE_CORDENADOR
-                ],
-                    ],
-
-                     [
-                        'actions' => ['update'],
-                        'allow' => true,
-                      //  'roles' => ['@'],
-                        
-                        'roles' => [
-                User::ROLE_ADMIN,
-                User::ROLE_GESTOR,
-                User::ROLE_CORDENADOR
-            ],
-                    ],
-
-                    [
-                        'actions' => ['delete'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                        'matchCallback' => function ($rule, $action) {
-                       return User::isUserAdmin(Yii::$app->user->identity->username);}
-                    ],
-                ]
-            ]
+            [['province_code','district_code', 'start_date', 'end_date'], 'required'],
+            [['province_code','district_code'], 'string', 'max' => 100],
         ];
     }
-     
-    public function actionIndex()
+
+    public function attributeLabels()
     {
-        Yii::$app->response->format = Response::FORMAT_JSON;
-        return Json::encode([
-            'message' => 'success'
-        ]);
-        
+        return [
+            'province_code' => 'Provincia',
+            'start_date' => 'Data Inicial',
+            'end_date' => 'Data Final',
+            'district_code' => 'Distrito',
+        ];
     }
 
-    public function actionTest(){
+    public function getCompletedOnlyFirstPackageDesagregation(){
         
-
-        $newMatrix = $this->generateDesagregationMatrix();
-        array_push($newMatrix['10_14']['0_6']['completaramApenasPacotePrimario'], 114);
-
-
-        Yii::$app->response->format = Response::FORMAT_JSON;
-        return $newMatrix['10_14']['0_6']['completaramApenasPacotePrimario'];
-        
-
-       /*$datetime1 = date_create('2019-10-11');
-        $datetime2 = date_create('2021-3-13');
-        $months = $this->s_datediff("m", $datetime1, $datetime2, true);
-
-        Yii::$app->response->format = Response::FORMAT_JSON;
-        return $months;
-        */
-
+        $indicator = $this->desagregationCompletedOnlyFirstPackage($this->start_date, $this->end_date, $this->province_code, $this->district_code);
+        return $indicator;
     }
-   
-    /**
-     * Function to calculate the difference between two dates
-     */
-    function s_datediff( $str_interval, $dt_menor, $dt_maior, $relative=false){
+
+    private function s_datediff( $str_interval, $dt_menor, $dt_maior, $relative=false){
 
         if( is_string( $dt_menor)) $dt_menor = date_create( $dt_menor);
         if( is_string( $dt_maior)) $dt_maior = date_create( $dt_maior);
@@ -151,7 +67,7 @@ class Vw_agyw_prevController extends Controller
         else    return $total;
     }
 
-    function generateDesagregationMatrix(){
+    private function generateDesagregationMatrix(){
         $results1014 = array(
                     'completaram_pacote_primario' => array(),
                     'completaram_servico_primario' => array(),
@@ -213,7 +129,7 @@ class Vw_agyw_prevController extends Controller
         ); 
     }
     
-    function generateTotalDesagregationMatrix(){
+    private function generateTotalDesagregationMatrix(){
     
         return array(
             '9-14' => array(
@@ -243,11 +159,11 @@ class Vw_agyw_prevController extends Controller
         ); 
     }
 
-    function getEnrollmentTimeInMonths($enrollmentdate, $dataFim){
+    private function getEnrollmentTimeInMonths($enrollmentdate, $dataFim){
         return $this->s_datediff("m", $enrollmentdate, $dataFim);
     }
 
-    function addCompletude(&$matrix, $enrollmentTime, $value, $index1, $index3){
+    private function addCompletude(&$matrix, $enrollmentTime, $value, $index1, $index3){
         
         if($enrollmentTime <= 6){
             array_push($matrix[$index1]['0_6'][$index3], $value);
@@ -263,14 +179,8 @@ class Vw_agyw_prevController extends Controller
         }
     }
 
-    function completude($dataInicio,$dataFim){
-        /*$completaram_pacote_primario = array();
-        $completaram_servico_primario = array();
-        $completaram_servico_secundario = array();
-        $completaram_servico_violencia = array();
-        $tiveram_intervencao_subsidio_escolar = array();
-        $iniciaram_servico = array();*/
-
+    private function completude($dataInicio,$dataFim, $province, $district){
+       
         $desagregationMap = $this->generateDesagregationMatrix();
 
         $query = "select beneficiario_id, faixa_actual, vai_escola, sexualmente_activa, data_registo, 
@@ -363,26 +273,27 @@ class Vw_agyw_prevController extends Controller
                     end) prevencao_violencia_15_mais,
                     min(data_servico) data_servico 
                 from app_dream_vw_agyw_prev
-                where vulneravel = 1 and
+                where   provincia_id = :province and
+                        distrito_id = :district and
+                        vulneravel = 1 and
                         faixa_actual <> '' and
                         faixa_actual <> 'NA' and
                         nui <> '' and
                         data_servico is not null and
                         data_servico <> '' and
-                        (data_servico between :start and :end) 
+                        (data_servico between :start and :end)
                 group by beneficiario_id, faixa_actual, vai_escola, sexualmente_activa, data_registo";
 
         $preparedQuery = Yii::$app->db->createCommand($query);
+        $preparedQuery->bindParam(":province", $province);
+        $preparedQuery->bindParam(":district", $district);
         $preparedQuery->bindParam(":start", $dataInicio);
         $preparedQuery->bindParam(":end", $dataFim);
         $result = $preparedQuery->queryAll();
 
-
-
         foreach ($result as $row){
             
             $beneficiary_id = $row['beneficiario_id'];
-            //$nui = $row['nui'];
             $faixa_etaria = $row['faixa_actual'];
             $vai_escola = $row['vai_escola'];
             $sexualmente_activa = $row['sexualmente_activa'];
@@ -413,150 +324,95 @@ class Vw_agyw_prevController extends Controller
             if($faixa_etaria == '9-14'){
                 if($vai_escola == 1){    //Na escola
                     if($recursos_mandatorios == 15 && $outros_recursos > 6 && $modulos_ogaac == 3 && $sessoes_saaj == 5 && $literacia_financeira == 1 && ($sexualmente_activa == 1 && $testagem_hiv > 0)){
-                        //array_push($completaram_pacote_primario, $beneficiary_id);
                         $this->addCompletude($desagregationMap, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_pacote_primario');
                         
                     }
                     if($recursos_mandatorios == 15 || $outros_recursos > 6 || $modulos_ogaac == 3 || $sessoes_saaj == 5 || $literacia_financeira == 1 || ($sexualmente_activa == 1 || $testagem_hiv > 0)){
-                        //array_push($completaram_servico_primario, $beneficiary_id);
                         $this->addCompletude($desagregationMap, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_servico_primario');
                     }
                     if($prevencao_violencia_estudante == 3){
-                        //array_push($completaram_servico_violencia, $beneficiary_id);
                         $this->addCompletude($desagregationMap, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_servico_violencia');
                     }
                     if($recursos_mandatorios > 0 || $outros_recursos > 0 || $modulos_ogaac > 0 && $sessoes_saaj > 0 || $prevencao_violencia_estudante > 3){
-                        //array_push($iniciaram_servico, $beneficiary_id);
                         $this->addCompletude($desagregationMap, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'iniciaram_servico');
-                    }
-                    if($recursos_mandatorios > 0 || $outros_recursos > 0 || $modulos_ogaac > 0 && $sessoes_saaj > 0 || $prevencao_violencia_estudante > 3){
-                        $iniciaram_servico[$i++] = $beneficiary_id;
                     }
                 }
                 else{   // Fora da escola
                     if($recursos_mandatorios == 8 && $outros_recursos > 4 && $modulos_ogaac == 3 && $sessoes_saaj == 5 && $literacia_financeira == 1 && ($sexualmente_activa == 1 && $testagem_hiv > 0)){
-                        //array_push($completaram_pacote_primario, $beneficiary_id);
                         $this->addCompletude($desagregationMap, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_pacote_primario');
                     }
                     if($recursos_mandatorios == 8 || $outros_recursos > 4 || $modulos_ogaac == 3 && $sessoes_saaj == 5 || $literacia_financeira == 1 || ($sexualmente_activa == 1 || $testagem_hiv > 0)){
-                        //array_push($completaram_servico_primario, $beneficiary_id);
                         $this->addCompletude($desagregationMap, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_servico_primario');
                     }
                     if($prevencao_violencia_rapariga == 5){
-                        //array_push($completaram_servico_violencia, $beneficiary_id);
                         $this->addCompletude($desagregationMap, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_servico_violencia');
                     }
                     if($recursos_mandatorios > 0 || $outros_recursos > 0 || $modulos_ogaac > 0 && $sessoes_saaj > 0 || $prevencao_violencia_rapariga > 3){
-                        //array_push($iniciaram_servico, $beneficiary_id);
                         $this->addCompletude($desagregationMap, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'iniciaram_servico');
-                    }
-                    if($recursos_mandatorios > 0 || $outros_recursos > 0 || $modulos_ogaac > 0 && $sessoes_saaj > 0 || $prevencao_violencia_rapariga > 3){
-                        $iniciaram_servico[$i++] = $beneficiary_id;
                     }
                 }
                 if($subsidio_escolar > 0 || $preservativos > 0 || ($sexualmente_activa == 0 && $testagem_hiv > 0) || $cuidados_pos_violencia_us > 0 || $cuidados_pos_violencia_comunidade > 0 || $outros_servicos_saaj > 0){
-                    //array_push($completaram_servico_secundario, $beneficiary_id);
                     $this->addCompletude($desagregationMap, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_servico_secundario');
                 }
                 // Antigo curriculo
                 if($recursos_antigo > 9 && $sessoes_saaj == 5 && ($sexualmente_activa == 1 && $preservativos > 0 && $testagem_hiv > 0)){
-                    //array_push($completaram_pacote_primario, $beneficiary_id);
                     $this->addCompletude($desagregationMap, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_pacote_primario');
                 }
                 if($recursos_antigo > 9 || $sessoes_saaj == 5 || ($sexualmente_activa == 1 || $preservativos > 0 || $testagem_hiv > 0)){
-                    //array_push($completaram_servico_primario, $beneficiary_id);
                     $this->addCompletude($desagregationMap, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_servico_primario');
                 }
                 if($subsidio_escolar > 0 || ($sexualmente_activa == 0 && ($testagem_hiv > 0 || $preservativos > 0)) || $cuidados_pos_violencia_us >0 || $cuidados_pos_violencia_comunidade > 0 || $outros_servicos_saaj > 0){
-                    //array_push($completaram_servico_secundario, $beneficiary_id);
                     $this->addCompletude($desagregationMap, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_servico_secundario');
                 }
                 if($recursos_antigo > 0){
-                    //array_push($iniciaram_servico, $beneficiary_id);
                     $this->addCompletude($desagregationMap, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'iniciaram_servico');
-                }
-                if($recursos_antigo > 0){
-                    $iniciaram_servico[$i++] = $beneficiary_id;
                 }
             }else{  // 15-24 Anos
                 if($preservativos > 0 && $sessoes_hiv_vbg > 7 && $testagem_hiv > 0 && $literacia_financeira == 1){
-                    //array_push($completaram_pacote_primario, $beneficiary_id);
                     $this->addCompletude($desagregationMap, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_pacote_primario');
                 }
                 if($preservativos > 0 || $sessoes_hiv_vbg > 7 || $testagem_hiv > 0 || $literacia_financeira == 1){
-                    //array_push($completaram_servico_primario, $beneficiary_id);
                     $this->addCompletude($desagregationMap, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_servico_primario');
                 }
                 if($recursos_sociais_15_mais > 0 || $subsidio_escolar > 0 || $cuidados_pos_violencia_us >0 || $cuidados_pos_violencia_comunidade > 0 || $abordagens_socio_economicas > 0 || $outros_servicos_saaj > 0 || $prep > 0){
-                    //array_push($completaram_servico_secundario, $beneficiary_id);
                     $this->addCompletude($desagregationMap, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_servico_secundario');
                 }
                 if($prevencao_violencia_15_mais == 3){
-                    //array_push($completaram_servico_violencia, $beneficiary_id);
                     $this->addCompletude($desagregationMap, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_servico_violencia');
                 }
                 if($sessoes_hiv_vbg > 0 || $prevencao_violencia_15_mais > 0){
-                    //array_push($iniciaram_servico, $beneficiary_id);
                     $this->addCompletude($desagregationMap, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'iniciaram_servico');
-                }
-                if($sessoes_hiv_vbg > 0 || $prevencao_violencia_15_mais > 0){
-                    $iniciaram_servico[$i++] = $beneficiary_id;
                 }
                 // Antigo curriculo
                 if($preservativos > 0 && $testagem_hiv > 0 && $sessoes_hiv > 0 && $sessoes_vbg > 0){
-                    //array_push($completaram_pacote_primario, $beneficiary_id);
                     $this->addCompletude($desagregationMap, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_pacote_primario');
                 }
                 if($faixa_etaria = '15-19'){
                     if($recursos_antigo > 9 || $subsidio_escolar > 0 || $cuidados_pos_violencia_us >0 || $cuidados_pos_violencia_comunidade > 0 || $abordagens_socio_economicas > 0 || $outros_servicos_saaj > 0){
-                        //array_push($completaram_servico_secundario, $beneficiary_id);
                         $this->addCompletude($desagregationMap, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_servico_secundario');
                     }
                     if($recursos_antigo > 0){
-                        //array_push($iniciaram_servico, $beneficiary_id);
                         $this->addCompletude($desagregationMap, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'iniciaram_servico');
-                    }
-                    if($recursos_antigo > 0){
-                        $iniciaram_servico[$i++] = $beneficiary_id;
                     }
                 }else{ //20-24
                     if($cuidados_pos_violencia_us > 0 || $cuidados_pos_violencia_comunidade > 0 || $abordagens_socio_economicas > 0 || $outros_servicos_saaj > 0){
-                        //array_push($completaram_servico_secundario, $beneficiary_id);
                         $this->addCompletude($desagregationMap, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_servico_secundario');
                     }
                 }
             }
             if($subsidio_escolar > 0){
-                //array_push($tiveram_intervencao_subsidio_escolar, $beneficiary_id);
                 $this->addCompletude($desagregationMap, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'tiveram_intervencao_subsidio_escolar');
             }
         }
 
-        /*$completaramApenasPacotePrimario = array_diff($completaram_pacote_primario, $completaram_servico_secundario);
-        $completaramPacotePrimarioMaisSevicoSecudario = array_intersect($completaram_pacote_primario, $completaram_servico_secundario);
-        $completaramServicoNaoPacotePrimario = array_diff(array_merge($completaram_servico_primario, $completaram_servico_secundario), $completaram_pacote_primario);
-        $iniciaraServicoNaoCompletaram = array_diff($iniciaram_servico, $completaram_pacote_primario, $completaramApenasPacotePrimario, $completaramPacotePrimarioMaisSevicoSecudario, $completaramServicoNaoPacotePrimario);
-
-        $completudeResults = array(
-            'completaramApenasPacotePrimario' => $completaramApenasPacotePrimario,
-            'completaramPacotePrimarioMaisSevicoSecudario' => $completaramPacotePrimarioMaisSevicoSecudario,
-            'completaramServicoNaoPacotePrimario' => $completaramServicoNaoPacotePrimario,
-            'iniciaraServicoNaoCompletaram' => $iniciaraServicoNaoCompletaram,
-            'completaram_servico_violencia' => $completaram_servico_violencia,
-            'tiveram_intervencao_subsidio_escolar' => $tiveram_intervencao_subsidio_escolar
-        );*/
-
-
-
-
-        Yii::$app->response->format = Response::FORMAT_JSON;
         return $desagregationMap;
     }
 
-    public function actionIndicator($dataInicio,$dataFim){
+
+    private function desagregationCompletedOnlyFirstPackage($dataInicio,$dataFim, $prov, $district){
 
         $results = $this->generateTotalDesagregationMatrix();
-        $completudes = $this->completude($dataInicio,$dataFim);
+        $completudes = $this->completude($dataInicio,$dataFim, $prov, $district);
 
 
         // 9-14
@@ -600,44 +456,10 @@ class Vw_agyw_prevController extends Controller
         $results['25-29']['13_24'] = count($completaramApenasPacotePrimario1324);
         $results['25-29']['25+'] = count($completaramApenasPacotePrimario25);
         
-
-        Yii::$app->response->format = Response::FORMAT_JSON;
         return $results;
-
-
-        /*$completaramApenasPacotePrimario=ArrayHelper::getValue($completaram_pacote_primario,'completaramApenasPacotePrimario');
-        $completaramPacotePrimarioMaisSevicoSecudario=ArrayHelper::getValue($completaram_pacote_primario,'completaramPacotePrimarioMaisSevicoSecudario');
-        $completaramServicoNaoPacotePrimario=ArrayHelper::getValue($completaram_pacote_primario,'completaramServicoNaoPacotePrimario');
-        $iniciaraServicoNaoCompletaram=ArrayHelper::getValue($completaram_pacote_primario,'iniciaraServicoNaoCompletaram');
-        $servicoViolencia=ArrayHelper::getValue($completaram_pacote_primario,'completaram_servico_violencia');
-        $subsidioEscolar=ArrayHelper::getValue($completaram_pacote_primario,'tiveram_intervencao_subsidio_escolar');
-
-        $results = array(
-            'completaramApenasPacotePrimario' => count($completaramApenasPacotePrimario),
-            'completaramPacotePrimarioMaisSevicoSecudario' => count($completaramPacotePrimarioMaisSevicoSecudario),
-            'completaramServicoNaoPacotePrimario' => count($completaramServicoNaoPacotePrimario),
-            'iniciaraServicoNaoCompletaram' => count($iniciaraServicoNaoCompletaram),
-            'servicoViolencia' => count($servicoViolencia),
-            'subsidioEscolar' => count($subsidioEscolar)
-        );
-
-        
-        if(count($results)>0) {
-
-            $array=ArrayHelper::getValue($results,'nui');
-            Yii::$app->response->format = Response::FORMAT_JSON;
-            return $this->asJson($results);
-
-        }else
-        { Yii::$app->response->format = Response::FORMAT_JSON;
-            return Json::encode([
-                'message' => 'Sem AGYW`s'
-            ]);
-        }
-        
-*/
     } 
 
 
-}
 
+
+}
