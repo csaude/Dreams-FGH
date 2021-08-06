@@ -29,11 +29,31 @@ class AgywPrev extends Model {
         ];
     }
 
-    public function getCompletedOnlyFirstPackageDesagregation(){
+    /**
+     * Return results for desagregation Bellow
+     * Number of active DREAMS beneficiaries that have fully completed the DREAMS primary package of services/interventions 
+     *  but no additional services/interventions. (Numerator, Denominator)
+     */
+    public function getFirstDesagregationResults(){
         
         $indicator = $this->desagregationCompletedOnlyFirstPackage($this->start_date, $this->end_date, $this->province_code, $this->district_code);
-        return $indicator;
+        
+        return $indicator['results'];
     }
+
+    /**
+     * Return beneficiaries for desagregation Bellow
+     * Number of active DREAMS beneficiaries that have fully completed the DREAMS primary package of services/interventions 
+     *  but no additional services/interventions. (Numerator, Denominator)
+     */
+    public function getFirstDesagregationBeneficiaries(){
+        $indicator = $this->desagregationCompletedOnlyFirstPackage($this->start_date, $this->end_date, $this->province_code, $this->district_code);
+        
+        return $indicator['beneficiaries'];
+    }
+
+
+    
 
     private function s_datediff( $str_interval, $dt_menor, $dt_maior, $relative=false){
 
@@ -159,6 +179,34 @@ class AgywPrev extends Model {
         ); 
     }
 
+    private function beneficiaryIdsMatrix(){
+        return array(
+            '9-14' => array(
+                '0_6' => array(),
+                '7_12' => array(),
+                '13_24' => array(),
+                '25+' => array(),
+            ),
+            '15-19' => array(
+                '0_6' => array(),
+                '7_12' => array(),
+                '13_24' => array(),
+                '25+' => array(),
+            ),
+            '20-24' => array(
+                '0_6' => array(),
+                '7_12' => array(),
+                '13_24' => array(),
+                '25+' => array(),
+            ),
+            '25-29' => array(
+                '0_6' => array(),
+                '7_12' => array(),
+                '13_24' => array(),
+                '25+' => array(),
+            )
+        ); 
+    }
     private function getEnrollmentTimeInMonths($enrollmentdate, $dataFim){
         return $this->s_datediff("m", $enrollmentdate, $dataFim);
     }
@@ -409,10 +457,17 @@ class AgywPrev extends Model {
     }
 
 
+    /**
+     * 
+     * Number of active DREAMS beneficiaries that have fully completed the DREAMS primary package of services/interventions 
+     *  but no additional services/interventions. (Numerator, Denominator)
+     */
     private function desagregationCompletedOnlyFirstPackage($dataInicio,$dataFim, $prov, $district){
 
         $results = $this->generateTotalDesagregationMatrix();
         $completudes = $this->completude($dataInicio,$dataFim, $prov, $district);
+        //store the IDs for further consultation
+        $onlyFirstPackageDesagregation = $this->beneficiaryIdsMatrix();
 
 
         // 9-14
@@ -421,9 +476,13 @@ class AgywPrev extends Model {
         $completaramApenasPacotePrimario1324 = array_diff($completudes['9-14']['13_24']['completaram_pacote_primario'], $completudes['9-14']['13_24']['completaram_servico_secundario']);
         $completaramApenasPacotePrimario25 = array_diff($completudes['9-14']['25+']['completaram_pacote_primario'], $completudes['9-14']['25+']['completaram_servico_secundario']);
         $results['9-14']['0_6'] = count($completaramApenasPacotePrimario06);
+        $onlyFirstPackageDesagregation['9-14']['0_6'] = $completaramApenasPacotePrimario06;
         $results['9-14']['7_12'] = count($completaramApenasPacotePrimario712);
+        $onlyFirstPackageDesagregation['9-14']['7_12'] = $completaramApenasPacotePrimario712;
         $results['9-14']['13_24'] = count($completaramApenasPacotePrimario1324);
+        $onlyFirstPackageDesagregation['9-14']['13_24'] = $completaramApenasPacotePrimario1324;
         $results['9-14']['25+'] = count($completaramApenasPacotePrimario25);
+        $onlyFirstPackageDesagregation['9-14']['25+'] = $completaramApenasPacotePrimario25;
 
 
         // 15-19
@@ -432,9 +491,13 @@ class AgywPrev extends Model {
         $completaramApenasPacotePrimario1324 = array_diff($completudes['15-19']['13_24']['completaram_pacote_primario'], $completudes['15-19']['13_24']['completaram_servico_secundario']);
         $completaramApenasPacotePrimario25 = array_diff($completudes['15-19']['25+']['completaram_pacote_primario'], $completudes['15-19']['25+']['completaram_servico_secundario']);
         $results['15-19']['0_6'] = count($completaramApenasPacotePrimario06);
+        $onlyFirstPackageDesagregation['15-19']['0_6'] = $completaramApenasPacotePrimario06;
         $results['15-19']['7_12'] = count($completaramApenasPacotePrimario712);
+        $onlyFirstPackageDesagregation['15-19']['7_12'] = $completaramApenasPacotePrimario712;
         $results['15-19']['13_24'] = count($completaramApenasPacotePrimario1324);
+        $onlyFirstPackageDesagregation['15-19']['13_24'] = $completaramApenasPacotePrimario1324;
         $results['15-19']['25+'] = count($completaramApenasPacotePrimario25);
+        $onlyFirstPackageDesagregation['15-19']['25+'] = $completaramApenasPacotePrimario25;
 
         // 20-24
         $completaramApenasPacotePrimario06 = array_diff($completudes['20-24']['0_6']['completaram_pacote_primario'], $completudes['20-24']['0_6']['completaram_servico_secundario']);
@@ -442,9 +505,13 @@ class AgywPrev extends Model {
         $completaramApenasPacotePrimario1324 = array_diff($completudes['20-24']['13_24']['completaram_pacote_primario'], $completudes['20-24']['13_24']['completaram_servico_secundario']);
         $completaramApenasPacotePrimario25 = array_diff($completudes['20-24']['25+']['completaram_pacote_primario'], $completudes['20-24']['25+']['completaram_servico_secundario']);
         $results['20-24']['0_6'] = count($completaramApenasPacotePrimario06);
+        $onlyFirstPackageDesagregation['20-24']['0_6'] = $completaramApenasPacotePrimario06;
         $results['20-24']['7_12'] = count($completaramApenasPacotePrimario712);
+        $onlyFirstPackageDesagregation['20-24']['7_12'] = $completaramApenasPacotePrimario712;
         $results['20-24']['13_24'] = count($completaramApenasPacotePrimario1324);
+        $onlyFirstPackageDesagregation['20-24']['13_24'] = $completaramApenasPacotePrimario1324;
         $results['20-24']['25+'] = count($completaramApenasPacotePrimario25);
+        $onlyFirstPackageDesagregation['20-24']['25+'] = $completaramApenasPacotePrimario25;
 
         // 25-29
         $completaramApenasPacotePrimario06 = array_diff($completudes['25-29']['0_6']['completaram_pacote_primario'], $completudes['25-29']['0_6']['completaram_servico_secundario']);
@@ -452,11 +519,21 @@ class AgywPrev extends Model {
         $completaramApenasPacotePrimario1324 = array_diff($completudes['25-29']['13_24']['completaram_pacote_primario'], $completudes['25-29']['13_24']['completaram_servico_secundario']);
         $completaramApenasPacotePrimario25 = array_diff($completudes['25-29']['25+']['completaram_pacote_primario'], $completudes['25-29']['25+']['completaram_servico_secundario']);
         $results['25-29']['0_6'] = count($completaramApenasPacotePrimario06);
+        $onlyFirstPackageDesagregation['25-29']['0_6'] = $completaramApenasPacotePrimario06;
         $results['25-29']['7_12'] = count($completaramApenasPacotePrimario712);
+        $onlyFirstPackageDesagregation['25-29']['7_12'] = $completaramApenasPacotePrimario712;
         $results['25-29']['13_24'] = count($completaramApenasPacotePrimario1324);
+        $onlyFirstPackageDesagregation['25-29']['13_24'] = $completaramApenasPacotePrimario1324;
         $results['25-29']['25+'] = count($completaramApenasPacotePrimario25);
+        $onlyFirstPackageDesagregation['25-29']['25+'] = $completaramApenasPacotePrimario25;
+
+       
+        $result = [
+            'results' => $results,
+            'beneficiaries' =>  $onlyFirstPackageDesagregation
+        ];
         
-        return $results;
+        return $result;
     } 
 
 

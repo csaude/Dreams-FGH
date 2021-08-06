@@ -18,6 +18,8 @@ use app\models\ComiteLocalidades;
 use app\models\SubServicosDreams;
 use app\models\ServicosDream;
 use app\models\Bairros;
+use app\models\Provincias;
+use app\models\AgywPrev;
 
 use yii\helpers\Json;
 
@@ -46,7 +48,7 @@ class BeneficiariosController extends Controller
                 ],
                 'rules' => [
                     [
-                        'actions' => ['index', 'view', 'create', 'lists', 'listas', 'servicos', 'localidades', 'bairros', 'todos', 'filtros', 'relatorio', 'relatoriofy19', 'relatoriofy20q1', 'relatoriofy20q2'],
+                        'actions' => ['index', 'view', 'create', 'lists', 'listas', 'servicos', 'localidades', 'bairros', 'todos', 'filtros', 'relatorio', 'relatoriofy19', 'relatoriofy20q1', 'relatoriofy20q2', 'relatorioagyw', 'relatorioagywprev'],
 
                         'allow' => true,
                         'roles' => [
@@ -116,8 +118,60 @@ O digitadores so visualizam 5 Beneficiarios por lista**/
         ]);
     }
 
+    public function actionRelatorioagywprev(){
 
+        $enrollmentTime = isset($_POST['enrollmentTime'])? $_POST['enrollmentTime'] : null;
+        $ageBand = isset($_POST['ageBand'])? $_POST['ageBand'] : null;
+        $province_code = isset($_POST['province_code'])? $_POST['province_code'] : null;
+        $district_code = isset($_POST['district_code'])? $_POST['district_code'] : null;
+        $start_date = isset($_POST['start_date'])? $_POST['start_date'] : null;
+        $end_date = isset($_POST['end_date'])? $_POST['end_date'] : null;
+        $indicatorID = isset($_POST['indicatorID'])? $_POST['indicatorID'] : null;
 
+        $model = new AgywPrev();
+        $model->province_code = $province_code;
+        $model->district_code = $district_code;
+        $model->start_date = $start_date;
+        $model->end_date = $end_date;
+
+        $desagregationResults = $model->getFirstDesagregationBeneficiaries();
+
+        $beneficiaries = $desagregationResults[$ageBand][$enrollmentTime];
+       
+        $searchModel = new BeneficiariosSearch();
+        $dataProvider = $searchModel->searchList($beneficiaries);
+        $dataProvider->pagination->pageSize = 10;
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    public function actionRelatorioagyw()
+    {
+        $model = new AgywPrev();
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $province = Provincias::find()
+                    ->where(['id' => $model->province_code])->one();
+
+            $district = Distritos::find()
+                    ->where(['district_code' => $model->district_code])->one();
+
+            $desagregationResults = $model->getFirstDesagregationResults();
+        
+            return $this->render('relatorioagywprev', [
+                'model' => $model,
+                'province' => $province->province_name,
+                'district' => $district->district_name,
+                'completedOnlyFirstPackageDesagregation' => $desagregationResults
+            ]);
+        }
+        
+        return $this->render('relatorioagyw', [
+            'model' => $model,
+        ]);
+    }
 
 
 
