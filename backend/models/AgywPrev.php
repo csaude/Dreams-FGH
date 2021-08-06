@@ -10,6 +10,7 @@ class AgywPrev extends Model {
     public $district_code;
     public $start_date;
     public $end_date;
+    private $completudeness;
 
     public function rules()
     {
@@ -36,7 +37,8 @@ class AgywPrev extends Model {
      */
     public function getFirstDesagregationResults(){
         
-        $indicator = $this->desagregationCompletedOnlyFirstPackage($this->start_date, $this->end_date, $this->province_code, $this->district_code);
+        //$indicator = $this->desagregationCompletedOnlyFirstPackage($this->start_date, $this->end_date, $this->province_code, $this->district_code);
+        $indicator = $this->desagregationCompletedOnlyFirstPackage();
         
         return $indicator['results'];
     }
@@ -47,8 +49,9 @@ class AgywPrev extends Model {
      *  but no additional services/interventions. (Numerator, Denominator)
      */
     public function getFirstDesagregationBeneficiaries(){
-        $indicator = $this->desagregationCompletedOnlyFirstPackage($this->start_date, $this->end_date, $this->province_code, $this->district_code);
-        
+        //$indicator = $this->desagregationCompletedOnlyFirstPackage($this->start_date, $this->end_date, $this->province_code, $this->district_code);
+        $indicator = $this->desagregationCompletedOnlyFirstPackage();
+
         return $indicator['beneficiaries'];
     }
 
@@ -456,16 +459,26 @@ class AgywPrev extends Model {
         return $desagregationMap;
     }
 
+    /**
+     * Executes the completude operation
+     */
+    public function execute(){
+        
+        if($this->start_date && $this->end_date && $this->province_code && $this->district_code){
+            $this->completudeness = $this->completude($this->start_date, $this->end_date, $this->province_code, $this->district_code);
+        }
+    }
 
     /**
      * 
      * Number of active DREAMS beneficiaries that have fully completed the DREAMS primary package of services/interventions 
      *  but no additional services/interventions. (Numerator, Denominator)
      */
-    private function desagregationCompletedOnlyFirstPackage($dataInicio,$dataFim, $prov, $district){
+    private function desagregationCompletedOnlyFirstPackage(){
 
         $results = $this->generateTotalDesagregationMatrix();
-        $completudes = $this->completude($dataInicio,$dataFim, $prov, $district);
+        //$completudes = $this->completude($dataInicio,$dataFim, $prov, $district);
+        $completudes = $this->completudeness;
         //store the IDs for further consultation
         $onlyFirstPackageDesagregation = $this->beneficiaryIdsMatrix();
 
@@ -535,6 +548,14 @@ class AgywPrev extends Model {
         
         return $result;
     } 
+
+    /**
+     * Number of active DREAMS beneficiaries that have fully completed the primary package of services/interventions AND
+     *   at least one secondary service/intervention. (Numerator, Denominator)
+     */
+    private function desagregationCompletedFirstPackageAndService(){
+        
+    }
 
 
 
