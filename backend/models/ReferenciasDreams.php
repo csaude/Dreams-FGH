@@ -17,6 +17,8 @@ use common\models\User;
  * @property integer $notificar_ao
  * @property integer $status
  * @property string $description
+ * @property string $cancel_reason
+ * @property string $other_reason
  * @property integer $criado_por
  * @property integer $actualizado_por
  * @property string $criado_em
@@ -47,7 +49,7 @@ class ReferenciasDreams extends \yii\db\ActiveRecord
             [['beneficiario_id', 'distrito_id', 'servico_id', 'status', 'criado_por', 'actualizado_por'], 'integer'],
             [['criado_em', 'actualizado_em','intervensao','status_ref'], 'safe'],
             [['nota_referencia'], 'string', 'max' => 100],
-            [['name', 'description'], 'string', 'max' => 250],
+            [['name', 'description','cancel_reason','other_reason'], 'string', 'max' => 250],
             [['projecto'], 'string', 'max' => 150],
             [['refer_to', 'num_livro', 'ref_livro'], 'string', 'max' => 100],
             [['referido_por', 'notificar_ao', 'user_location', 'user_location2'], 'string', 'max' => 100],
@@ -75,8 +77,10 @@ class ReferenciasDreams extends \yii\db\ActiveRecord
             'servico_id'=>Yii::t('app', 'Tipo de Serviço'),
             'intervensao'=>Yii::t('app', 'Intervensões Principais'),
             'status' => Yii::t('app', 'Status'),
-	    'status_ref' =>Yii::t('app','Estado'),
+	        'status_ref' =>Yii::t('app','Estado'),
             'description' => Yii::t('app', 'Observações'),
+            'cancel_reason' => Yii::t('app', 'Motivo de Cancelamento'),
+            'other_reason' => Yii::t('app', 'Outro Motivo'),
             'criado_por' => Yii::t('app', 'Criado Por'),
             'actualizado_por' => Yii::t('app', 'Actualizado Por'),
             'criado_em' => Yii::t('app', 'Referido em'),
