@@ -152,7 +152,7 @@ Pjax::begin(['enablePushState'=>false]); ?>
           "17"=>"Matutuine",
         ),*/
         'filter'=> ArrayHelper::map(Distritos::find()->orderBy('district_name ASC')->asArray()->all(), 'district_code', 'district_name'),
-'value'=>'distrito.district_name',
+        'value'=>'distrito.district_name',
   /*      'value'=>function ($model) {
           if(!$model->district_code==NULL) {
             $District = $model->district_code;
@@ -355,7 +355,20 @@ if($conta==0){return  '<span class="label label-danger"> <i class="fa fa-medkit"
 "117"=>"ADPP_FHI360Covida_Marracuene",
 "118"=>"ADPP_FHI360Covida_Manhica",
 "119"=>"ADPP_FHI360Covida_Magude",
-"120"=>"ADPP_FHI360Covida_Moamba"),
+"120"=>"ADPP_FHI360Covida_Moamba",
+
+
+"121"=>"Associação AMME_OCB Nweti_Ile",
+"122"=>"Associação Olipa_FHI360Covida _ Pemba",
+"123"=>"Conselho Cristão de Moçambique_OCB_Nweti _Mocubela",
+"124"=>"COMUSANAS_SOFALA",
+"125"=>"Fundacao Ariel Glaser_SDSMAS_Pemba",
+"126"=>"Associação ADESCA_ OCB_ NWETI_Lugela",
+"128"=>"FHI360 Covida_Pemba",
+"129"=>"ADPP_MAPUTO PROVINCIA",
+"130"=>"ASSEDUCO - OCB FHII360 COVIDA  MAPUTO PROVINCIA"),
+	  
+
         'value' => function ($model) {
    //	return $model->parceiro_id;
     if($model->parceiro_id==1) {return "Jhpiego - Sofala";}
@@ -470,6 +483,18 @@ elseif($model->parceiro_id==117){return "ADPP_FHI360Covida_Marracuene";}
 elseif($model->parceiro_id==118){return "ADPP_FHI360Covida_Manhica";}
 elseif($model->parceiro_id==119){return "ADPP_FHI360Covida_Magude";}
 elseif($model->parceiro_id==120){return "ADPP_FHI360Covida_Moamba";}
+
+// Hardcode 2021
+
+elseif($model->parceiro_id==121){return "Associação AMME_OCB Nweti_Ile";}
+elseif($model->parceiro_id==122){return "Associação Olipa_FHI360Covida _ Pemba";}
+elseif($model->parceiro_id==123){return "Conselho Cristão de Moçambique_OCB_Nweti _Mocubela";}
+elseif($model->parceiro_id==124){return "COMUSANAS_SOFALA";}
+elseif($model->parceiro_id==125){return "Fundacao Ariel Glaser_SDSMAS_Pemba";}
+elseif($model->parceiro_id==126){return "Associação ADESCA_ OCB_ NWETI_Lugela";}
+elseif($model->parceiro_id==128){return "FHI360 Covida_Pemba";}
+elseif($model->parceiro_id==129){return "ADPP_MAPUTO PROVINCIA";}
+elseif($model->parceiro_id==130){return "ASSEDUCO - OCB FHII360 COVIDA  MAPUTO PROVINCIA";}
 	  
    },
     ],      
