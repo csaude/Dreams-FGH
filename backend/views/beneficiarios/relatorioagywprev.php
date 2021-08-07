@@ -73,7 +73,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                             <td bgcolor="#CD9B9B"> 
                                                 
                                                 
-                                                <?= Html::a($completedOnlyFirstPackageDesagregation[$index1][$index2], ['relatorioagywprev'], [
+                                                <?= Html::a($firstDesagregation[$index1][$index2], ['relatorioagywprev'], [
                                                         'data'=>[
                                                             'method' => 'post',
                                                             'params'=>['ageBand' => $index1, 
@@ -83,6 +83,201 @@ $this->params['breadcrumbs'][] = $this->title;
                                                                         'start_date' => $model->start_date,
                                                                         'end_date' => $model->end_date,
                                                                         'indicatorID' => 1
+                                                                    ],
+                                                        ]
+                                                    ]) ?>
+                                               
+                                            </td>
+                                        <?php  } ?>
+                                    </tr>
+                            <?php  } ?>
+                            <tr>
+                                <td colspan="5" height="40" bgcolor="#FFFFFF"><b> </b></td>
+                            </tr>
+
+                            <tr>
+                                <td width="706" colspan="5" bgcolor="#CD5C5C"><b>Número de Beneficiários DREAMS que receberam TODO pacote primário de serviços e pelo menos um serviço secundario</b> </td>
+                            </tr>
+                            <tr>
+                                <td width="174" bgcolor="#FFE4E1">Tempo de registo como beneficiário DREAMS </td>
+                                <td bgcolor="#FFE4E1">10-14</td>
+                                <td bgcolor="#FFE4E1">15-19</td>
+                                <td bgcolor="#FFE4E1">20-24</td>
+                                <td bgcolor="#FFE4E1">25-29</td>
+                            </tr>
+                            <?php foreach(['0_6','7_12', '13_24', '25+'] as $index2){ ?>
+                                    <tr>
+                                        <td bgcolor="#CD9B9B"><?php echo $index2 ?> meses </td>
+                                        <?php foreach(['9-14','15-19', '20-24', '25-29'] as $index1){ ?>
+                                            <td bgcolor="#CD9B9B"> 
+                                                
+                                                
+                                                <?= Html::a($secondDesagregation[$index1][$index2], ['relatorioagywprev'], [
+                                                        'data'=>[
+                                                            'method' => 'post',
+                                                            'params'=>['ageBand' => $index1, 
+                                                                        'enrollmentTime' => $index2,
+                                                                        'province_code' => $model->province_code,
+                                                                        'district_code' => $model->district_code,
+                                                                        'start_date' => $model->start_date,
+                                                                        'end_date' => $model->end_date,
+                                                                        'indicatorID' => 2
+                                                                    ],
+                                                        ]
+                                                    ]) ?>
+                                               
+                                            </td>
+                                        <?php  } ?>
+                                    </tr>
+                            <?php  } ?>
+                            <tr>
+                                <td colspan="5" height="40" bgcolor="#FFFFFF"><b> </b></td>
+                            </tr>
+
+                            <tr>
+                                <td width="706" colspan="5" bgcolor="#CD5C5C"><b>Número de Beneficiários DREAMS que completaram pelo menos um serviço DREAMS mais não completaram o pacote primário de serviços</b> </td>
+                            </tr>
+                            <tr>
+                                <td width="174" bgcolor="#FFE4E1">Tempo de registo como beneficiário DREAMS </td>
+                                <td bgcolor="#FFE4E1">10-14</td>
+                                <td bgcolor="#FFE4E1">15-19</td>
+                                <td bgcolor="#FFE4E1">20-24</td>
+                                <td bgcolor="#FFE4E1">25-29</td>
+                            </tr>
+                            <?php foreach(['0_6','7_12', '13_24', '25+'] as $index2){ ?>
+                                    <tr>
+                                        <td bgcolor="#CD9B9B"><?php echo $index2 ?> meses </td>
+                                        <?php foreach(['9-14','15-19', '20-24', '25-29'] as $index1){ ?>
+                                            <td bgcolor="#CD9B9B"> 
+                                                
+                                                
+                                                <?= Html::a($thirdDesagregation[$index1][$index2], ['relatorioagywprev'], [
+                                                        'data'=>[
+                                                            'method' => 'post',
+                                                            'params'=>['ageBand' => $index1, 
+                                                                        'enrollmentTime' => $index2,
+                                                                        'province_code' => $model->province_code,
+                                                                        'district_code' => $model->district_code,
+                                                                        'start_date' => $model->start_date,
+                                                                        'end_date' => $model->end_date,
+                                                                        'indicatorID' => 3
+                                                                    ],
+                                                        ]
+                                                    ]) ?>
+                                               
+                                            </td>
+                                        <?php  } ?>
+                                    </tr>
+                            <?php  } ?>
+                            <tr>
+                                <td colspan="5" height="40" bgcolor="#FFFFFF"><b> </b></td>
+                            </tr>
+
+                            <tr>
+                                <td width="706" colspan="5" bgcolor="#CD5C5C"><b>Número de Beneficiários DREAMS iniciaram pelo menos um serviço/intervençao mas ainda nao concluiram</b> </td>
+                            </tr>
+                            <tr>
+                                <td width="174" bgcolor="#FFE4E1">Tempo de registo como beneficiário DREAMS </td>
+                                <td bgcolor="#FFE4E1">10-14</td>
+                                <td bgcolor="#FFE4E1">15-19</td>
+                                <td bgcolor="#FFE4E1">20-24</td>
+                                <td bgcolor="#FFE4E1">25-29</td>
+                            </tr>
+                            <?php foreach(['0_6','7_12', '13_24', '25+'] as $index2){ ?>
+                                    <tr>
+                                        <td bgcolor="#CD9B9B"><?php echo $index2 ?> meses </td>
+                                        <?php foreach(['9-14','15-19', '20-24', '25-29'] as $index1){ ?>
+                                            <td bgcolor="#CD9B9B"> 
+                                                
+                                                
+                                                <?= Html::a($fourthdesagregationResults[$index1][$index2], ['relatorioagywprev'], [
+                                                        'data'=>[
+                                                            'method' => 'post',
+                                                            'params'=>['ageBand' => $index1, 
+                                                                        'enrollmentTime' => $index2,
+                                                                        'province_code' => $model->province_code,
+                                                                        'district_code' => $model->district_code,
+                                                                        'start_date' => $model->start_date,
+                                                                        'end_date' => $model->end_date,
+                                                                        'indicatorID' => 3
+                                                                    ],
+                                                        ]
+                                                    ]) ?>
+                                               
+                                            </td>
+                                        <?php  } ?>
+                                    </tr>
+                            <?php  } ?>
+                            <tr>
+                                <td colspan="5" height="40" bgcolor="#FFFFFF"><b> </b></td>
+                            </tr>
+
+                            <tr>
+                                <td width="706" colspan="5" bgcolor="#CD5C5C"><b>Número de Beneficiários DREAMS que completaram intervencao focada na prevencao de violencia</b> </td>
+                            </tr>
+                            <tr>
+                                <td width="174" bgcolor="#FFE4E1">Tempo de registo como beneficiário DREAMS </td>
+                                <td bgcolor="#FFE4E1">10-14</td>
+                                <td bgcolor="#FFE4E1">15-19</td>
+                                <td bgcolor="#FFE4E1">20-24</td>
+                                <td bgcolor="#FFE4E1">25-29</td>
+                            </tr>
+                            <?php foreach(['0_6','7_12', '13_24', '25+'] as $index2){ ?>
+                                    <tr>
+                                        <td bgcolor="#CD9B9B"><?php echo $index2 ?> meses </td>
+                                        <?php foreach(['9-14','15-19', '20-24', '25-29'] as $index1){ ?>
+                                            <td bgcolor="#CD9B9B"> 
+                                                
+                                                
+                                                <?= Html::a($fifthdesagregationResults[$index1][$index2], ['relatorioagywprev'], [
+                                                        'data'=>[
+                                                            'method' => 'post',
+                                                            'params'=>['ageBand' => $index1, 
+                                                                        'enrollmentTime' => $index2,
+                                                                        'province_code' => $model->province_code,
+                                                                        'district_code' => $model->district_code,
+                                                                        'start_date' => $model->start_date,
+                                                                        'end_date' => $model->end_date,
+                                                                        'indicatorID' => 3
+                                                                    ],
+                                                        ]
+                                                    ]) ?>
+                                               
+                                            </td>
+                                        <?php  } ?>
+                                    </tr>
+                            <?php  } ?>
+                            <tr>
+                                <td colspan="5" height="40" bgcolor="#FFFFFF"><b> </b></td>
+                            </tr>
+
+                            <tr>
+                                <td width="706" colspan="5" bgcolor="#CD5C5C"><b>Número de Beneficiários DREAMS que receberam subsidio e suporte escolar</b> </td>
+                            </tr>
+                            <tr>
+                                <td width="174" bgcolor="#FFE4E1">Tempo de registo como beneficiário DREAMS </td>
+                                <td bgcolor="#FFE4E1">10-14</td>
+                                <td bgcolor="#FFE4E1">15-19</td>
+                                <td bgcolor="#FFE4E1">20-24</td>
+                                <td bgcolor="#FFE4E1">25-29</td>
+                            </tr>
+                            <?php foreach(['0_6','7_12', '13_24', '25+'] as $index2){ ?>
+                                    <tr>
+                                        <td bgcolor="#CD9B9B"><?php echo $index2 ?> meses </td>
+                                        <?php foreach(['9-14','15-19', '20-24', '25-29'] as $index1){ ?>
+                                            <td bgcolor="#CD9B9B"> 
+                                                
+                                                
+                                                <?= Html::a($sixthdesagregationResults[$index1][$index2], ['relatorioagywprev'], [
+                                                        'data'=>[
+                                                            'method' => 'post',
+                                                            'params'=>['ageBand' => $index1, 
+                                                                        'enrollmentTime' => $index2,
+                                                                        'province_code' => $model->province_code,
+                                                                        'district_code' => $model->district_code,
+                                                                        'start_date' => $model->start_date,
+                                                                        'end_date' => $model->end_date,
+                                                                        'indicatorID' => 3
                                                                     ],
                                                         ]
                                                     ]) ?>
