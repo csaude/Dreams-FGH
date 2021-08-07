@@ -53,7 +53,115 @@ class AgywPrev extends Model {
         return $indicator['beneficiaries'];
     }
 
+    /**
+     * Return results for desagregation Bellow
+     * Number of active DREAMS beneficiaries that have fully completed the primary package of services/interventions AND
+     *   at least one secondary service/intervention. (Numerator, Denominator)
+     */
+    public function getSecondDesagregationResults(){
+        $indicator = $this->desagregationCompletedFirstPackageAndSecondaryService();
+        
+        return $indicator['results'];
+    }
 
+    /**
+     * Return beneficiaries for desagregation Bellow
+     * Number of active DREAMS beneficiaries that have fully completed the primary package of services/interventions AND
+     *   at least one secondary service/intervention. (Numerator, Denominator)
+     */
+    public function getSecondDesagregationBeneficiaries(){
+        $indicator = $this->desagregationCompletedFirstPackageAndSecondaryService();
+
+        return $indicator['beneficiaries'];
+    }
+
+    /**
+     * Return results for desagregation Bellow
+     * Number of active DREAMS beneficiaries that have completed at least one DREAMS service/intervention but 
+     *  not the full primary package. (Denominator)
+     */
+    public function getThirdDesagregationResults(){
+        $indicator = $this->desagregationCompletedOnlyServiceNotPackage();
+        
+        return $indicator['results'];
+    }
+
+    /**
+     * Return beneficiaries for desagregation Bellow
+     * Number of active DREAMS beneficiaries that have completed at least one DREAMS service/intervention but 
+     *  not the full primary package. (Denominator)
+     */
+    public function getThirdDesagregationBeneficiaries(){
+        $indicator = $this->desagregationCompletedOnlyServiceNotPackage();
+
+        return $indicator['beneficiaries'];
+    }
+
+    /**
+     * Return results for desagregation Bellow
+     * Number of active DREAMS beneficiaries that have completed at least one DREAMS service/intervention but 
+     *  not the full primary package. (Denominator)
+     */
+    public function getFourthDesagregationResults(){
+        $indicator = $this->desagregationStartedServiceNotFinished();
+        
+        return $indicator['results'];
+    }
+
+    /**
+     * Return beneficiaries for desagregation Bellow
+     * Number of active DREAMS beneficiaries that have completed at least one DREAMS service/intervention but 
+     *  not the full primary package. (Denominator)
+     */
+    public function getFourthDesagregationBeneficiaries(){
+        $indicator = $this->desagregationStartedServiceNotFinished();
+
+        return $indicator['beneficiaries'];
+    }
+
+    /**
+     * Return results for desagregation Bellow
+     * Violence Prevention: Number of AGYW enrolled in DREAMS that completed an evidence-based intervention focused 
+     *  on preventing violence within the reporting period.
+     */
+    public function getFifthDesagregationResults(){
+        $indicator = $this->desagregationCompletedViolenceService();
+        
+        return $indicator['results'];
+    }
+
+    /**
+     * Return beneficiaries for desagregation Bellow
+     * Violence Prevention: Number of AGYW enrolled in DREAMS that completed an evidence-based intervention focused 
+     *  on preventing violence within the reporting period.
+     */
+    public function getFifthDesagregationBeneficiaries(){
+        $indicator = $this->desagregationCompletedViolenceService();
+
+        return $indicator['beneficiaries'];
+    }
+
+    /**
+     * Return results for desagregation Bellow
+     * Education Support: Number of AGYW enrolled in DREAMS that received educational support to remain in, advance, 
+     *  and/or rematriculate in school within the reporting period.
+     */
+    public function getSixthDesagregationResults(){
+        $indicator = $this->desagregationSubsidioEscolar();
+        
+        return $indicator['results'];
+    }
+
+    /**
+     * Return beneficiaries for desagregation Bellow
+     * Education Support: Number of AGYW enrolled in DREAMS that received educational support to remain in, 
+     *  advance, and/or rematriculate in school within the reporting period.
+     */
+    public function getSixthDesagregationBeneficiaries(){
+        $indicator = $this->desagregationSubsidioEscolar();
+
+        return $indicator['beneficiaries'];
+    }
     
 
     private function s_datediff( $str_interval, $dt_menor, $dt_maior, $relative=false){
@@ -500,7 +608,7 @@ class AgywPrev extends Model {
      * Number of active DREAMS beneficiaries that have fully completed the primary package of services/interventions AND
      *   at least one secondary service/intervention. (Numerator, Denominator)
      */
-    private function desagregationCompletedFirstPackageAndService(){
+    private function desagregationCompletedFirstPackageAndSecondaryService(){
         $ageBands = ['9-14','15-19','20-24','25-29'];
         $enrollmentTimes = ['0_6','7_12','13_24','25+'];
 
@@ -525,7 +633,125 @@ class AgywPrev extends Model {
         return $result;
     }
 
+     /**
+     * Number of active DREAMS beneficiaries that have completed at least one DREAMS service/intervention but 
+     *  not the full primary package. (Denominator)
+     */
+    private function desagregationCompletedOnlyServiceNotPackage(){
+        $ageBands = ['9-14','15-19','20-24','25-29'];
+        $enrollmentTimes = ['0_6','7_12','13_24','25+'];
+        
+        $results = $this->generateTotalDesagregationMatrix();
+        $completudes = $this->completudeness;
+        //store the IDs for further consultation
+        $beneficiaries = $this->beneficiaryIdsMatrix();
 
+        foreach($ageBands as $index1){
+            foreach($enrollmentTimes as $index2){
+                $completaramServiconPP =  array_diff(array_merge($completudes[$index1][$index2]['completaram_servico_primario'], $completudes[$index1][$index2]['completaram_servico_secundario']), $completudes[$index1][$index2]['completaram_pacote_primario']);
+                $beneficiaries[$index1][$index2] = $completaramServiconPP;
+                $results[$index1][$index2] = count($completaramServiconPP);
+            }
+        }
+
+        $result = [
+            'results' => $results,
+            'beneficiaries' =>  $beneficiaries
+        ];
+
+        return $result;
+    }
+
+     /**
+     * Number of active DREAMS beneficiaries that have started a DREAMS service/intervention but 
+     *  have not yet completed it. (Denominator)
+     */
+    private function desagregationStartedServiceNotFinished(){
+        $ageBands = ['9-14','15-19','20-24','25-29'];
+        $enrollmentTimes = ['0_6','7_12','13_24','25+'];
+        
+        $results = $this->generateTotalDesagregationMatrix();
+        $completudes = $this->completudeness;
+        //store the IDs for further consultation
+        $beneficiaries = $this->beneficiaryIdsMatrix();
+
+        foreach($ageBands as $index1){
+            foreach($enrollmentTimes as $index2){
+                $completaramApenasPacotePrimario = array_diff($completudes[$index1][$index2]['completaram_pacote_primario'], $completudes[$index1][$index2]['completaram_servico_secundario']);
+                $completaramPPeServico = array_intersect($completudes[$index1][$index2]['completaram_pacote_primario'], $completudes[$index1][$index2]['completaram_servico_secundario']);
+                $completaramServiconPP =  array_diff(array_merge($completudes[$index1][$index2]['completaram_servico_primario'], $completudes[$index1][$index2]['completaram_servico_secundario']), $completudes[$index1][$index2]['completaram_pacote_primario']);
+                
+                $iniciaraServicoNaoCompletaram =  array_diff($completudes[$index1][$index2]['iniciaram_servico'], $completudes[$index1][$index2]['completaram_pacote_primario'], $completaramApenasPacotePrimario, $completaramPPeServico, $completaramServiconPP);
+                $beneficiaries[$index1][$index2] = $iniciaraServicoNaoCompletaram;
+                $results[$index1][$index2] = count($iniciaraServicoNaoCompletaram);
+            }
+        }
+
+        $result = [
+            'results' => $results,
+            'beneficiaries' =>  $beneficiaries
+        ];
+
+        return $result;
+    }
+
+    /**
+     * Violence Prevention: Number of AGYW enrolled in DREAMS that completed an evidence-based intervention 
+     *  focused on preventing violence within the reporting period.
+     */
+    private function desagregationCompletedViolenceService(){
+        $ageBands = ['9-14','15-19','20-24','25-29'];
+        $enrollmentTimes = ['0_6','7_12','13_24','25+'];
+        
+        $results = $this->generateTotalDesagregationMatrix();
+        $completudes = $this->completudeness;
+        //store the IDs for further consultation
+        $beneficiaries = $this->beneficiaryIdsMatrix();
+
+        foreach($ageBands as $index1){
+            foreach($enrollmentTimes as $index2){
+                $completaramServicoViolencia =  $completudes[$index1][$index2]['completaram_servico_violencia'];
+                $beneficiaries[$index1][$index2] = $completaramServicoViolencia;
+                $results[$index1][$index2] = count($completaramServicoViolencia);
+            }
+        }
+
+        $result = [
+            'results' => $results,
+            'beneficiaries' =>  $beneficiaries
+        ];
+
+        return $result;
+    }
+
+    /**
+     * Violence Prevention: Number of AGYW enrolled in DREAMS that completed an evidence-based intervention 
+     *  focused on preventing violence within the reporting period.
+     */
+    private function desagregationSubsidioEscolar(){
+        $ageBands = ['9-14','15-19','20-24','25-29'];
+        $enrollmentTimes = ['0_6','7_12','13_24','25+'];
+        
+        $results = $this->generateTotalDesagregationMatrix();
+        $completudes = $this->completudeness;
+        //store the IDs for further consultation
+        $beneficiaries = $this->beneficiaryIdsMatrix();
+
+        foreach($ageBands as $index1){
+            foreach($enrollmentTimes as $index2){
+                $completaramServicoEscolar =  $completudes[$index1][$index2]['tiveram_intervencao_subsidio_escolar'];
+                $beneficiaries[$index1][$index2] = $completaramServicoEscolar;
+                $results[$index1][$index2] = count($completaramServicoEscolar);
+            }
+        }
+
+        $result = [
+            'results' => $results,
+            'beneficiaries' =>  $beneficiaries
+        ];
+
+        return $result;
+    }
 
 
 }
