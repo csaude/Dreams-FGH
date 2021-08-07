@@ -134,6 +134,7 @@ O digitadores so visualizam 5 Beneficiarios por lista**/
         $model->start_date = $start_date;
         $model->end_date = $end_date;
 
+        $model->execute();
         $desagregationResults = $model->getFirstDesagregationBeneficiaries();
 
         $beneficiaries = $desagregationResults[$ageBand][$enrollmentTime];
@@ -158,6 +159,9 @@ O digitadores so visualizam 5 Beneficiarios por lista**/
             $district = Distritos::find()
                     ->where(['district_code' => $model->district_code])->one();
 
+
+            //$desagregationResults = $model->getFirstDesagregationResults();
+            $model->execute();
             $desagregationResults = $model->getFirstDesagregationResults();
         
             return $this->render('relatorioagywprev', [
