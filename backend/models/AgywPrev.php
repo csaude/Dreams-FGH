@@ -37,7 +37,6 @@ class AgywPrev extends Model {
      */
     public function getFirstDesagregationResults(){
         
-        //$indicator = $this->desagregationCompletedOnlyFirstPackage($this->start_date, $this->end_date, $this->province_code, $this->district_code);
         $indicator = $this->desagregationCompletedOnlyFirstPackage();
         
         return $indicator['results'];
@@ -49,7 +48,6 @@ class AgywPrev extends Model {
      *  but no additional services/interventions. (Numerator, Denominator)
      */
     public function getFirstDesagregationBeneficiaries(){
-        //$indicator = $this->desagregationCompletedOnlyFirstPackage($this->start_date, $this->end_date, $this->province_code, $this->district_code);
         $indicator = $this->desagregationCompletedOnlyFirstPackage();
 
         return $indicator['beneficiaries'];
@@ -475,75 +473,24 @@ class AgywPrev extends Model {
      *  but no additional services/interventions. (Numerator, Denominator)
      */
     private function desagregationCompletedOnlyFirstPackage(){
-
+        $ageBands = ['9-14','15-19','20-24','25-29'];
+        $enrollmentTimes = ['0_6','7_12','13_24','25+'];
         $results = $this->generateTotalDesagregationMatrix();
-        //$completudes = $this->completude($dataInicio,$dataFim, $prov, $district);
         $completudes = $this->completudeness;
         //store the IDs for further consultation
-        $onlyFirstPackageDesagregation = $this->beneficiaryIdsMatrix();
+        $beneficiaries = $this->beneficiaryIdsMatrix();
 
+        foreach($ageBands as $index1){
+            foreach($enrollmentTimes as $index2){
+                $completaramApenasPacotePrimario = array_diff($completudes[$index1][$index2]['completaram_pacote_primario'], $completudes[$index1][$index2]['completaram_servico_secundario']);
+                $beneficiaries[$index1][$index2] = $completaramApenasPacotePrimario;
+                $results[$index1][$index2] = count($completaramApenasPacotePrimario);
+            }
+        }
 
-        // 9-14
-        $completaramApenasPacotePrimario06 = array_diff($completudes['9-14']['0_6']['completaram_pacote_primario'], $completudes['9-14']['0_6']['completaram_servico_secundario']);
-        $completaramApenasPacotePrimario712 = array_diff($completudes['9-14']['7_12']['completaram_pacote_primario'], $completudes['9-14']['7_12']['completaram_servico_secundario']);
-        $completaramApenasPacotePrimario1324 = array_diff($completudes['9-14']['13_24']['completaram_pacote_primario'], $completudes['9-14']['13_24']['completaram_servico_secundario']);
-        $completaramApenasPacotePrimario25 = array_diff($completudes['9-14']['25+']['completaram_pacote_primario'], $completudes['9-14']['25+']['completaram_servico_secundario']);
-        $results['9-14']['0_6'] = count($completaramApenasPacotePrimario06);
-        $onlyFirstPackageDesagregation['9-14']['0_6'] = $completaramApenasPacotePrimario06;
-        $results['9-14']['7_12'] = count($completaramApenasPacotePrimario712);
-        $onlyFirstPackageDesagregation['9-14']['7_12'] = $completaramApenasPacotePrimario712;
-        $results['9-14']['13_24'] = count($completaramApenasPacotePrimario1324);
-        $onlyFirstPackageDesagregation['9-14']['13_24'] = $completaramApenasPacotePrimario1324;
-        $results['9-14']['25+'] = count($completaramApenasPacotePrimario25);
-        $onlyFirstPackageDesagregation['9-14']['25+'] = $completaramApenasPacotePrimario25;
-
-
-        // 15-19
-        $completaramApenasPacotePrimario06 = array_diff($completudes['15-19']['0_6']['completaram_pacote_primario'], $completudes['15-19']['0_6']['completaram_servico_secundario']);
-        $completaramApenasPacotePrimario712 = array_diff($completudes['15-19']['7_12']['completaram_pacote_primario'], $completudes['15-19']['7_12']['completaram_servico_secundario']);
-        $completaramApenasPacotePrimario1324 = array_diff($completudes['15-19']['13_24']['completaram_pacote_primario'], $completudes['15-19']['13_24']['completaram_servico_secundario']);
-        $completaramApenasPacotePrimario25 = array_diff($completudes['15-19']['25+']['completaram_pacote_primario'], $completudes['15-19']['25+']['completaram_servico_secundario']);
-        $results['15-19']['0_6'] = count($completaramApenasPacotePrimario06);
-        $onlyFirstPackageDesagregation['15-19']['0_6'] = $completaramApenasPacotePrimario06;
-        $results['15-19']['7_12'] = count($completaramApenasPacotePrimario712);
-        $onlyFirstPackageDesagregation['15-19']['7_12'] = $completaramApenasPacotePrimario712;
-        $results['15-19']['13_24'] = count($completaramApenasPacotePrimario1324);
-        $onlyFirstPackageDesagregation['15-19']['13_24'] = $completaramApenasPacotePrimario1324;
-        $results['15-19']['25+'] = count($completaramApenasPacotePrimario25);
-        $onlyFirstPackageDesagregation['15-19']['25+'] = $completaramApenasPacotePrimario25;
-
-        // 20-24
-        $completaramApenasPacotePrimario06 = array_diff($completudes['20-24']['0_6']['completaram_pacote_primario'], $completudes['20-24']['0_6']['completaram_servico_secundario']);
-        $completaramApenasPacotePrimario712 = array_diff($completudes['20-24']['7_12']['completaram_pacote_primario'], $completudes['20-24']['7_12']['completaram_servico_secundario']);
-        $completaramApenasPacotePrimario1324 = array_diff($completudes['20-24']['13_24']['completaram_pacote_primario'], $completudes['20-24']['13_24']['completaram_servico_secundario']);
-        $completaramApenasPacotePrimario25 = array_diff($completudes['20-24']['25+']['completaram_pacote_primario'], $completudes['20-24']['25+']['completaram_servico_secundario']);
-        $results['20-24']['0_6'] = count($completaramApenasPacotePrimario06);
-        $onlyFirstPackageDesagregation['20-24']['0_6'] = $completaramApenasPacotePrimario06;
-        $results['20-24']['7_12'] = count($completaramApenasPacotePrimario712);
-        $onlyFirstPackageDesagregation['20-24']['7_12'] = $completaramApenasPacotePrimario712;
-        $results['20-24']['13_24'] = count($completaramApenasPacotePrimario1324);
-        $onlyFirstPackageDesagregation['20-24']['13_24'] = $completaramApenasPacotePrimario1324;
-        $results['20-24']['25+'] = count($completaramApenasPacotePrimario25);
-        $onlyFirstPackageDesagregation['20-24']['25+'] = $completaramApenasPacotePrimario25;
-
-        // 25-29
-        $completaramApenasPacotePrimario06 = array_diff($completudes['25-29']['0_6']['completaram_pacote_primario'], $completudes['25-29']['0_6']['completaram_servico_secundario']);
-        $completaramApenasPacotePrimario712 = array_diff($completudes['25-29']['7_12']['completaram_pacote_primario'], $completudes['25-29']['7_12']['completaram_servico_secundario']);
-        $completaramApenasPacotePrimario1324 = array_diff($completudes['25-29']['13_24']['completaram_pacote_primario'], $completudes['25-29']['13_24']['completaram_servico_secundario']);
-        $completaramApenasPacotePrimario25 = array_diff($completudes['25-29']['25+']['completaram_pacote_primario'], $completudes['25-29']['25+']['completaram_servico_secundario']);
-        $results['25-29']['0_6'] = count($completaramApenasPacotePrimario06);
-        $onlyFirstPackageDesagregation['25-29']['0_6'] = $completaramApenasPacotePrimario06;
-        $results['25-29']['7_12'] = count($completaramApenasPacotePrimario712);
-        $onlyFirstPackageDesagregation['25-29']['7_12'] = $completaramApenasPacotePrimario712;
-        $results['25-29']['13_24'] = count($completaramApenasPacotePrimario1324);
-        $onlyFirstPackageDesagregation['25-29']['13_24'] = $completaramApenasPacotePrimario1324;
-        $results['25-29']['25+'] = count($completaramApenasPacotePrimario25);
-        $onlyFirstPackageDesagregation['25-29']['25+'] = $completaramApenasPacotePrimario25;
-
-       
         $result = [
             'results' => $results,
-            'beneficiaries' =>  $onlyFirstPackageDesagregation
+            'beneficiaries' =>  $beneficiaries
         ];
         
         return $result;
@@ -554,7 +501,28 @@ class AgywPrev extends Model {
      *   at least one secondary service/intervention. (Numerator, Denominator)
      */
     private function desagregationCompletedFirstPackageAndService(){
-        
+        $ageBands = ['9-14','15-19','20-24','25-29'];
+        $enrollmentTimes = ['0_6','7_12','13_24','25+'];
+
+        $results = $this->generateTotalDesagregationMatrix();
+        $completudes = $this->completudeness;
+        //store the IDs for further consultation
+        $beneficiaries = $this->beneficiaryIdsMatrix();
+
+        foreach($ageBands as $index1){
+            foreach($enrollmentTimes as $index2){
+                $completaramPPeServico = array_intersect($completudes[$index1][$index2]['completaram_pacote_primario'], $completudes[$index1][$index2]['completaram_servico_secundario']);
+                $beneficiaries[$index1][$index2] = $completaramPPeServico;
+                $results[$index1][$index2] = count($completaramPPeServico);
+            }
+        }
+
+        $result = [
+            'results' => $results,
+            'beneficiaries' =>  $beneficiaries
+        ];
+
+        return $result;
     }
 
 
