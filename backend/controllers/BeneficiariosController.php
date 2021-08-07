@@ -135,9 +135,37 @@ O digitadores so visualizam 5 Beneficiarios por lista**/
         $model->end_date = $end_date;
 
         $model->execute();
-        $desagregationResults = $model->getFirstDesagregationBeneficiaries();
 
-        $beneficiaries = $desagregationResults[$ageBand][$enrollmentTime];
+        $desagregationResults = null;
+        $beneficiaries = null;
+
+        switch($indicatorID){
+            case 1: 
+                    $desagregationResults = $model->getFirstDesagregationBeneficiaries();
+                    $beneficiaries = $desagregationResults[$ageBand][$enrollmentTime];
+                    break;
+            case 2: 
+                    $desagregationResults = $model->getSecondDesagregationBeneficiaries();
+                    $beneficiaries = $desagregationResults[$ageBand][$enrollmentTime];
+                    break;
+            case 3: 
+                    $desagregationResults = $model->getThirdDesagregationBeneficiaries();
+                    $beneficiaries = $desagregationResults[$ageBand][$enrollmentTime];
+                    break;
+            case 4: 
+                    $desagregationResults = $model->getFourthDesagregationBeneficiaries();
+                    $beneficiaries = $desagregationResults[$ageBand][$enrollmentTime];
+                    break;
+            case 5: 
+                    $desagregationResults = $model->getFifthDesagregationBeneficiaries();
+                    $beneficiaries = $desagregationResults[$ageBand][$enrollmentTime];
+                    break;
+            case 6: 
+                    $desagregationResults = $model->getSixthDesagregationBeneficiaries();
+                    $beneficiaries = $desagregationResults[$ageBand][$enrollmentTime];
+                    break;        
+        };
+        
        
         $searchModel = new BeneficiariosSearch();
         $dataProvider = $searchModel->searchList($beneficiaries);
@@ -162,13 +190,24 @@ O digitadores so visualizam 5 Beneficiarios por lista**/
 
             //$desagregationResults = $model->getFirstDesagregationResults();
             $model->execute();
-            $desagregationResults = $model->getFirstDesagregationResults();
+            $firstdesagregationResults = $model->getFirstDesagregationResults();
+            $seconddesagregationResults = $model->getSecondDesagregationResults();
+            $thirddesagregationResults = $model->getThirdDesagregationResults();
+            $fourthdesagregationResults = $model->getFourthDesagregationResults();
+            $fifthdesagregationResults = $model->getFifthDesagregationResults();
+            $sixthdesagregationResults = $model->getSixthDesagregationResults();
+
         
             return $this->render('relatorioagywprev', [
                 'model' => $model,
                 'province' => $province->province_name,
                 'district' => $district->district_name,
-                'completedOnlyFirstPackageDesagregation' => $desagregationResults
+                'firstDesagregation' => $firstdesagregationResults,
+                'secondDesagregation' => $seconddesagregationResults,
+                'thirdDesagregation' => $thirddesagregationResults,
+                'fourthdesagregationResults' => $fourthdesagregationResults,
+                'fifthdesagregationResults' => $fifthdesagregationResults,
+                'sixthdesagregationResults' => $sixthdesagregationResults
             ]);
         }
         
