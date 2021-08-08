@@ -429,6 +429,9 @@ class Vw_agyw_prevController extends Controller
                         //array_push($iniciaram_servico, $beneficiary_id);
                         $this->addCompletude($desagregationMap, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'iniciaram_servico');
                     }
+                    if($recursos_mandatorios > 0 || $outros_recursos > 0 || $modulos_ogaac > 0 && $sessoes_saaj > 0 || $prevencao_violencia_estudante > 3){
+                        $iniciaram_servico[$i++] = $beneficiary_id;
+                    }
                 }
                 else{   // Fora da escola
                     if($recursos_mandatorios == 8 && $outros_recursos > 4 && $modulos_ogaac == 3 && $sessoes_saaj == 5 && $literacia_financeira == 1 && ($sexualmente_activa == 1 && $testagem_hiv > 0)){
@@ -446,6 +449,9 @@ class Vw_agyw_prevController extends Controller
                     if($recursos_mandatorios > 0 || $outros_recursos > 0 || $modulos_ogaac > 0 && $sessoes_saaj > 0 || $prevencao_violencia_rapariga > 3){
                         //array_push($iniciaram_servico, $beneficiary_id);
                         $this->addCompletude($desagregationMap, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'iniciaram_servico');
+                    }
+                    if($recursos_mandatorios > 0 || $outros_recursos > 0 || $modulos_ogaac > 0 && $sessoes_saaj > 0 || $prevencao_violencia_rapariga > 3){
+                        $iniciaram_servico[$i++] = $beneficiary_id;
                     }
                 }
                 if($subsidio_escolar > 0 || $preservativos > 0 || ($sexualmente_activa == 0 && $testagem_hiv > 0) || $cuidados_pos_violencia_us > 0 || $cuidados_pos_violencia_comunidade > 0 || $outros_servicos_saaj > 0){
@@ -469,6 +475,9 @@ class Vw_agyw_prevController extends Controller
                     //array_push($iniciaram_servico, $beneficiary_id);
                     $this->addCompletude($desagregationMap, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'iniciaram_servico');
                 }
+                if($recursos_antigo > 0){
+                    $iniciaram_servico[$i++] = $beneficiary_id;
+                }
             }else{  // 15-24 Anos
                 if($preservativos > 0 && $sessoes_hiv_vbg > 7 && $testagem_hiv > 0 && $literacia_financeira == 1){
                     //array_push($completaram_pacote_primario, $beneficiary_id);
@@ -490,6 +499,9 @@ class Vw_agyw_prevController extends Controller
                     //array_push($iniciaram_servico, $beneficiary_id);
                     $this->addCompletude($desagregationMap, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'iniciaram_servico');
                 }
+                if($sessoes_hiv_vbg > 0 || $prevencao_violencia_15_mais > 0){
+                    $iniciaram_servico[$i++] = $beneficiary_id;
+                }
                 // Antigo curriculo
                 if($preservativos > 0 && $testagem_hiv > 0 && $sessoes_hiv > 0 && $sessoes_vbg > 0){
                     //array_push($completaram_pacote_primario, $beneficiary_id);
@@ -503,6 +515,9 @@ class Vw_agyw_prevController extends Controller
                     if($recursos_antigo > 0){
                         //array_push($iniciaram_servico, $beneficiary_id);
                         $this->addCompletude($desagregationMap, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'iniciaram_servico');
+                    }
+                    if($recursos_antigo > 0){
+                        $iniciaram_servico[$i++] = $beneficiary_id;
                     }
                 }else{ //20-24
                     if($cuidados_pos_violencia_us > 0 || $cuidados_pos_violencia_comunidade > 0 || $abordagens_socio_economicas > 0 || $outros_servicos_saaj > 0){
