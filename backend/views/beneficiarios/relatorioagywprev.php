@@ -199,7 +199,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                                         'district_code' => $model->district_code,
                                                                         'start_date' => $model->start_date,
                                                                         'end_date' => $model->end_date,
-                                                                        'indicatorID' => 3
+                                                                        'indicatorID' => 4
                                                                     ],
                                                         ]
                                                     ]) ?>
@@ -238,7 +238,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                                         'district_code' => $model->district_code,
                                                                         'start_date' => $model->start_date,
                                                                         'end_date' => $model->end_date,
-                                                                        'indicatorID' => 3
+                                                                        'indicatorID' => 5
                                                                     ],
                                                         ]
                                                     ]) ?>
@@ -277,7 +277,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                                         'district_code' => $model->district_code,
                                                                         'start_date' => $model->start_date,
                                                                         'end_date' => $model->end_date,
-                                                                        'indicatorID' => 3
+                                                                        'indicatorID' => 6
                                                                     ],
                                                         ]
                                                     ]) ?>
