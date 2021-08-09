@@ -273,7 +273,9 @@ class Vw_agyw_prevController extends Controller
 
         $desagregationMap = $this->generateDesagregationMatrix();
 
-        $query = "select beneficiario_id, faixa_actual, vai_escola, sexualmente_activa, data_registo, 
+        $query = "select beneficiario_id, 
+                    if(idade_actual = 15  and datediff(min(data_servico),coalesce(STR_TO_DATE(dataNascimento,'%d/%m/%Y'),STR_TO_DATE(dataNascimento,'%m/%d/%Y')))/30 between 120 and 177,'9-14',if(idade_actual = 20  and datediff(min(data_servico),coalesce(STR_TO_DATE(dataNascimento,'%d/%m/%Y'),STR_TO_DATE(dataNascimento,'%m/%d/%Y')))/30 between 180 and 237,'15-19',faixa_actual)) faixa_actual, 
+                    vai_escola, sexualmente_activa, data_registo, 
                     sum(case
                     when (vai_escola=1 and sub_servico_id in (169,170,184,185,186,187,188,189,190,191,192,193,194,207,208)
                         or vai_escola=0 and sub_servico_id in (179,180,181,182,196,197,198,199)) then 1
