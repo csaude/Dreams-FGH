@@ -22,6 +22,7 @@ use app\models\Provincias;
 use app\models\AgywPrev;
 
 use yii\helpers\Json;
+use yii\helpers\VarDumper;
 
 /**
  * BeneficiariosController implements the CRUD actions for Beneficiarios model.
@@ -102,7 +103,8 @@ class BeneficiariosController extends Controller
         $searchModel = new BeneficiariosSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         /** updated by: jordao.cololo@gmail.com on 13th July 2018
-O digitadores so visualizam 5 Beneficiarios por lista**/
+        *   O digitadores so visualizam 5 Beneficiarios por lista
+        */
         Yii::$app->user->identity->role < 18 ? $dataProvider->pagination->pageSize = 5 : $dataProvider->pagination->pageSize = 10;
 
         return $this->render('index', [
@@ -119,7 +121,7 @@ O digitadores so visualizam 5 Beneficiarios por lista**/
     }
 
     public function actionRelatorioagywprev(){
-
+        
         $enrollmentTime = isset($_POST['enrollmentTime'])? $_POST['enrollmentTime'] : null;
         $ageBand = isset($_POST['ageBand'])? $_POST['ageBand'] : null;
         $province_code = isset($_POST['province_code'])? $_POST['province_code'] : null;
@@ -127,7 +129,6 @@ O digitadores so visualizam 5 Beneficiarios por lista**/
         $start_date = isset($_POST['start_date'])? $_POST['start_date'] : null;
         $end_date = isset($_POST['end_date'])? $_POST['end_date'] : null;
         $indicatorID = isset($_POST['indicatorID'])? $_POST['indicatorID'] : null;
-
         $model = new AgywPrev();
         $model->province_code = $province_code;
         $model->district_code = $district_code;
@@ -166,9 +167,15 @@ O digitadores so visualizam 5 Beneficiarios por lista**/
                     break;        
         };
         
-       
+        if($beneficiaries != null){
+            setcookie("beneficiaries", json_encode($beneficiaries), time() + 3600 * 365);
+        } else {
+
+            $beneficiaries = json_decode($_COOKIE["beneficiaries"]);
+        }   
+        
         $searchModel = new BeneficiariosSearch();
-        $dataProvider = $searchModel->searchList($beneficiaries);
+        $dataProvider = $searchModel->searchList(Yii::$app->request->queryParams, $beneficiaries);
         $dataProvider->pagination->pageSize = 10;
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -187,8 +194,6 @@ O digitadores so visualizam 5 Beneficiarios por lista**/
             $district = Distritos::find()
                     ->where(['district_code' => $model->district_code])->one();
 
-
-            //$desagregationResults = $model->getFirstDesagregationResults();
             $model->execute();
             $firstdesagregationResults = $model->getFirstDesagregationResults();
             $seconddesagregationResults = $model->getSecondDesagregationResults();
