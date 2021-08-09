@@ -293,6 +293,7 @@ class Vw_agyw_prevController extends Controller
                     if(idade_actual > 17 and trabalhadora_sexo=1,1,0) +
                     if(abuso_alcool_drogas=1,1,0) +
                     if(historico_its=1,1,0) vulnerabilidades, 
+                    vai_escola, sexualmente_activa, data_registo, 
                     sum(case
                     when (vai_escola=1 and sub_servico_id in (169,170,184,185,186,187,188,189,190,191,192,193,194,207,208)
                         or vai_escola=0 and sub_servico_id in (179,180,181,182,196,197,198,199)) then 1
