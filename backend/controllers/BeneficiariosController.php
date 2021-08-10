@@ -271,10 +271,10 @@ class BeneficiariosController extends Controller
         $searchModel = new BeneficiariosSearch();
         $dataProvider = $searchModel->searchList(Yii::$app->request->queryParams, $beneficiaries);
         $dataProvider->pagination->pageSize = 10;
-        return $this->render('agywlist', [
+        return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'beneficiaries' => implode(',',$beneficiaries)
+            //'beneficiaries' => implode(',',$beneficiaries)
         ]);
     }
 
