@@ -29,6 +29,8 @@ use app\models\ServicosDream;
 use app\models\TipoUs;
 use app\models\ServicosBeneficiados;
 use app\models\Bairros;
+use app\models\Curriculum;
+use app\models\CurriculumServicos;
 use app\models\Us;
 use app\models\EscolasDreams;
 use app\models\SubServicosDreams;
@@ -203,6 +205,12 @@ MaterialAsset::register($this);}
                                    <li>
                                 <a href="<?php echo Url::toRoute('parceiros-tipo/index'); ?>"><i class="fa fa-plus-circle"  style="color:green;"></i> <span>Tipos de Parceirias<span class="badge pull-right"> <?php // ParceirosTipo::find()->count();?>
 </span></span></a>
+                                </li>
+                                <li>
+                                <a href="<?php echo Url::toRoute('curriculum/index'); ?>"><i class="fa fa-plus-circle"  style="color:green;"></i> <span>Curriculum<span class="badge pull-right"></span></span></a>
+                                </li>
+                                <li>
+                                <a href="<?php echo Url::toRoute('curriculum-servicos/index'); ?>"><i class="fa fa-plus-circle"  style="color:green;"></i> <span>Curriculum-Serviço<span class="badge pull-right"></span></span></a>
                                 </li>
 
                             </ul>
@@ -465,8 +473,14 @@ $ben=Beneficiarios::find()->where(['provin_code'=>5])->andWhere(['emp_status'=>1
                                    <li>
                                 <a href="<?php echo Url::toRoute('tipo-us/index'); ?>"><i class="fa fa-gears"  style="color:green;"></i> <span>Tipos de US<span class="badge pull-right"> <?= TipoUs::find()->count();?></span></span></a>
                                 </li>
-                        
-
+                                <li>
+                                <a href="<?php echo Url::toRoute('curriculum/index'); ?>"><i class="fa fa-gears"  style="color:green;"></i> <span>Curriculum<span class="badge pull-right"> <?= Curriculum::find()->count();?></span></span></a>
+                                </li>
+                                <li>
+                                <a href="<?php echo Url::toRoute('curriculum-servicos/index'); ?>">
+                                  <i class="fa fa-list-ol"  style="color:green;"></i> <span>Curriculum-Serviço
+                                  <span class="badge pull-right"> <?= CurriculumServicos::find()->count();?></span></span></a>
+                                </li>
                          
 
                       
@@ -565,9 +579,16 @@ $ben=Beneficiarios::find()->where(['provin_code'=>5])->andWhere(['emp_status'=>1
                                 </li>
 
 <?php } ?>
-                                                            	 <li>
+                                <li>
+                                    <?= Html::a(Yii::t('app', '<i class="fa fa-angle-double-right"></i> AGYW prev'), ['/beneficiarios/relatorioagyw','id'=>1]) ?> 
+                                </li>      
+                                <li>
+                                    <?= Html::a(Yii::t('app', '<i class="fa fa-angle-double-right"></i> AGYW prev Indicator'), ['/agywprev/index']) ?> 
+                                </li>                         	 
+                        <li>
                                <?= Html::a(Yii::t('app', '<i class="fa fa-angle-double-right"></i> FY19'), ['/beneficiarios/relatoriofy19','id'=>5]) ?> 
                         </li>
+                        
 
 		<li class="treeview">
                             <a href="#"  data-toggle="collapse" data-target="#apr">
@@ -581,7 +602,7 @@ $ben=Beneficiarios::find()->where(['provin_code'=>5])->andWhere(['emp_status'=>1
                               <li>
                                 <?= Html::a(Yii::t('app', '<i class="fa fa-angle-double-right"></i> Q2'), ['/beneficiarios/relatoriofy20q2']) ?>
                              </li>
-
+                             
                           </ul>
                             </ul>
     </li>

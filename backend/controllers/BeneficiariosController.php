@@ -18,8 +18,12 @@ use app\models\ComiteLocalidades;
 use app\models\SubServicosDreams;
 use app\models\ServicosDream;
 use app\models\Bairros;
+use app\models\Provincias;
+use app\models\AgywPrev;
 
 use yii\helpers\Json;
+use yii\helpers\VarDumper;
+
 /**
  * BeneficiariosController implements the CRUD actions for Beneficiarios model.
  */
@@ -41,40 +45,40 @@ class BeneficiariosController extends Controller
             'access' => [
                 'class' => AccessControl::className(),
                 'ruleConfig' => [
-        'class' => AccessRule::className(),
-    ],
+                    'class' => AccessRule::className(),
+                ],
                 'rules' => [
                     [
-                        'actions' => ['index','view','create','lists','listas','servicos','localidades','bairros','todos','filtros','relatorio','relatoriofy19','relatoriofy20q1','relatoriofy20q2'],
+                        'actions' => ['index', 'view', 'create', 'lists', 'listas', 'servicos', 'localidades', 'bairros', 'todos', 'filtros', 'relatorio', 'relatoriofy19', 'relatoriofy20q1', 'relatoriofy20q2', 'relatorioagyw', 'relatorioagywprev', 'exportlist', 'exportreport'],
 
                         'allow' => true,
                         'roles' => [
-                User::ROLE_USER,
-	        User::ROLE_MA,
-                User::ROLE_ADMIN,
-                User::ROLE_GESTOR,
-		User::ROLE_DIGITADOR,
-            	User::ROLE_EDUCADOR_DE_PAR,
-            	User::ROLE_MENTOR,
-                  User::ROLE_ENFERMEIRA,
-                User::ROLE_CORDENADOR
-                ],
+                            User::ROLE_USER,
+                            User::ROLE_MA,
+                            User::ROLE_ADMIN,
+                            User::ROLE_GESTOR,
+                            User::ROLE_DIGITADOR,
+                            User::ROLE_EDUCADOR_DE_PAR,
+                            User::ROLE_MENTOR,
+                            User::ROLE_ENFERMEIRA,
+                            User::ROLE_CORDENADOR
+                        ],
                     ],
 
-                     [
-                        'actions' => ['update','referidos'],
+                    [
+                        'actions' => ['update', 'referidos'],
                         'allow' => true,
-                      //  'roles' => ['@'],
+                        //  'roles' => ['@'],
                         'roles' => [
-               User::ROLE_USER,
-                User::ROLE_ADMIN,
-                User::ROLE_GESTOR,
-User::ROLE_DIGITADOR,
-            User::ROLE_EDUCADOR_DE_PAR,
-            User::ROLE_MENTOR,
-            User::ROLE_ENFERMEIRA,                
-User::ROLE_CORDENADOR
-            ],
+                            User::ROLE_USER,
+                            User::ROLE_ADMIN,
+                            User::ROLE_GESTOR,
+                            User::ROLE_DIGITADOR,
+                            User::ROLE_EDUCADOR_DE_PAR,
+                            User::ROLE_MENTOR,
+                            User::ROLE_ENFERMEIRA,
+                            User::ROLE_CORDENADOR
+                        ],
                     ],
 
                     [
@@ -82,11 +86,105 @@ User::ROLE_CORDENADOR
                         'allow' => true,
                         'roles' => ['@'],
                         'matchCallback' => function ($rule, $action) {
-                       return User::isUserAdmin(Yii::$app->user->identity->username);}
+                            return User::isUserAdmin(Yii::$app->user->identity->username);
+                        }
                     ],
                 ]
             ]
         ];
+    }
+
+    public function actionExportreport(){
+        $model = new AgywPrev();
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $province = Provincias::find()
+                    ->where(['id' => $model->province_code])->one();
+
+            $district = Distritos::find()
+                    ->where(['district_code' => $model->district_code])->one();
+           
+            $model->execute();
+            $firstdesagregationResults = $model->getFirstDesagregationResults();
+            $seconddesagregationResults = $model->getSecondDesagregationResults();
+            $thirddesagregationResults = $model->getThirdDesagregationResults();
+            $fourthdesagregationResults = $model->getFourthDesagregationResults();
+            $fifthdesagregationResults = $model->getFifthDesagregationResults();
+            $sixthdesagregationResults = $model->getSixthDesagregationResults();
+
+           
+            return $this->render('report', [
+                'province' => $province->province_name,
+                'district' => $district->district_name,
+                'period'=>$model->start_date.' - '.$model->end_date,
+                'firstDesagregation' => $firstdesagregationResults,
+                'secondDesagregation' => $seconddesagregationResults,
+                'thirdDesagregation' => $thirddesagregationResults,
+                'fourthdesagregationResults' => $fourthdesagregationResults,
+                'fifthdesagregationResults' => $fifthdesagregationResults,
+                'sixthdesagregationResults' => $sixthdesagregationResults
+            ]);
+
+        }
+        
+        return $this->render('relatorioagyw', [
+            'model' => $model,
+        ]);
+    }
+
+    public function actionExportlist($beneficiaries){
+
+        $array = explode(',',$beneficiaries);
+
+        $searchModel = new BeneficiariosSearch();
+        $data = $searchModel->searchList(Yii::$app->request->queryParams, $beneficiaries);
+
+
+        
+       
+
+        $export = '<table>
+        <tr>
+          <th>Company</th>
+          <th>Contact</th>
+          <th> '.$array[2].'Country</th>
+        </tr>
+        <tr>
+          <td>Alfreds Futterkiste</td>
+          <td>Maria Anders</td>
+          <td>Germany</td>
+        </tr>
+        <tr>
+          <td>Centro comercial Moctezuma</td>
+          <td>Francisco Chang</td>
+          <td>Mexico</td>
+        </tr>
+        <tr>
+          <td>Ernst Handel</td>
+          <td>Roland Mendel</td>
+          <td>Austria</td>
+        </tr>
+        <tr>
+          <td>Island Trading</td>
+          <td>Helen Bennett</td>
+          <td>UK</td>
+        </tr>
+        <tr>
+          <td>Laughing Bacchus Winecellars</td>
+          <td>Yoshi Tannamuri</td>
+          <td>Canada</td>
+        </tr>
+        <tr>
+          <td>Magazzini Alimentari Riuniti</td>
+          <td>Giovanni Rovelli</td>
+          <td>Italy</td>
+        </tr>
+      </table>';
+
+
+        //header( "Content-Type: application/vnd.ms-excel; charset=utf-8" ); 
+        header( "Content-Type: application/xls" ); 
+        header( "Content-Disposition: attachment; filename=test.xls" );
+        echo $export;
     }
 
     /**
@@ -97,9 +195,10 @@ User::ROLE_CORDENADOR
     {
         $searchModel = new BeneficiariosSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-/** updated by: jordao.cololo@gmail.com on 13th July 2018
-O digitadores so visualizam 5 Beneficiarios por lista**/
-	Yii::$app->user->identity->role<18? $dataProvider->pagination->pageSize=5:$dataProvider->pagination->pageSize=10;
+        /** updated by: jordao.cololo@gmail.com on 13th July 2018
+        *   O digitadores so visualizam 5 Beneficiarios por lista
+        */
+        Yii::$app->user->identity->role < 18 ? $dataProvider->pagination->pageSize = 5 : $dataProvider->pagination->pageSize = 10;
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -107,19 +206,120 @@ O digitadores so visualizam 5 Beneficiarios por lista**/
         ]);
     }
 
-	    public function actionReferidos($id)
+    public function actionReferidos($id)
     {
-      return $this->render('referidos', [
-          'model' => $this->findModel($id),
-      ]);
+        return $this->render('referidos', [
+            'model' => $this->findModel($id),
+        ]);
     }
-	
-	
-	
+
+    public function actionRelatorioagywprev(){
+        
+        $enrollmentTime = isset($_POST['enrollmentTime'])? $_POST['enrollmentTime'] : null;
+        $ageBand = isset($_POST['ageBand'])? $_POST['ageBand'] : null;
+        $province_code = isset($_POST['province_code'])? $_POST['province_code'] : null;
+        $district_code = isset($_POST['district_code'])? $_POST['district_code'] : null;
+        $start_date = isset($_POST['start_date'])? $_POST['start_date'] : null;
+        $end_date = isset($_POST['end_date'])? $_POST['end_date'] : null;
+        $indicatorID = isset($_POST['indicatorID'])? $_POST['indicatorID'] : null;
+        $model = new AgywPrev();
+        $model->province_code = $province_code;
+        $model->district_code = $district_code;
+        $model->start_date = $start_date;
+        $model->end_date = $end_date;
+
+        $model->execute();
+
+        $desagregationResults = null;
+        $beneficiaries = null;
+
+        switch($indicatorID){
+            case 1: 
+                    $desagregationResults = $model->getFirstDesagregationBeneficiaries();
+                    $beneficiaries = $desagregationResults[$ageBand][$enrollmentTime];
+                    break;
+            case 2: 
+                    $desagregationResults = $model->getSecondDesagregationBeneficiaries();
+                    $beneficiaries = $desagregationResults[$ageBand][$enrollmentTime];
+                    break;
+            case 3: 
+                    $desagregationResults = $model->getThirdDesagregationBeneficiaries();
+                    $beneficiaries = $desagregationResults[$ageBand][$enrollmentTime];
+                    break;
+            case 4: 
+                    $desagregationResults = $model->getFourthDesagregationBeneficiaries();
+                    $beneficiaries = $desagregationResults[$ageBand][$enrollmentTime];
+                    break;
+            case 5: 
+                    $desagregationResults = $model->getFifthDesagregationBeneficiaries();
+                    $beneficiaries = $desagregationResults[$ageBand][$enrollmentTime];
+                    break;
+            case 6: 
+                    $desagregationResults = $model->getSixthDesagregationBeneficiaries();
+                    $beneficiaries = $desagregationResults[$ageBand][$enrollmentTime];
+                    break;        
+        };
+        
+        if($beneficiaries != null){
+            setcookie("beneficiaries", implode(',',$beneficiaries)/*json_encode($beneficiaries)*/, time() + 3600 * 365);
+        } else {
+
+            $beneficiaries = explode(',',$_COOKIE["beneficiaries"]);
+        }   
+        VarDumper::dump($beneficiaries);
+        //VarDumper::dump($beneficiaries );
+        $searchModel = new BeneficiariosSearch();
+        $dataProvider = $searchModel->searchList(Yii::$app->request->queryParams, $beneficiaries);
+        $dataProvider->pagination->pageSize = 10;
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            //'beneficiaries' => implode(',',$beneficiaries)
+        ]);
+    }
+
+    public function actionRelatorioagyw()
+    {
+        
+        $model = new AgywPrev();
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $province = Provincias::find()
+                    ->where(['id' => $model->province_code])->one();
+
+            $district = Distritos::find()
+                    ->where(['district_code' => $model->district_code])->one();
+
+            $model->execute();
+            $firstdesagregationResults = $model->getFirstDesagregationResults();
+            $seconddesagregationResults = $model->getSecondDesagregationResults();
+            $thirddesagregationResults = $model->getThirdDesagregationResults();
+            $fourthdesagregationResults = $model->getFourthDesagregationResults();
+            $fifthdesagregationResults = $model->getFifthDesagregationResults();
+            $sixthdesagregationResults = $model->getSixthDesagregationResults();
+
+        
+            return $this->render('relatorioagywprev', [
+                'model' => $model,
+                'province' => $province->province_name,
+                'district' => $district->district_name,
+                'firstDesagregation' => $firstdesagregationResults,
+                'secondDesagregation' => $seconddesagregationResults,
+                'thirdDesagregation' => $thirddesagregationResults,
+                'fourthdesagregationResults' => $fourthdesagregationResults,
+                'fifthdesagregationResults' => $fifthdesagregationResults,
+                'sixthdesagregationResults' => $sixthdesagregationResults
+            ]);
+        }
+        
+        return $this->render('relatorioagyw', [
+            'model' => $model,
+        ]);
+    }
 
 
 
- 
+
 
     /**
      * Displays a single Beneficiarios model.
@@ -189,14 +389,14 @@ O digitadores so visualizam 5 Beneficiarios por lista**/
     public function actionCreate()
     {
         $model = new Beneficiarios();
-		
-		
-/*		$ben=Beneficiarios::find()
+
+
+        /*		$ben=Beneficiarios::find()
     ->where(['id' => Beneficiarios::find()->max('id')])
     ->one();
      $emp_number = $ben->id+1;
      $model->emp_number=$emp_number;
-	*/	
+	*/
 
         $model->emp_gender = 2;
         $model->estudante = 1;
@@ -204,29 +404,34 @@ O digitadores so visualizam 5 Beneficiarios por lista**/
         $model->filhos = 0;
         $model->emp_status = 1;
         $model->deficiencia = 0;
-		$model->ponto_entrada = 1;
-      
-      
-		/*$model->parceiro_id  = 0;*/	
-		
-		/*$model->provin_code = 5;
+        $model->ponto_entrada = 1;
+
+
+        /*$model->parceiro_id  = 0;*/
+
+        /*$model->provin_code = 5;
 		$model->district_code = 1;
 		$model->bairro_id = 1;
         $model->us_id = 1;
 		$model->membro_localidade_id = 2;*/
 
         if ($model->load(Yii::$app->request->post())) {
-			
-			 if(!empty($_POST['Beneficiarios']['encarregado_educacao'])) {
-            $model->encarregado_educacao= implode(", ",$_POST['Beneficiarios']['encarregado_educacao']); } else {}
 
-if($model->save()) {
-Yii::$app->db->close();
-Yii::$app->db->open();
-            return $this->redirect(['update', 'id' => $model->id]);
-}
-
- } else {
+            if (!empty($_POST['Beneficiarios']['encarregado_educacao'])) {
+                $model->encarregado_educacao = implode(", ", $_POST['Beneficiarios']['encarregado_educacao']);
+            } else {
+            }
+            //Table write lock
+            yii::$app->db->createcommand("lock tables hs_hr_employee write")->execute();
+            if ($model->save()) {
+                Yii::$app->db->close();
+                Yii::$app->db->open();
+                //Table unlocked
+                yii::$app->db->createcommand("unlock tables")->execute();
+                return $this->redirect(['update', 'id' => $model->id]);
+            }
+            yii::$app->db->createcommand("unlock tables")->execute();
+        } else {
             return $this->render('create', [
                 'model' => $model,
             ]);
@@ -242,19 +447,19 @@ Yii::$app->db->open();
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        $model->encarregado_educacao= explode(',', $model->encarregado_educacao);  
+        $model->encarregado_educacao = explode(',', $model->encarregado_educacao);
 
-        if ($model->load(Yii::$app->request->post()) ) {
-  if(!empty($_POST['Beneficiarios']['encarregado_educacao'])) {
-            $model->encarregado_educacao= implode(", ",$_POST['Beneficiarios']['encarregado_educacao']); } else {}
+        if ($model->load(Yii::$app->request->post())) {
+            if (!empty($_POST['Beneficiarios']['encarregado_educacao'])) {
+                $model->encarregado_educacao = implode(", ", $_POST['Beneficiarios']['encarregado_educacao']);
+            } else {
+            }
 
-if($model->save()) {
-Yii::$app->db->close();
-Yii::$app->db->open();
-return $this->redirect(['view', 'id' => $model->id]);
-}
-
-
+            if ($model->save()) {
+                Yii::$app->db->close();
+                Yii::$app->db->open();
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         } else {
             return $this->render('update', [
                 'model' => $model,
@@ -292,114 +497,118 @@ return $this->redirect(['view', 'id' => $model->id]);
     }
 
 
-        public function actionLists($id)
+    public function actionLists($id)
     {
-       $countDistritos = Distritos::find() 
-                       ->where(['province_code'=>$id])
-                       ->count();
-        $Distritos  = Distritos::find() 
-                       ->where(['province_code'=>$id])
-                       ->all();
-echo "<option>-</option>";
-    if($countDistritos>0) {
-        foreach($Distritos as $distrito) 
-            { echo "<option value='".$distrito->district_code."'>".$distrito->district_name."</option>";}
-                          }else 
-                        { echo "<option>-</option>";}  
-
-    }
-	
-	    public function actionTodos($id)
- {
-
-    $countBenes = Beneficiarios::find()
-                    ->where(['district_code'=>$id])
-                    ->count();
-     $Benes  = Beneficiarios::find()
-                    ->where(['district_code'=>$id])
-                    ->all();
-
- if($countBenes>0) {
-   echo "<option>-</option>";
-     foreach($Benes as $bene)
-         { echo "<option value='".$bene->emp_firstname."'>".$bene->emp_firstname." ".$bene->emp_lastname." | ".$bene->us['name']."</option>";}
-                       }else
-                     { echo "<option> -- </option>";}
- }
-	
-	
-	      public function actionServicos($id)
-    {
-        $countServicos = ServicosDream::find() 
-                       ->where(['servico_id'=>$id])
-                       ->count();
-        $Servicos  = ServicosDream::find() 
-                       ->where(['servico_id'=>$id])
-                       ->all();
-
-    if($countServicos>0) {
-        echo "<option value='NULL'>--SELECIONE O SERVI&Ccedil;O--</option>";
-        foreach($Servicos as $servico) 
-            { echo "<option value='".$servico->id."'>".$servico->name."</option>";}
-                          }else 
-                        { }  
-
+        $countDistritos = Distritos::find()
+            ->where(['province_code' => $id])
+            ->count();
+        $Distritos  = Distritos::find()
+            ->where(['province_code' => $id])
+            ->all();
+        echo "<option>-</option>";
+        if ($countDistritos > 0) {
+            foreach ($Distritos as $distrito) {
+                echo "<option value='" . $distrito->district_code . "'>" . $distrito->district_name . "</option>";
+            }
+        } else {
+            echo "<option>-</option>";
+        }
     }
 
- public function actionListas($id)
+    public function actionTodos($id)
     {
-       $countSubservicos = SubServicosDreams::find() 
-                       ->where(['servico_id'=>$id])
-                       ->count();
-        $Subservicos  = SubServicosDreams::find() 
-                       ->where(['servico_id'=>$id])
-                       ->all();
 
-    if($countSubservicos>0) {
-        echo "<option value='NULL'>--SELECIONE--</option>";
-        foreach($Subservicos as $subservico) 
-            { echo "<option value='".$subservico->id."'>".$subservico->name."</option>";}
-                          }else 
-                        {  echo "<option value='NULL'>--SEM SUB-SERVICOS--</option>"; }  
+        $countBenes = Beneficiarios::find()
+            ->where(['district_code' => $id])
+            ->count();
+        $Benes  = Beneficiarios::find()
+            ->where(['district_code' => $id])
+            ->all();
 
+        if ($countBenes > 0) {
+            echo "<option>-</option>";
+            foreach ($Benes as $bene) {
+                echo "<option value='" . $bene->emp_firstname . "'>" . $bene->emp_firstname . " " . $bene->emp_lastname . " | " . $bene->us['name'] . "</option>";
+            }
+        } else {
+            echo "<option> -- </option>";
+        }
     }
 
-       public function actionLocalidades($id)
+
+    public function actionServicos($id)
     {
-       $countLocalidades = ComiteLocalidades::find() 
-                       ->where(['c_distrito_id'=>$id])
-                       ->count();
-        $Localidades  = ComiteLocalidades::find() 
-                       ->where(['c_distrito_id'=>$id])
-                       ->all();
-echo "<option>-</option>";
-    if($countLocalidades>0) {
-        foreach($Localidades as $localidade) 
-            { echo "<option value='".$localidade->id."'>".$localidade->name."</option>";}
-                          }else 
-                        { }  
+        $countServicos = ServicosDream::find()
+            ->where(['servico_id' => $id])
+            ->count();
+        $Servicos  = ServicosDream::find()
+            ->where(['servico_id' => $id])
+            ->all();
 
+        if ($countServicos > 0) {
+            echo "<option value='NULL'>--SELECIONE O SERVI&Ccedil;O--</option>";
+            foreach ($Servicos as $servico) {
+                echo "<option value='" . $servico->id . "'>" . $servico->name . "</option>";
+            }
+        } else {
+        }
     }
-	
-	
-	    public function actionBairros($id)
- {
-    $countBairros = Bairros::find()
-                    ->where(['post_admin_id'=>$id])
-                    ->count();
-     $Bairros  = Bairros::find()
-                    ->where(['post_admin_id'=>$id])
-                    ->all();
-echo "<option>-</option>";
- if($countBairros>0) {
-     foreach($Bairros as $bairros)
-         { echo "<option value='".$bairros->id."'>".$bairros->name."</option>";}
-                       }else
-                     { /*echo "<option>-</option>";*/}
 
- }
-	//added on 01.12.2017 by cololo
-	  public function actionFiltros()
+    public function actionListas($id)
+    {
+        $countSubservicos = SubServicosDreams::find()
+            ->where(['servico_id' => $id])
+            ->count();
+        $Subservicos  = SubServicosDreams::find()
+            ->where(['servico_id' => $id])
+            ->all();
+
+        if ($countSubservicos > 0) {
+            echo "<option value='NULL'>--SELECIONE--</option>";
+            foreach ($Subservicos as $subservico) {
+                echo "<option value='" . $subservico->id . "'>" . $subservico->name . "</option>";
+            }
+        } else {
+            echo "<option value='NULL'>--SEM SUB-SERVICOS--</option>";
+        }
+    }
+
+    public function actionLocalidades($id)
+    {
+        $countLocalidades = ComiteLocalidades::find()
+            ->where(['c_distrito_id' => $id])
+            ->count();
+        $Localidades  = ComiteLocalidades::find()
+            ->where(['c_distrito_id' => $id])
+            ->all();
+        echo "<option>-</option>";
+        if ($countLocalidades > 0) {
+            foreach ($Localidades as $localidade) {
+                echo "<option value='" . $localidade->id . "'>" . $localidade->name . "</option>";
+            }
+        } else {
+        }
+    }
+
+
+    public function actionBairros($id)
+    {
+        $countBairros = Bairros::find()
+            ->where(['post_admin_id' => $id])
+            ->count();
+        $Bairros  = Bairros::find()
+            ->where(['post_admin_id' => $id])
+            ->all();
+        echo "<option>-</option>";
+        if ($countBairros > 0) {
+            foreach ($Bairros as $bairros) {
+                echo "<option value='" . $bairros->id . "'>" . $bairros->name . "</option>";
+            }
+        } else { /*echo "<option>-</option>";*/
+        }
+    }
+    //added on 01.12.2017 by cololo
+    public function actionFiltros()
     {
         $searchModel = new BeneficiariosSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
@@ -407,29 +616,25 @@ echo "<option>-</option>";
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
-
     }
 
 
 
-//added on 26.02.2019 relatorioQ1
+    //added on 26.02.2019 relatorioQ1
     public function actionRelatorio($id)
-  {
-    return $this->render('relatorio', [
-        'model' => $this->findModel($id),
-    ]);
-  }
-  
-  
+    {
+        return $this->render('relatorio', [
+            'model' => $this->findModel($id),
+        ]);
+    }
 
-//added on 11.02.2020 by Gerzelio Saide relatorioQ1
+
+
+    //added on 11.02.2020 by Gerzelio Saide relatorioQ1
     public function actionRelatorioQ1($id)
-  {
-    return $this->render('relatorioQ1', [
-        'model' => $this->findModel($id),
-    ]);
-  }
-
-
-
+    {
+        return $this->render('relatorioQ1', [
+            'model' => $this->findModel($id),
+        ]);
+    }
 }

@@ -38,7 +38,7 @@ class ServicosBeneficiados extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['servico_id','ponto_entrada','sub_servico_id','us_id','beneficiario_id', 'activista_id', 'status', 'criado_por', 'actualizado_por'], 'integer'],
+            [['tipo_servico_id', 'servico_id','ponto_entrada','sub_servico_id','us_id','beneficiario_id', 'activista_id', 'status', 'criado_por', 'actualizado_por'], 'integer'],
             [['servico_id','beneficiario_id','ponto_entrada','data_beneficio','status'], 'required'],
             [['data_beneficio', 'criado_em','sub_servico_id', 'actualizado_em','resultado','provedor'], 'safe'],
             [['beneficiario_id', 'description'], 'string', 'max' => 250],
@@ -53,6 +53,7 @@ class ServicosBeneficiados extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
+            'tipo_servico_id' => Yii::t('app', 'Tipo de Serviço'),	
             'servico_id' => Yii::t('app', 'Serviço'),			
 			'sub_servico_id'=>Yii::t('app', 'Sub-Serviço/Intervenção'),
 	   		'ponto_entrada'=>Yii::t('app', 'Ponto de Entrada'),
@@ -92,6 +93,11 @@ date_default_timezone_set('Africa/Maputo');
         }
     return parent::beforeSave($insert); 
 }
+
+    public function getTipoServicos()
+    {
+        return $this->hasOne(TipoServicos::className(), ['id' => 'tipo_servico_id']);
+    }
 
             public function getServicos()
     {
