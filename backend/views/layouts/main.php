@@ -580,7 +580,10 @@ $ben=Beneficiarios::find()->where(['provin_code'=>5])->andWhere(['emp_status'=>1
 
 <?php } ?>
                                 <li>
-                                    <?= Html::a(Yii::t('app', '<i class="fa fa-angle-double-right"></i> AGYW prev'), ['/beneficiarios/relatorioagyw']) ?> 
+                                    <?= Html::a(Yii::t('app', '<i class="fa fa-angle-double-right"></i> AGYW prev'), ['/beneficiarios/relatorioagyw','id'=>1]) ?> 
+                                </li>      
+                                <li>
+                                    <?= Html::a(Yii::t('app', '<i class="fa fa-angle-double-right"></i> AGYW prev Indicator'), ['/agywprev/index']) ?> 
                                 </li>                         	 
                         <li>
                                <?= Html::a(Yii::t('app', '<i class="fa fa-angle-double-right"></i> FY19'), ['/beneficiarios/relatoriofy19','id'=>5]) ?> 
