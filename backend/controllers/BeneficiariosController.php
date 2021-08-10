@@ -49,7 +49,7 @@ class BeneficiariosController extends Controller
                 ],
                 'rules' => [
                     [
-                        'actions' => ['index', 'view', 'create', 'lists', 'listas', 'servicos', 'localidades', 'bairros', 'todos', 'filtros', 'relatorio', 'relatoriofy19', 'relatoriofy20q1', 'relatoriofy20q2', 'relatorioagyw', 'relatorioagywprev'],
+                        'actions' => ['index', 'view', 'create', 'lists', 'listas', 'servicos', 'localidades', 'bairros', 'todos', 'filtros', 'relatorio', 'relatoriofy19', 'relatoriofy20q1', 'relatoriofy20q2', 'relatorioagyw', 'relatorioagywprev', 'exportlist', 'exportreport'],
 
                         'allow' => true,
                         'roles' => [
@@ -92,6 +92,111 @@ class BeneficiariosController extends Controller
                 ]
             ]
         ];
+    }
+
+    public function actionExportreport(){
+        $model = new AgywPrev();
+        VarDumper::dump("Indicator: ");
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            /*$province = Provincias::find()
+                    ->where(['id' => $model->province_code])->one();
+
+            $district = Distritos::find()
+                    ->where(['district_code' => $model->district_code])->one();*/
+                   // VarDumper::dump("Indicator: ");
+            //$report = $model->report();
+            return $this->render('report', [
+            ]);
+
+
+            /*
+            header( "Content-Type: application/xls" ); 
+            header( "Content-Disposition: attachment; filename=report.xls" );
+            echo $report;
+
+            $model->execute();
+            $firstdesagregationResults = $model->getFirstDesagregationResults();
+            $seconddesagregationResults = $model->getSecondDesagregationResults();
+            $thirddesagregationResults = $model->getThirdDesagregationResults();
+            $fourthdesagregationResults = $model->getFourthDesagregationResults();
+            $fifthdesagregationResults = $model->getFifthDesagregationResults();
+            $sixthdesagregationResults = $model->getSixthDesagregationResults();
+
+        
+            return $this->render('relatorioagywprev', [
+                'model' => $model,
+                'province' => $province->province_name,
+                'district' => $district->district_name,
+                'firstDesagregation' => $firstdesagregationResults,
+                'secondDesagregation' => $seconddesagregationResults,
+                'thirdDesagregation' => $thirddesagregationResults,
+                'fourthdesagregationResults' => $fourthdesagregationResults,
+                'fifthdesagregationResults' => $fifthdesagregationResults,
+                'sixthdesagregationResults' => $sixthdesagregationResults
+            ]);
+
+        */
+        }
+        
+        return $this->render('relatorioagyw', [
+            'model' => $model,
+        ]);
+    }
+
+    public function actionExportlist($beneficiaries){
+
+        $array = explode(',',$beneficiaries);
+
+        $searchModel = new BeneficiariosSearch();
+        $data = $searchModel->searchList(Yii::$app->request->queryParams, $beneficiaries);
+
+
+        
+       
+
+        $export = '<table>
+        <tr>
+          <th>Company</th>
+          <th>Contact</th>
+          <th> '.$array[2].'Country</th>
+        </tr>
+        <tr>
+          <td>Alfreds Futterkiste</td>
+          <td>Maria Anders</td>
+          <td>Germany</td>
+        </tr>
+        <tr>
+          <td>Centro comercial Moctezuma</td>
+          <td>Francisco Chang</td>
+          <td>Mexico</td>
+        </tr>
+        <tr>
+          <td>Ernst Handel</td>
+          <td>Roland Mendel</td>
+          <td>Austria</td>
+        </tr>
+        <tr>
+          <td>Island Trading</td>
+          <td>Helen Bennett</td>
+          <td>UK</td>
+        </tr>
+        <tr>
+          <td>Laughing Bacchus Winecellars</td>
+          <td>Yoshi Tannamuri</td>
+          <td>Canada</td>
+        </tr>
+        <tr>
+          <td>Magazzini Alimentari Riuniti</td>
+          <td>Giovanni Rovelli</td>
+          <td>Italy</td>
+        </tr>
+      </table>';
+
+
+        //header( "Content-Type: application/vnd.ms-excel; charset=utf-8" ); 
+        header( "Content-Type: application/xls" ); 
+        header( "Content-Disposition: attachment; filename=test.xls" );
+        echo $export;
     }
 
     /**
@@ -168,23 +273,26 @@ class BeneficiariosController extends Controller
         };
         
         if($beneficiaries != null){
-            setcookie("beneficiaries", json_encode($beneficiaries), time() + 3600 * 365);
+            setcookie("beneficiaries", implode(',',$beneficiaries)/*json_encode($beneficiaries)*/, time() + 3600 * 365);
         } else {
 
-            $beneficiaries = json_decode($_COOKIE["beneficiaries"]);
+            $beneficiaries = explode(',',$_COOKIE["beneficiaries"]);
         }   
-        
+        VarDumper::dump($beneficiaries);
+        //VarDumper::dump($beneficiaries );
         $searchModel = new BeneficiariosSearch();
         $dataProvider = $searchModel->searchList(Yii::$app->request->queryParams, $beneficiaries);
         $dataProvider->pagination->pageSize = 10;
-        return $this->render('index', [
+        return $this->render('agywlist', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'beneficiaries' => implode(',',$beneficiaries)
         ]);
     }
 
     public function actionRelatorioagyw()
     {
+        
         $model = new AgywPrev();
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {

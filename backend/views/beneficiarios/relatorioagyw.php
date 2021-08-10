@@ -86,7 +86,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <br />
                 <div class="form-group">
                     <?= Html::submitButton('Preview' , ['class' => 'btn btn-success']) ?>
-                    <?= Html::a('<i class="fa fa-plus"></i> Download', ['create'], ['class' => 'btn btn-warning']) ?>
+                    <?= Html::a('<i class="glyphicon glyphicon-export"></i>', ['relatorioagyw'], ['class'=>'btn btn-default', 'title'=>'Export List']) ?>
                 </div>
             </div>
         </div>
