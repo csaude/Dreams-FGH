@@ -86,7 +86,19 @@ $this->params['breadcrumbs'][] = $this->title;
                 <br />
                 <div class="form-group">
                     <?= Html::submitButton('Preview' , ['class' => 'btn btn-success']) ?>
-                    <?= Html::a('<i class="glyphicon glyphicon-export"></i>', ['relatorioagyw'], ['class'=>'btn btn-default', 'title'=>'Export List']) ?>
+                   
+                    <?= Html::a('<i class="glyphicon glyphicon-export"></i> Download', ['exportreport'], [
+                                                        'data'=>[
+                                                            'method' => 'post',
+                                                            'params'=>['province_code' => $model->province_code,
+                                                                        'district_code' => $model->district_code,
+                                                                        'start_date' => $model->start_date,
+                                                                        'end_date' => $model->end_date,
+                                                                        'indicatorID' => 1
+                                                                    ],
+                                                                ],
+                                                        'class'=>'btn btn-default'        
+                                                    ]) ?>
                 </div>
             </div>
         </div>

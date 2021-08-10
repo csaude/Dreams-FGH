@@ -96,24 +96,13 @@ class BeneficiariosController extends Controller
 
     public function actionExportreport(){
         $model = new AgywPrev();
-        VarDumper::dump("Indicator: ");
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            /*$province = Provincias::find()
+            $province = Provincias::find()
                     ->where(['id' => $model->province_code])->one();
 
             $district = Distritos::find()
-                    ->where(['district_code' => $model->district_code])->one();*/
-                   // VarDumper::dump("Indicator: ");
-            //$report = $model->report();
-            return $this->render('report', [
-            ]);
-
-
-            /*
-            header( "Content-Type: application/xls" ); 
-            header( "Content-Disposition: attachment; filename=report.xls" );
-            echo $report;
-
+                    ->where(['district_code' => $model->district_code])->one();
+           
             $model->execute();
             $firstdesagregationResults = $model->getFirstDesagregationResults();
             $seconddesagregationResults = $model->getSecondDesagregationResults();
@@ -122,11 +111,11 @@ class BeneficiariosController extends Controller
             $fifthdesagregationResults = $model->getFifthDesagregationResults();
             $sixthdesagregationResults = $model->getSixthDesagregationResults();
 
-        
-            return $this->render('relatorioagywprev', [
-                'model' => $model,
+           
+            return $this->render('report', [
                 'province' => $province->province_name,
                 'district' => $district->district_name,
+                'period'=>$model->start_date.' - '.$model->end_date,
                 'firstDesagregation' => $firstdesagregationResults,
                 'secondDesagregation' => $seconddesagregationResults,
                 'thirdDesagregation' => $thirddesagregationResults,
@@ -135,7 +124,6 @@ class BeneficiariosController extends Controller
                 'sixthdesagregationResults' => $sixthdesagregationResults
             ]);
 
-        */
         }
         
         return $this->render('relatorioagyw', [
@@ -283,10 +271,10 @@ class BeneficiariosController extends Controller
         $searchModel = new BeneficiariosSearch();
         $dataProvider = $searchModel->searchList(Yii::$app->request->queryParams, $beneficiaries);
         $dataProvider->pagination->pageSize = 10;
-        return $this->render('agywlist', [
+        return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'beneficiaries' => implode(',',$beneficiaries)
+            //'beneficiaries' => implode(',',$beneficiaries)
         ]);
     }
 
