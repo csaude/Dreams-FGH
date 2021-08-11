@@ -266,7 +266,7 @@ class BeneficiariosController extends Controller
 
             $beneficiaries = explode(',',$_COOKIE["beneficiaries"]);
         }   
-        VarDumper::dump($beneficiaries);
+        //VarDumper::dump($beneficiaries);
         //VarDumper::dump($beneficiaries );
         $searchModel = new BeneficiariosSearch();
         $dataProvider = $searchModel->searchList(Yii::$app->request->queryParams, $beneficiaries);

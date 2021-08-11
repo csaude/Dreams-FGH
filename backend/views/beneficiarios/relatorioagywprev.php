@@ -40,7 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     </tr> 
                 </table>
 
-                <button class="btn btn-primary btn-block  mb1 black bg-darken-1" data-toggle="collapse" data-target="#first"><b> Provincia: <?php echo $province ?> </b></button>
+                <button class="btn btn-primary btn-block  mb1 black bg-darken-1" data-toggle="collapse" data-target="#first"><b> <?php echo $province ?> </b></button>
 
                 <div id="first" class="collapse">
                     <table width="100%" class="table table-dashed">
@@ -57,7 +57,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 <td colspan="5" bgcolor="#FFFFFF"><b> Distrito: <?php echo $district ?> </b></td>
                             </tr>	
                             <tr>
-                                <td width="706" colspan="5" bgcolor="#CD5C5C"><b>Número de Beneficiários DREAMS que receberam TODO pacote primário de serviços e mais nenhum outro serviço</b> </td>
+                                <td width="706" colspan="5" bgcolor="#CD5C5C"><b>Beneficiaries that have fully completed the DREAMS primary package of services/interventions but no additional services/interventions</b> </td>
                             </tr>
                             <tr>
                                 <td width="174" bgcolor="#FFE4E1">Tempo de registo como beneficiário DREAMS </td>
@@ -96,7 +96,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             </tr>
 
                             <tr>
-                                <td width="706" colspan="5" bgcolor="#CD5C5C"><b>Número de Beneficiários DREAMS que receberam TODO pacote primário de serviços e pelo menos um serviço secundario</b> </td>
+                                <td width="706" colspan="5" bgcolor="#CD5C5C"><b>Beneficiaries that have fully completed the DREAMS primary package of services/interventions AND at least one secondary service/intervention</b> </td>
                             </tr>
                             <tr>
                                 <td width="174" bgcolor="#FFE4E1">Tempo de registo como beneficiário DREAMS </td>
@@ -135,7 +135,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             </tr>
 
                             <tr>
-                                <td width="706" colspan="5" bgcolor="#CD5C5C"><b>Número de Beneficiários DREAMS que completaram pelo menos um serviço DREAMS mais não completaram o pacote primário de serviços</b> </td>
+                                <td width="706" colspan="5" bgcolor="#CD5C5C"><b>Beneficiaries that have completed at least one DREAMS service/intervention but not the full primary package</b> </td>
                             </tr>
                             <tr>
                                 <td width="174" bgcolor="#FFE4E1">Tempo de registo como beneficiário DREAMS </td>
@@ -174,7 +174,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             </tr>
 
                             <tr>
-                                <td width="706" colspan="5" bgcolor="#CD5C5C"><b>Número de Beneficiários DREAMS iniciaram pelo menos um serviço/intervençao mas ainda nao concluiram</b> </td>
+                                <td width="706" colspan="5" bgcolor="#CD5C5C"><b>Beneficiaries that have started a DREAMS service/intervention but have not yet completed it</b> </td>
                             </tr>
                             <tr>
                                 <td width="174" bgcolor="#FFE4E1">Tempo de registo como beneficiário DREAMS </td>
@@ -213,7 +213,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             </tr>
 
                             <tr>
-                                <td width="706" colspan="5" bgcolor="#CD5C5C"><b>Número de Beneficiários DREAMS que completaram intervencao focada na prevencao de violencia</b> </td>
+                                <td width="706" colspan="5" bgcolor="#CD5C5C"><b>Number of AGYW enrolled in DREAMS that completed an evidence-based intervention focused on preventing violence within the reporting period</b> </td>
                             </tr>
                             <tr>
                                 <td width="174" bgcolor="#FFE4E1">Tempo de registo como beneficiário DREAMS </td>
@@ -252,7 +252,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             </tr>
 
                             <tr>
-                                <td width="706" colspan="5" bgcolor="#CD5C5C"><b>Número de Beneficiários DREAMS que receberam subsidio e suporte escolar</b> </td>
+                                <td width="706" colspan="5" bgcolor="#CD5C5C"><b>Number of AGYW enrolled in DREAMS that received educational support to remain in, advance, and/or rematriculate in school within the reporting period</b> </td>
                             </tr>
                             <tr>
                                 <td width="174" bgcolor="#FFE4E1">Tempo de registo como beneficiário DREAMS </td>

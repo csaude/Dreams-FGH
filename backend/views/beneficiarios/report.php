@@ -21,9 +21,9 @@
             $map[$i++] = $firstDesagregation[$index1][$index2];
         }
         $map[$i++] = $sum;
-        //$firstDesagregationTotal += $sum;
+        $firstDesagregationTotal += $sum;
     };
-    $map[3] = $firstDesagregationTotal;
+    
 
     //second desagregation
     foreach(['0_6','7_12', '13_24', '25+'] as $index2){
@@ -33,6 +33,7 @@
             $map[$i++] = $secondDesagregation[$index1][$index2];
         }
         $map[$i++] = $sum;
+        $firstDesagregationTotal += $sum;
     };
 
     //third desagregation
@@ -43,6 +44,7 @@
             $map[$i++] = $thirdDesagregation[$index1][$index2];
         }
         $map[$i++] = $sum;
+        $firstDesagregationTotal += $sum;
     };
 
     //fourth desagregation
@@ -53,6 +55,7 @@
             $map[$i++] = $fourthdesagregationResults[$index1][$index2];
         }
         $map[$i++] = $sum;
+        $firstDesagregationTotal += $sum;
     };
 
     //violence
@@ -64,6 +67,7 @@
         }
     };
     $map[$i++] = $sum;
+    $firstDesagregationTotal += $sum;
 
     //education
     $sum = 0;
@@ -74,6 +78,8 @@
         }
     };
     $map[$i++] = $sum;
+    $firstDesagregationTotal += $sum;
+    $map[3] = $firstDesagregationTotal;
 
 
 
