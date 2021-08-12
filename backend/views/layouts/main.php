@@ -366,18 +366,39 @@ $ben=Beneficiarios::find()->where(['provin_code'=>5])->andWhere(['emp_status'=>1
                         </li>
 
      <li>
-		 <?php
-												  if(isset(Yii::$app->user->identity->provin_code)&&Yii::$app->user->identity->provin_code>0) {
-								echo				  Html::a(Yii::t('app', '<i class="fa fa-exchange"></i> <span>Gest&atilde;o de Refer&ecirc;ncias<small class="badge pull-right bg-yellow">
-   0 </small></span>'), ['referencias-dreams/index', 'id' => Yii::$app->user->identity->provin_code]); } else {
-												  
-	echo	Html::a(Yii::t('app', '<i class="fa fa-exchange"></i> <span>Gest&atilde;o de Refer&ecirc;ncias<small class="badge pull-right bg-yellow">
-   0 </small></span>'), ['referencias-dreams/index', 'id' => 5]);										  
-												  }
-		 
-		 ?>
-                             
-                        </li>            
+     <?php if (Yii::$app->user->identity->role==20) { ?>
+        <li class="treeview">
+            <a href="#" data-toggle="collapse" data-target="#referencias">
+
+                <i class="fa fa-exchange"></i>
+                <span>Refer&ecirc;ncias</span>
+                <i class="fa fa-angle-left pull-right"> </i>
+
+            </a>
+            <ul id="referencias" class="collapse">
+
+               <?php
+                    if(isset(Yii::$app->user->identity->provin_code)&&Yii::$app->user->identity->provin_code>0) 
+                    {
+                        echo Html::a(Yii::t('app', '<li><i class="fa fa-angle-double-right"></i> <span>Gest&atilde;o de Refer&ecirc;ncias<small class="badge pull-right bg-yellow"> 0 </small></span></li>'), ['referencias-dreams/index', 'id' => Yii::$app->user->identity->provin_code]); 
+                    } else {
+                        echo	Html::a(Yii::t('app', '<li><i class="fa fa-angle-double-right"></i> <span>Gest&atilde;o de Refer&ecirc;ncias<small class="badge pull-right bg-yellow"> 0 </small></span></li>'), ['referencias-dreams/index', 'id' => 5]);										  
+                    }
+                ?>
+                <li>
+                    <a href="<?php echo Url::toRoute('referencias-dreams/pendentes'); ?>"><i class="fa fa-angle-double-right"></i> Refer&ecirc;ncias Pendentes </a>
+                </li>
+            </ul>
+        </li>
+        <?php } else {
+            if(isset(Yii::$app->user->identity->provin_code)&&Yii::$app->user->identity->provin_code>0) 
+            {
+                echo Html::a(Yii::t('app', '<i class="fa fa-exchange"></i> <span>Gest&atilde;o de Refer&ecirc;ncias<small class="badge pull-right bg-yellow"> 0 </small></span>'), ['referencias-dreams/index', 'id' => Yii::$app->user->identity->provin_code]); 
+            } else {
+                echo	Html::a(Yii::t('app', '<i class="fa fa-exchange"></i> <span>Gest&atilde;o de Refer&ecirc;ncias<small class="badge pull-right bg-yellow"> 0 </small></span>'), ['referencias-dreams/index', 'id' => 5]);										  
+            }
+        } ?>                             
+    </li>            
 
 
 
