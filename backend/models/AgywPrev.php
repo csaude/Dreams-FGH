@@ -30,6 +30,10 @@ class AgywPrev extends Model {
         ];
     }
 
+    public function search($params, $beneficiaries){
+
+    }
+
     /**
      * Return results for desagregation Bellow
      * Number of active DREAMS beneficiaries that have fully completed the DREAMS primary package of services/interventions 
@@ -340,7 +344,25 @@ class AgywPrev extends Model {
        
         $desagregationMap = $this->generateDesagregationMatrix();
 
-        $query = "select beneficiario_id, faixa_actual, vai_escola, sexualmente_activa, data_registo, 
+        $query = "select beneficiario_id, vai_escola, sexualmente_activa, data_registo, 
+                    if(idade_actual = 15  and datediff(min(data_servico),coalesce(STR_TO_DATE(dataNascimento,'%d/%m/%Y'),STR_TO_DATE(dataNascimento,'%m/%d/%Y')))/30 between 120 and 177,'9-14',if(idade_actual = 20  and datediff(min(data_servico),coalesce(STR_TO_DATE(dataNascimento,'%d/%m/%Y'),STR_TO_DATE(dataNascimento,'%m/%d/%Y')))/30 between 180 and 237,'15-19',faixa_actual)) faixa_actual,
+                    if(idade_actual < 20 and sustenta_casa=1,1,0) +
+                    if(idade_actual < 18 and vai_escola=0,1,0) +
+                    if(tem_deficiencia=1,1,0) +
+                    if(idade_actual < 20 and foi_casada=1,1,0) + -- rever a restrićão de idade
+                    if(idade_actual < 20 and esteve_gravida=1,1,0) +
+                    if(idade_actual < 20 and tem_filhos=1,1,0) +
+                    if(idade_actual < 20 and gravida_amamentar=1,1,0) +
+                    if(teste_hiv < 2,1,0) +
+                    if(idade_actual < 18 and vitima_exploracao_sexual=1,1,0) +
+                    if(idade_actual < 20 and migrante=1,1,0) +
+                    if(idade_actual < 20 and vitima_trafico=1,1,0) +
+                    if(idade_actual < 18 and sexualmente_activa=1,1,0) +
+                    if(relacoes_multiplas_cocorrentes=1,1,0) +
+                    if(vitima_vbg=1,1,0) +
+                    if(idade_actual > 17 and trabalhadora_sexo=1,1,0) +
+                    if(abuso_alcool_drogas=1,1,0) +
+                    if(historico_its=1,1,0) vulnerabilidades, 
                     sum(case
                     when (vai_escola=1 and sub_servico_id in (169,170,184,185,186,187,188,189,190,191,192,193,194,207,208)
                         or vai_escola=0 and sub_servico_id in (179,180,181,182,196,197,198,199)) then 1
@@ -751,6 +773,48 @@ class AgywPrev extends Model {
         ];
 
         return $result;
+    }
+
+    public function report(){
+        $output = "";
+
+        $output . ' <table style="width:100%">
+                        <tr>
+                            <th rowspan="5">Reporting_Period</th>
+                            <th rowspan="5">Province</th>
+                            <th rowspan="5">District</th>
+                            <th colspan="80">AGYW_PREV (Denominator) : Number of active DREAMS beneficiaries that have started or completed any DREAMS service/intervention</th>
+                        </tr>
+                        <tr>
+                            <td rowspan="4">Total</td>
+                            <td colspan="20">Beneficiaries that have fully completed the DREAMS primary package of services/interventions but no additional services/interventions</td>
+                        </tr>
+                        <tr>
+                     
+                            <td colspan="20">Enrollment Time / Age</td>
+                        </tr>
+                        <tr>
+                            <td colspan="5">0-6</td>
+                            <td colspan="5">7-12</td>
+                            <td colspan="5">13-24</td>
+                            <td colspan="5">25+ months</td>
+                        </tr>
+                        <tr>
+                            <td>9-14</td>
+                            <td>15-19</td>
+                            <td>20-24</td>
+                            <td>25-29</td>
+                            <td>SubTotal</td>
+                            <td>9-14</td>
+                            <td>15-19</td>
+                            <td>20-24</td>
+                            <td>25-29</td>
+                            <td>SubTotal</td>
+                        </tr>
+                    </table>
+                    ';
+
+        return $output;
     }
 
 

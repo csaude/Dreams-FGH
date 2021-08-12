@@ -40,6 +40,48 @@ class BeneficiariosSearch extends Beneficiarios
         return Model::scenarios();
     }
 
+    public function fetchAGYW($listBeneficiaries){
+        $query = new yii\db\Query;
+
+        $query->select(['beneficiario_id', 'provincia_id as province_code', 'hs_hr_province.name as provincia', 'distrito_id as district_code', 'hs_hr_district.name as distrito', 'app_dream_bairros.name as bairro',
+                        "if(app_dream_vw_agyw_prev.ponto_entrada=1,'US',if(app_dream_vw_agyw_prev.ponto_entrada=2,'CM','ES')) as ponto_entrada",
+                        'app_dream_parceiros.name organizacao', 'data_registo', 'nui', 'faixa_registo', 'faixa_actual', 'idade_actual', 'idade_registo', 'dataNascimento',
+                        "if(idade_actual = 15  and datediff(min(data_servico),coalesce(STR_TO_DATE(dataNascimento,'%d/%m/%Y'),STR_TO_DATE(dataNascimento,'%m/%d/%Y')))/30 between 120 and 177,'9-14',if(idade_actual = 20  and datediff(min(data_servico),coalesce(STR_TO_DATE(dataNascimento,'%d/%m/%Y'),STR_TO_DATE(dataNascimento,'%m/%d/%Y')))/30 between 180 and 237,'15-19',faixa_actual)) as faixa_actual",
+                        "if(idade_actual < 20 and sustenta_casa=1,1,0) +
+                            if(idade_actual < 18 and vai_escola=0,1,0) +
+                            if(tem_deficiencia=1,1,0) +
+                            if(idade_actual < 20 and foi_casada=1,1,0) +
+                            if(idade_actual < 20 and esteve_gravida=1,1,0) +
+                            if(idade_actual < 20 and tem_filhos=1,1,0) +
+                            if(idade_actual < 20 and gravida_amamentar=1,1,0) +   
+                            if(teste_hiv < 2,1,0) +
+                            if(idade_actual < 18 and vitima_exploracao_sexual=1,1,0) +
+                            if(idade_actual < 20 and migrante=1,1,0) +
+                            if(idade_actual < 20 and vitima_trafico=1,1,0) +
+                            if(idade_actual < 18 and sexualmente_activa=1,1,0) +
+                            if(relacoes_multiplas_cocorrentes=1,1,0) +
+                            if(vitima_vbg=1,1,0) +
+                            if(idade_actual > 17 and trabalhadora_sexo=1,1,0) +
+                            if(abuso_alcool_drogas=1,1,0) +
+                            if(historico_its=1,1,0) as vulnerabilidades",
+                        'app_dream_tipo_servicos.name as tipo_servico', 'app_dream_servicos.name as servico', 'app_dream_servicos_sub.name as sub_servico', 'app_dream_nivel_intervensao.name as pacote',
+                        "if(app_dream_vw_agyw_prev.ponto_entrada_id=1,'US',if(app_dream_vw_agyw_prev.ponto_entrada_id=2,'CM','ES')) as ponto_entrada_servico",
+                        'app_dream_us.name as localizacao', 'provedor', 'observacoes'
+                        ])
+                ->from('app_dream_vw_agyw_prev')
+                ->leftjoin('hs_hr_province', 'hs_hr_province.id = app_dream_vw_agyw_prev.provincia_id')
+                ->leftjoin('hs_hr_district', 'hs_hr_district.district_code = app_dream_vw_agyw_prev.distrito_id')
+                ->leftjoin('app_dream_bairros', 'app_dream_bairros.id = app_dream_vw_agyw_prev.bairro_id')
+                ->leftjoin('app_dream_parceiros', 'app_dream_parceiros.id = app_dream_vw_agyw_prev.organizacao_id')
+                ->leftjoin('app_dream_tipo_servicos', 'app_dream_tipo_servicos.id = app_dream_vw_agyw_prev.area_servico_id')
+                ->leftjoin('app_dream_servicos', 'app_dream_servicos.id = app_dream_vw_agyw_prev.servico_id')
+                ->leftjoin('app_dream_servicos_sub', 'app_dream_servicos_sub.id = app_dream_vw_agyw_prev.sub_servico_id')
+                ->leftjoin('app_dream_nivel_intervensao', 'app_dream_nivel_intervensao.id = app_dream_vw_agyw_prev.pacote_servico_id')
+                ->leftjoin('app_dream_us', 'app_dream_us.id = app_dream_vw_agyw_prev.localizacao_id')
+                ->where(['in', 'beneficiario_id', $listBeneficiaries])
+                ->groupBy(['beneficiario_id']);
+    }
+
     /**
      * Creates data provider instance with search query applied
      *
