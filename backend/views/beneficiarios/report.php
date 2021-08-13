@@ -67,7 +67,7 @@
         }
     };
     $map[$i++] = $sum;
-    $firstDesagregationTotal += $sum;
+    // $firstDesagregationTotal += $sum;
 
     //education
     $sum = 0;
@@ -78,7 +78,7 @@
         }
     };
     $map[$i++] = $sum;
-    $firstDesagregationTotal += $sum;
+    // $firstDesagregationTotal += $sum;
     $map[3] = $firstDesagregationTotal;
 
 
