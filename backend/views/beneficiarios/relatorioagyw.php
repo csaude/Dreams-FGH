@@ -90,13 +90,15 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?= Html::a('<i class="glyphicon glyphicon-export"></i> Download', ['exportreport'], [
                                                         'data'=>[
                                                             'method' => 'post',
-                                                            'params'=>['province_code' => $model->province_code,
-                                                                        'district_code' => $model->district_code,
-                                                                        'start_date' => $model->start_date,
-                                                                        'end_date' => $model->end_date,
-                                                                        'indicatorID' => 1
-                                                                    ],
+                                                            'params'=>[
+                                                                    'province_code' => $model->province_code,
+                                                                    'district_code' => $model->district_code,
+                                                                    'start_date' => $model->start_date,
+                                                                    'end_date' => $model->end_date,
+                                                                    'indicatorID' => 1
                                                                 ],
+                                                            'confirm' => 'The EXCEL export file will be generated for download!'
+                                                        ],
                                                         'class'=>'btn btn-default'        
                                                     ]) ?>
                 </div>
