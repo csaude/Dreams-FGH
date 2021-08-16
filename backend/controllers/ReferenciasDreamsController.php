@@ -5,6 +5,7 @@ namespace backend\controllers;
 use Yii;
 use app\models\ReferenciasDreams;
 use app\models\ReferenciasDreamsSearch;
+use app\models\ReferenciasDreamsPendentesSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -74,6 +75,14 @@ User::ROLE_DIGITADOR,
             User::ROLE_MENTOR,
             User::ROLE_ENFERMEIRA,
             User::ROLE_CORDENADOR
+            ],
+            ],
+
+            [
+            'actions' => ['pendentes'],
+            'allow' => true,
+            'roles' => [
+            User::ROLE_ADMIN
             ],
             ],
 
@@ -305,6 +314,42 @@ $dists = ArrayHelper::getColumn($distritos, 'district_code');
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
+
+
+    /**
+     * Lists all Referencias Dreams Pendentes.
+     * @return mixed
+     */
+    public function actionPendentes()
+    {
+        $searchModel = new ReferenciasDreamsPendentesSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->andFilterWhere(['status_ref'=>0]); 
+
+        $model = new ReferenciasDreams();
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                            
+             foreach ($_POST['id']as $key => $value){
+                    echo $_POST['id'][$key];
+                    echo '<br>';
+                }
+
+            return $this->render('pendentes', [
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+                'model' => $model,
+                'other_reason' => $key,
+            ]);
+
+        } else {
+            return $this->render('pendentes', [
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+                'model' => $model,
+            ]);
         }
     }
 }

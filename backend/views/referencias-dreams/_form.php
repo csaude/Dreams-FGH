@@ -151,19 +151,19 @@ $pontos= new ReferenciasPontosDreams();
 			</div>
 			<div class="col-lg-4">
 
-				   <?php $form->field($model, 'projecto')->widget(Select2::classname(), [
+		<?php /* $form->field($model, 'projecto')->widget(Select2::classname(), [
        'data' => ArrayHelper::map(Organizacoes::find()
        ->where(['>','distrito_id',0])
        ->asArray()->all(), 'abreviatura', 'name')
    ], ['prompt' => '--','id' => 'projecto', 'onchange' => '$.post("notificar.dreams?id='.'"+$(this).val(), function(data) {
              $("select#referenciasdreams-notificar_ao").html(data);
-          });']);
+          });']); */
    ?>
 
   <?= $form->field($model, 'projecto')
 	       ->dropDownList(['data' => ArrayHelper::map(Organizacoes::find()
          ->where(['>','distrito_id',0])
-         ->asArray()->all(), 'abreviatura', 'name')],['prompt' => '--',
+         ->asArray()->all(), 'id', 'name')],['prompt' => '--',
           'onchange' => '$.post("notificar.dreams?id='.'"+$(this).val(), function(data) {
              $("select#referenciasdreams-notificar_ao").html(data);
           });',
@@ -293,8 +293,6 @@ $ids = ArrayHelper::getColumn($users, 'id');
    </div>
    </div>
 
-
-
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Prosseguir >>') : Yii::t('app', 'Actualizar'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
@@ -313,10 +311,15 @@ $ids = ArrayHelper::getColumn($users, 'id');
 
     <?php } ?>
 
-
-
-
 </div>
 
 </div>
 
+<script type="text/javascript">
+  window.onload = function () {
+    $(document).ready(function() {
+      $("#teste1").hide(1000);
+      $("#teste2").hide(1000);
+    });
+  }
+</script>
