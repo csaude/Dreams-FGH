@@ -20,7 +20,8 @@ use app\models\ServicosDream;
 use app\models\Bairros;
 use app\models\Provincias;
 use app\models\AgywPrev;
-
+use PHPExcel;
+use PHPExcel_IOFactory;
 use yii\helpers\Json;
 use yii\helpers\VarDumper;
 
@@ -94,7 +95,9 @@ class BeneficiariosController extends Controller
         ];
     }
 
+    
     public function actionExportreport(){
+      
         $model = new AgywPrev();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $province = Provincias::find()
@@ -111,19 +114,148 @@ class BeneficiariosController extends Controller
             $fifthdesagregationResults = $model->getFifthDesagregationResults();
             $sixthdesagregationResults = $model->getSixthDesagregationResults();
 
-           
-            return $this->render('report', [
-                'province' => $province->province_name,
-                'district' => $district->district_name,
-                'period'=>$model->start_date.' - '.$model->end_date,
-                'firstDesagregation' => $firstdesagregationResults,
-                'secondDesagregation' => $seconddesagregationResults,
-                'thirdDesagregation' => $thirddesagregationResults,
-                'fourthdesagregationResults' => $fourthdesagregationResults,
-                'fifthdesagregationResults' => $fifthdesagregationResults,
-                'sixthdesagregationResults' => $sixthdesagregationResults
-            ]);
+            // load report template
+            $tmpfname = 'template_agywprev.xls';
+            $excelReader = PHPExcel_IOFactory::createReaderForFile($tmpfname);
+            $excelObj = $excelReader->load($tmpfname);
+            $excelObj->setActiveSheetIndex(0);
 
+            /* fill the report */
+            // report identification
+            $excelObj->getActiveSheet()
+                        ->setCellValue('A9', $model->start_date.' - '.$model->end_date)
+                        ->setCellValue('B9', $province->province_name)
+                        ->setCellValue('C9', $district->district_name);
+
+            // report first desagregation
+            $excelObj->getActiveSheet()
+                        ->setCellValue('E9', $firstdesagregationResults['9-14']['0_6'])
+                        ->setCellValue('F9', $firstdesagregationResults['15-19']['0_6'])
+                        ->setCellValue('G9', $firstdesagregationResults['20-24']['0_6'])
+                        ->setCellValue('H9', $firstdesagregationResults['25-29']['0_6'])
+                        ->setCellValue('I9', $firstdesagregationResults['9-14']['0_6'] + $firstdesagregationResults['15-19']['0_6'] + $firstdesagregationResults['20-24']['0_6']+$firstdesagregationResults['25-29']['0_6'])
+                        ->setCellValue('J9', $firstdesagregationResults['9-14']['7_12'])
+                        ->setCellValue('K9', $firstdesagregationResults['15-19']['7_12'])
+                        ->setCellValue('L9', $firstdesagregationResults['20-24']['7_12'])
+                        ->setCellValue('M9', $firstdesagregationResults['25-29']['7_12'])
+                        ->setCellValue('N9', $firstdesagregationResults['9-14']['7_12'] + $firstdesagregationResults['15-19']['7_12'] + $firstdesagregationResults['20-24']['7_12']+$firstdesagregationResults['25-29']['7_12'])
+                        ->setCellValue('O9', $firstdesagregationResults['9-14']['13_24'])
+                        ->setCellValue('P9', $firstdesagregationResults['15-19']['13_24'])
+                        ->setCellValue('Q9', $firstdesagregationResults['20-24']['13_24'])
+                        ->setCellValue('R9', $firstdesagregationResults['25-29']['13_24'])
+                        ->setCellValue('S9', $firstdesagregationResults['9-14']['13_24'] + $firstdesagregationResults['15-19']['13_24'] + $firstdesagregationResults['20-24']['13_24']+$firstdesagregationResults['25-29']['13_24'])
+                        ->setCellValue('T9', $firstdesagregationResults['9-14']['25+'])
+                        ->setCellValue('U9', $firstdesagregationResults['15-19']['25+'])
+                        ->setCellValue('V9', $firstdesagregationResults['20-24']['25+'])
+                        ->setCellValue('W9', $firstdesagregationResults['25-29']['25+'])
+                        ->setCellValue('X9', $firstdesagregationResults['9-14']['25+'] + $firstdesagregationResults['15-19']['25+'] + $firstdesagregationResults['20-24']['25+']+$firstdesagregationResults['25-29']['25+']);
+                        
+                        
+            // report second desagregation
+            $excelObj->getActiveSheet()
+                        ->setCellValue('Y9', $seconddesagregationResults['9-14']['0_6'])
+                        ->setCellValue('Z9', $seconddesagregationResults['15-19']['0_6'])
+                        ->setCellValue('AA9', $seconddesagregationResults['20-24']['0_6'])
+                        ->setCellValue('AB9', $seconddesagregationResults['25-29']['0_6'])
+                        ->setCellValue('AC9', $seconddesagregationResults['9-14']['0_6'] + $seconddesagregationResults['15-19']['0_6'] + $seconddesagregationResults['20-24']['0_6']+$seconddesagregationResults['25-29']['0_6'])
+                        ->setCellValue('AD9', $seconddesagregationResults['9-14']['7_12'])
+                        ->setCellValue('AE9', $seconddesagregationResults['15-19']['7_12'])
+                        ->setCellValue('AF9', $seconddesagregationResults['20-24']['7_12'])
+                        ->setCellValue('AG9', $seconddesagregationResults['25-29']['7_12'])
+                        ->setCellValue('AH9', $seconddesagregationResults['9-14']['7_12'] + $seconddesagregationResults['15-19']['7_12'] + $seconddesagregationResults['20-24']['7_12']+$seconddesagregationResults['25-29']['7_12'])
+                        ->setCellValue('AI9', $seconddesagregationResults['9-14']['13_24'])
+                        ->setCellValue('AJ9', $seconddesagregationResults['15-19']['13_24'])
+                        ->setCellValue('AK9', $seconddesagregationResults['20-24']['13_24'])
+                        ->setCellValue('AL9', $seconddesagregationResults['25-29']['13_24'])
+                        ->setCellValue('AM9', $seconddesagregationResults['9-14']['13_24'] + $seconddesagregationResults['15-19']['13_24'] + $seconddesagregationResults['20-24']['13_24']+$seconddesagregationResults['25-29']['13_24'])
+                        ->setCellValue('AN9', $seconddesagregationResults['9-14']['25+'])
+                        ->setCellValue('AO9', $seconddesagregationResults['15-19']['25+'])
+                        ->setCellValue('AP9', $seconddesagregationResults['20-24']['25+'])
+                        ->setCellValue('AQ9', $seconddesagregationResults['25-29']['25+'])
+                        ->setCellValue('AR9', $seconddesagregationResults['9-14']['25+'] + $seconddesagregationResults['15-19']['25+'] + $seconddesagregationResults['20-24']['25+']+$seconddesagregationResults['25-29']['25+']);
+
+            // report third desagregation
+            $excelObj->getActiveSheet()
+                        ->setCellValue('AS9', $thirddesagregationResults['9-14']['0_6'])
+                        ->setCellValue('AT9', $thirddesagregationResults['15-19']['0_6'])
+                        ->setCellValue('AU9', $thirddesagregationResults['20-24']['0_6'])
+                        ->setCellValue('AV9', $thirddesagregationResults['25-29']['0_6'])
+                        ->setCellValue('AW9', $thirddesagregationResults['9-14']['0_6'] + $thirddesagregationResults['15-19']['0_6'] + $thirddesagregationResults['20-24']['0_6']+$thirddesagregationResults['25-29']['0_6'])
+                        ->setCellValue('AX9', $thirddesagregationResults['9-14']['7_12'])
+                        ->setCellValue('AY9', $thirddesagregationResults['15-19']['7_12'])
+                        ->setCellValue('AZ9', $thirddesagregationResults['20-24']['7_12'])
+                        ->setCellValue('BA9', $thirddesagregationResults['25-29']['7_12'])
+                        ->setCellValue('BB9', $thirddesagregationResults['9-14']['7_12'] + $thirddesagregationResults['15-19']['7_12'] + $thirddesagregationResults['20-24']['7_12']+$thirddesagregationResults['25-29']['7_12'])
+                        ->setCellValue('BC9', $thirddesagregationResults['9-14']['13_24'])
+                        ->setCellValue('BD9', $thirddesagregationResults['15-19']['13_24'])
+                        ->setCellValue('BE9', $thirddesagregationResults['20-24']['13_24'])
+                        ->setCellValue('BF9', $thirddesagregationResults['25-29']['13_24'])
+                        ->setCellValue('BG9', $thirddesagregationResults['9-14']['13_24'] + $thirddesagregationResults['15-19']['13_24'] + $thirddesagregationResults['20-24']['13_24']+$thirddesagregationResults['25-29']['13_24'])
+                        ->setCellValue('BH9', $thirddesagregationResults['9-14']['25+'])
+                        ->setCellValue('BI9', $thirddesagregationResults['15-19']['25+'])
+                        ->setCellValue('BJ9', $thirddesagregationResults['20-24']['25+'])
+                        ->setCellValue('BK9', $thirddesagregationResults['25-29']['25+'])
+                        ->setCellValue('BL9', $thirddesagregationResults['9-14']['25+'] + $thirddesagregationResults['15-19']['25+'] + $thirddesagregationResults['20-24']['25+']+$thirddesagregationResults['25-29']['25+']);
+
+            // report fourth desagregation
+            $excelObj->getActiveSheet()
+                        ->setCellValue('BM9', $fourthdesagregationResults['9-14']['0_6'])
+                        ->setCellValue('BN9', $fourthdesagregationResults['15-19']['0_6'])
+                        ->setCellValue('BO9', $fourthdesagregationResults['20-24']['0_6'])
+                        ->setCellValue('BP9', $fourthdesagregationResults['25-29']['0_6'])
+                        ->setCellValue('BQ9', $fourthdesagregationResults['9-14']['0_6'] + $fourthdesagregationResults['15-19']['0_6'] + $fourthdesagregationResults['20-24']['0_6']+$fourthdesagregationResults['25-29']['0_6'])
+                        ->setCellValue('BR9', $fourthdesagregationResults['9-14']['7_12'])
+                        ->setCellValue('BS9', $fourthdesagregationResults['15-19']['7_12'])
+                        ->setCellValue('BT9', $fourthdesagregationResults['20-24']['7_12'])
+                        ->setCellValue('BU9', $fourthdesagregationResults['25-29']['7_12'])
+                        ->setCellValue('BV9', $fourthdesagregationResults['9-14']['7_12'] + $fourthdesagregationResults['15-19']['7_12'] + $fourthdesagregationResults['20-24']['7_12']+$fourthdesagregationResults['25-29']['7_12'])
+                        ->setCellValue('BW9', $fourthdesagregationResults['9-14']['13_24'])
+                        ->setCellValue('BX9', $fourthdesagregationResults['15-19']['13_24'])
+                        ->setCellValue('BY9', $fourthdesagregationResults['20-24']['13_24'])
+                        ->setCellValue('BZ9', $fourthdesagregationResults['25-29']['13_24'])
+                        ->setCellValue('CA9', $fourthdesagregationResults['9-14']['13_24'] + $fourthdesagregationResults['15-19']['13_24'] + $fourthdesagregationResults['20-24']['13_24']+$fourthdesagregationResults['25-29']['13_24'])
+                        ->setCellValue('CB9', $fourthdesagregationResults['9-14']['25+'])
+                        ->setCellValue('CC9', $fourthdesagregationResults['15-19']['25+'])
+                        ->setCellValue('CD9', $fourthdesagregationResults['20-24']['25+'])
+                        ->setCellValue('CE9', $fourthdesagregationResults['25-29']['25+'])
+                        ->setCellValue('CF9', $fourthdesagregationResults['9-14']['25+'] + $fourthdesagregationResults['15-19']['25+'] + $fourthdesagregationResults['20-24']['25+']+$fourthdesagregationResults['25-29']['25+']);
+
+            // report fifth desagregation
+            $violencePreventionCount = 0;
+            foreach(['0_6','7_12', '13_24', '25+'] as $index2){
+                foreach(['9-14','15-19', '20-24', '25-29'] as $index1){  
+                    $violencePreventionCount += $fifthdesagregationResults[$index1][$index2];
+                }
+            };
+            $excelObj->getActiveSheet()
+                        ->setCellValue('CG9', $violencePreventionCount);
+
+            // report sixth desagregation
+            $educationSupportCount = 0;
+            foreach(['0_6','7_12', '13_24', '25+'] as $index2){
+                foreach(['9-14','15-19', '20-24', '25-29'] as $index1){  
+                    $educationSupportCount += $sixthdesagregationResults[$index1][$index2];
+                }
+            };
+            $excelObj->getActiveSheet()
+                        ->setCellValue('CH9', $educationSupportCount);
+
+
+            /* generate report */
+            $objWriter = PHPExcel_IOFactory::createWriter($excelObj, 'Excel2007');
+            $filename = 'PEPFAR_MER_2.5_AGYW_PREV_Semi-Annual_Indicator_' .  date('Ymd_his') . '.xls';
+            $objWriter->save($filename);   
+           
+            ob_end_clean();  
+            header('Content-type: application/xlsx');
+            header('Content-Disposition: attachment; ');
+            header("Pragma: no-cache");
+            header("Expires: 0");
+
+            return Yii::$app->response->sendFile($filename)->on(\yii\web\Response::EVENT_AFTER_SEND, function($event) {
+                unlink($event->data);
+            }, $filename);
+          
         }
         
         return $this->render('relatorioagyw', [
@@ -135,56 +267,34 @@ class BeneficiariosController extends Controller
 
         $array = explode(',',$beneficiaries);
 
-        $searchModel = new BeneficiariosSearch();
-        $data = $searchModel->searchList(Yii::$app->request->queryParams, $beneficiaries);
+        //$searchModel = new BeneficiariosSearch();
+        //$data = $searchModel->searchList(Yii::$app->request->queryParams, $beneficiaries);
 
-
+        $tmpfname = 'xlsx-simple.xlsx';
+        $excelReader = PHPExcel_IOFactory::createReaderForFile($tmpfname);
+       $excelObj = $excelReader->load($tmpfname);
         
-       
+         $excelObj->setActiveSheetIndex(0);
+        $excelObj->getActiveSheet()->setCellValue('C6', '4')
+                                ->setCellValue('C7', '5')
+                                    ->setCellValue('C8', '6')       
+                                    ->setCellValue('C9', '10');
+        $objWriter = PHPExcel_IOFactory::createWriter($excelObj, 'Excel2007');
+        $filename = 'xlsx-simple320210816_023849.xlsx';
+        $objWriter->save($filename);   
 
-        $export = '<table>
-        <tr>
-          <th>Company</th>
-          <th>Contact</th>
-          <th> '.$array[2].'Country</th>
-        </tr>
-        <tr>
-          <td>Alfreds Futterkiste</td>
-          <td>Maria Anders</td>
-          <td>Germany</td>
-        </tr>
-        <tr>
-          <td>Centro comercial Moctezuma</td>
-          <td>Francisco Chang</td>
-          <td>Mexico</td>
-        </tr>
-        <tr>
-          <td>Ernst Handel</td>
-          <td>Roland Mendel</td>
-          <td>Austria</td>
-        </tr>
-        <tr>
-          <td>Island Trading</td>
-          <td>Helen Bennett</td>
-          <td>UK</td>
-        </tr>
-        <tr>
-          <td>Laughing Bacchus Winecellars</td>
-          <td>Yoshi Tannamuri</td>
-          <td>Canada</td>
-        </tr>
-        <tr>
-          <td>Magazzini Alimentari Riuniti</td>
-          <td>Giovanni Rovelli</td>
-          <td>Italy</td>
-        </tr>
-      </table>';
+        ob_end_clean();  
+        header('Content-type: application/xlsx');
+        header('Content-Disposition: attachment; ');
+        header("Pragma: no-cache");
+        header("Expires: 0");
+        
+        //return Yii::$app->response->sendFile($filename);
 
-
-        //header( "Content-Type: application/vnd.ms-excel; charset=utf-8" ); 
-        header( "Content-Type: application/xls" ); 
-        header( "Content-Disposition: attachment; filename=test.xls" );
-        echo $export;
+        return Yii::$app->response->sendFile($filename)->on(\yii\web\Response::EVENT_AFTER_SEND, function($event) {
+            unlink($event->data);
+        }, $filename);
+                          
     }
 
     /**
@@ -267,14 +377,13 @@ class BeneficiariosController extends Controller
             $beneficiaries = explode(',',$_COOKIE["beneficiaries"]);
         }   
         //VarDumper::dump($beneficiaries);
-        //VarDumper::dump($beneficiaries );
         $searchModel = new BeneficiariosSearch();
         $dataProvider = $searchModel->searchList(Yii::$app->request->queryParams, $beneficiaries);
         $dataProvider->pagination->pageSize = 10;
-        return $this->render('index', [
+        return $this->render('agywlist', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            //'beneficiaries' => implode(',',$beneficiaries)
+            'beneficiaries' => implode(',',$beneficiaries)
         ]);
     }
 
