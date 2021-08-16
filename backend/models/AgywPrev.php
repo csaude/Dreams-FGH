@@ -512,14 +512,12 @@ class AgywPrev extends Model {
             $data_servico = $row['data_servico'];
             $enrollmentTime = $this->getEnrollmentTimeInMonths($data_servico, $dataFim);
 
-            $skiped = true;
-
             if($faixa_etaria == '9-14'){
                 if($vai_escola == 1){    //Na escola
                     if($recursos_mandatorios == 15 && $outros_recursos > 6 && $modulos_ogaac == 3 && $sessoes_saaj == 4 && $literacia_financeira == 1 && ($sexualmente_activa == 1 && $testagem_hiv > 0)){
                         $this->addCompletude($desagregationMap, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_pacote_primario');
                     }
-                    if($recursos_mandatorios == 15 || $outros_recursos > 6 || $modulos_ogaac == 3 || $sessoes_saaj == 4 || $literacia_financeira == 1 || ($sexualmente_activa == 1 || $testagem_hiv > 0)){
+                    if($recursos_mandatorios == 15 || $outros_recursos > 6 || $modulos_ogaac == 3 || $sessoes_saaj == 4 || $literacia_financeira == 1 || ($sexualmente_activa == 1 && $testagem_hiv > 0)){
                         $this->addCompletude($desagregationMap, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_servico_primario');
                     }
                     if($prevencao_violencia_estudante == 3){
@@ -533,7 +531,7 @@ class AgywPrev extends Model {
                     if($recursos_mandatorios == 8 && $outros_recursos > 5 && $modulos_ogaac == 3 && $sessoes_saaj == 4 && $literacia_financeira == 1 && ($sexualmente_activa == 1 && $testagem_hiv > 0)){
                         $this->addCompletude($desagregationMap, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_pacote_primario');
                     }
-                    if($recursos_mandatorios == 8 || $outros_recursos > 5 || $modulos_ogaac == 3 || $sessoes_saaj == 4 || $literacia_financeira == 1 || ($sexualmente_activa == 1 || $testagem_hiv > 0)){
+                    if($recursos_mandatorios == 8 || $outros_recursos > 5 || $modulos_ogaac == 3 || $sessoes_saaj == 4 || $literacia_financeira == 1 || ($sexualmente_activa == 1 && $testagem_hiv > 0)){
                         $this->addCompletude($desagregationMap, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_servico_primario');
                     }
                     if($prevencao_violencia_rapariga == 5){
@@ -550,7 +548,7 @@ class AgywPrev extends Model {
                 if($recursos_antigo > 9 && $sessoes_saaj == 4 && ($sexualmente_activa == 1 && ($preservativos > 0 || $testagem_hiv > 0))){
                     $this->addCompletude($desagregationMap, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_pacote_primario');
                 }
-                if($recursos_antigo > 9 || $sessoes_saaj == 4 || ($sexualmente_activa == 1 || $preservativos > 0 || $testagem_hiv > 0)){
+                if($recursos_antigo > 9 || $sessoes_saaj == 4 || ($sexualmente_activa == 1 && ($preservativos > 0 || $testagem_hiv > 0))){
                     $this->addCompletude($desagregationMap, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_servico_primario');
                 }
                 if($subsidio_escolar > 0 || ($sexualmente_activa == 0 && ($testagem_hiv > 0 || $preservativos > 0 || $contracepcao > 0)) || $cuidados_pos_violencia_us >0 || $cuidados_pos_violencia_comunidade > 0 || $outros_servicos_saaj > 0){
