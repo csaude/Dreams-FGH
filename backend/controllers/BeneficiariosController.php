@@ -119,6 +119,7 @@ class BeneficiariosController extends Controller
             $excelReader = PHPExcel_IOFactory::createReaderForFile($tmpfname);
             $excelObj = $excelReader->load($tmpfname);
             $excelObj->setActiveSheetIndex(0);
+            $total = 0;
 
             /* fill the report */
             // report identification
@@ -149,8 +150,12 @@ class BeneficiariosController extends Controller
                         ->setCellValue('V9', $firstdesagregationResults['20-24']['25+'])
                         ->setCellValue('W9', $firstdesagregationResults['25-29']['25+'])
                         ->setCellValue('X9', $firstdesagregationResults['9-14']['25+'] + $firstdesagregationResults['15-19']['25+'] + $firstdesagregationResults['20-24']['25+']+$firstdesagregationResults['25-29']['25+']);
-                        
-                        
+            
+            $total += $firstdesagregationResults['9-14']['0_6'] + $firstdesagregationResults['15-19']['0_6'] + $firstdesagregationResults['20-24']['0_6']+$firstdesagregationResults['25-29']['0_6'] +
+                        $firstdesagregationResults['9-14']['7_12'] + $firstdesagregationResults['15-19']['7_12'] + $firstdesagregationResults['20-24']['7_12']+$firstdesagregationResults['25-29']['7_12'] +
+                        $firstdesagregationResults['9-14']['13_24'] + $firstdesagregationResults['15-19']['13_24'] + $firstdesagregationResults['20-24']['13_24']+$firstdesagregationResults['25-29']['13_24'] +
+                        $firstdesagregationResults['9-14']['25+'] + $firstdesagregationResults['15-19']['25+'] + $firstdesagregationResults['20-24']['25+']+$firstdesagregationResults['25-29']['25+'];
+
             // report second desagregation
             $excelObj->getActiveSheet()
                         ->setCellValue('Y9', $seconddesagregationResults['9-14']['0_6'])
@@ -173,7 +178,11 @@ class BeneficiariosController extends Controller
                         ->setCellValue('AP9', $seconddesagregationResults['20-24']['25+'])
                         ->setCellValue('AQ9', $seconddesagregationResults['25-29']['25+'])
                         ->setCellValue('AR9', $seconddesagregationResults['9-14']['25+'] + $seconddesagregationResults['15-19']['25+'] + $seconddesagregationResults['20-24']['25+']+$seconddesagregationResults['25-29']['25+']);
-
+            $total += $seconddesagregationResults['9-14']['0_6'] + $seconddesagregationResults['15-19']['0_6'] + $seconddesagregationResults['20-24']['0_6']+$seconddesagregationResults['25-29']['0_6'] +
+                        $seconddesagregationResults['9-14']['7_12'] + $seconddesagregationResults['15-19']['7_12'] + $seconddesagregationResults['20-24']['7_12']+$seconddesagregationResults['25-29']['7_12'] +
+                        $seconddesagregationResults['9-14']['13_24'] + $seconddesagregationResults['15-19']['13_24'] + $seconddesagregationResults['20-24']['13_24']+$seconddesagregationResults['25-29']['13_24'] +
+                        $seconddesagregationResults['9-14']['25+'] + $seconddesagregationResults['15-19']['25+'] + $seconddesagregationResults['20-24']['25+']+$seconddesagregationResults['25-29']['25+'];
+                        
             // report third desagregation
             $excelObj->getActiveSheet()
                         ->setCellValue('AS9', $thirddesagregationResults['9-14']['0_6'])
@@ -196,7 +205,11 @@ class BeneficiariosController extends Controller
                         ->setCellValue('BJ9', $thirddesagregationResults['20-24']['25+'])
                         ->setCellValue('BK9', $thirddesagregationResults['25-29']['25+'])
                         ->setCellValue('BL9', $thirddesagregationResults['9-14']['25+'] + $thirddesagregationResults['15-19']['25+'] + $thirddesagregationResults['20-24']['25+']+$thirddesagregationResults['25-29']['25+']);
-
+            $total += $thirddesagregationResults['9-14']['0_6'] + $thirddesagregationResults['15-19']['0_6'] + $thirddesagregationResults['20-24']['0_6']+$thirddesagregationResults['25-29']['0_6'] +
+                        $thirddesagregationResults['9-14']['7_12'] + $thirddesagregationResults['15-19']['7_12'] + $thirddesagregationResults['20-24']['7_12']+$thirddesagregationResults['25-29']['7_12'] +
+                        $thirddesagregationResults['9-14']['13_24'] + $thirddesagregationResults['15-19']['13_24'] + $thirddesagregationResults['20-24']['13_24']+$thirddesagregationResults['25-29']['13_24'] +
+                        $thirddesagregationResults['9-14']['25+'] + $thirddesagregationResults['15-19']['25+'] + $thirddesagregationResults['20-24']['25+']+$thirddesagregationResults['25-29']['25+'];
+            
             // report fourth desagregation
             $excelObj->getActiveSheet()
                         ->setCellValue('BM9', $fourthdesagregationResults['9-14']['0_6'])
@@ -219,6 +232,13 @@ class BeneficiariosController extends Controller
                         ->setCellValue('CD9', $fourthdesagregationResults['20-24']['25+'])
                         ->setCellValue('CE9', $fourthdesagregationResults['25-29']['25+'])
                         ->setCellValue('CF9', $fourthdesagregationResults['9-14']['25+'] + $fourthdesagregationResults['15-19']['25+'] + $fourthdesagregationResults['20-24']['25+']+$fourthdesagregationResults['25-29']['25+']);
+            $total += $fourthdesagregationResults['9-14']['0_6'] + $fourthdesagregationResults['15-19']['0_6'] + $fourthdesagregationResults['20-24']['0_6']+$fourthdesagregationResults['25-29']['0_6'] +
+                        $fourthdesagregationResults['9-14']['7_12'] + $fourthdesagregationResults['15-19']['7_12'] + $fourthdesagregationResults['20-24']['7_12']+$fourthdesagregationResults['25-29']['7_12'] +
+                        $fourthdesagregationResults['9-14']['13_24'] + $fourthdesagregationResults['15-19']['13_24'] + $fourthdesagregationResults['20-24']['13_24']+$fourthdesagregationResults['25-29']['13_24'] +
+                        $fourthdesagregationResults['9-14']['25+'] + $fourthdesagregationResults['15-19']['25+'] + $fourthdesagregationResults['20-24']['25+']+$fourthdesagregationResults['25-29']['25+'];
+            
+            $excelObj->getActiveSheet()
+                        ->setCellValue('D9', $total);
 
             // report fifth desagregation
             $violencePreventionCount = 0;
