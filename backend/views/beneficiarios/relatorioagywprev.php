@@ -60,20 +60,21 @@ $this->params['breadcrumbs'][] = $this->title;
                             <tr>
                                 <td colspan="6" bgcolor="#FFFFFF"><b>RESUMO DISTRITAL</b></td>
                             </tr>
+                           
                             <tr>
                                 
-                                <td colspan="6" bgcolor="#FFFFFF">Total de Adolescentes Jovens Activos: <b>  <?php echo $totals['total_registos'] ?> </b></td>
+                                <td colspan="6" bgcolor="#FFFFFF"> <b>Total de Adolescentes Jovens Registados: <b>  <?php echo $totals['total_registos'] ?> </b></td>
                             </tr> 
                             <tr>
-                                <td colspan="6" bgcolor="#FFFFFF">Total de adolescentes e Jovens do sexo feminino:<b> <?php echo $totals['total_femininos'] ?></b></td>
+                                <td colspan="6" bgcolor="#FFFFFF"><b>Total de adolescentes e Jovens do sexo feminino: <?php echo $totals['total_femininos'] ?></b></td>
                             </tr> 
                             
                             <tr>
-                                <td colspan="6" bgcolor="#FFFFFF">Total de adolescentes e Jovens do sexo masculino:<b> <?php echo $totals['total_masculinos'] ?></b></td>
+                                <td colspan="6" bgcolor="#FFFFFF"><b>Total de adolescentes e Jovens do sexo masculino: <?php echo $totals['total_masculinos'] ?></b></td>
                             </tr> 		
                             
                             <tr>
-                                <td colspan="6" bgcolor="#FFFFFF">Total de Beneficiarias Activos:<b> <?php echo $totals['beneficiarias_activas'] ?></b></td>
+                                <td colspan="6" bgcolor="#FFFFFF"><b> Total de Beneficiarias Activos:<?php echo $totals['beneficiarias_activas'] ?></b></td>
                             </tr> 
                             <tr>
                                 <td colspan="6" height="40" bgcolor="#FFFFFF"><b> </b></td>
