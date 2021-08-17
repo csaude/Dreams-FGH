@@ -284,23 +284,45 @@ class BeneficiariosController extends Controller
     }
 
     public function actionExportlist($beneficiaries){
-
-        $array = explode(',',$beneficiaries);
-
-        //$searchModel = new BeneficiariosSearch();
-        //$data = $searchModel->searchList(Yii::$app->request->queryParams, $beneficiaries);
-
-        $tmpfname = 'xlsx-simple.xlsx';
-        $excelReader = PHPExcel_IOFactory::createReaderForFile($tmpfname);
-       $excelObj = $excelReader->load($tmpfname);
         
-         $excelObj->setActiveSheetIndex(0);
-        $excelObj->getActiveSheet()->setCellValue('C6', '4')
-                                ->setCellValue('C7', '5')
-                                    ->setCellValue('C8', '6')       
-                                    ->setCellValue('C9', '10');
+        $searchModel = new BeneficiariosSearch();
+        $dataProvider = $searchModel->fetchAGYW($beneficiaries);
+
+        $tmpfname = 'template_benefitiaries.xls';
+        $excelReader = PHPExcel_IOFactory::createReaderForFile($tmpfname);
+        $excelObj = $excelReader->load($tmpfname);
+        $excelObj->setActiveSheetIndex(0);
+        $worksheet = $excelObj->getActiveSheet();
+
+        $row = 1;
+
+        foreach($dataProvider as $data){
+            $row++;
+                
+            $worksheet->setCellValue('A'.$row, $data['provincia']);
+            $worksheet->setCellValue('B'.$row, $data['distrito']);
+            $worksheet->setCellValue('C'.$row, $data['bairro']);
+            $worksheet->setCellValue('D'.$row, $data['ponto_entrada']);
+            $worksheet->setCellValue('E'.$row, $data['organizacao']);
+            $worksheet->setCellValue('F'.$row, $data['data_registo']);
+            $worksheet->setCellValue('G'.$row, $data['nui']);
+            $worksheet->setCellValue('H'.$row, $data['idade_registo']);
+            $worksheet->setCellValue('I'.$row, $data['idade_actual']);
+            $worksheet->setCellValue('J'.$row, $data['faixa_registo']);
+            $worksheet->setCellValue('K'.$row, $data['faixa_actual']);
+            $worksheet->setCellValue('L'.$row, $data['vulnerabilidades']);
+            $worksheet->setCellValue('M'.$row, $data['tipo_servico']);
+            $worksheet->setCellValue('N'.$row, $data['servico']);
+            $worksheet->setCellValue('O'.$row, $data['subservico']);
+            $worksheet->setCellValue('P'.$row, $data['pacote']);
+            $worksheet->setCellValue('Q'.$row, $data['ponto_entrada_servico']);
+            $worksheet->setCellValue('R'.$row, $data['localizacao']);
+
+        }
+
+        // generate report 
         $objWriter = PHPExcel_IOFactory::createWriter($excelObj, 'Excel2007');
-        $filename = 'xlsx-simple320210816_023849.xlsx';
+        $filename = 'PEPFAR_MER_2.5_AGYW_PREV_Beneficiaries_' .  date('Ymd_his') . '.xls';
         $objWriter->save($filename);   
 
         ob_end_clean();  
@@ -308,13 +330,11 @@ class BeneficiariosController extends Controller
         header('Content-Disposition: attachment; ');
         header("Pragma: no-cache");
         header("Expires: 0");
-        
-        //return Yii::$app->response->sendFile($filename);
 
         return Yii::$app->response->sendFile($filename)->on(\yii\web\Response::EVENT_AFTER_SEND, function($event) {
             unlink($event->data);
         }, $filename);
-                          
+
     }
 
     /**
@@ -405,6 +425,7 @@ class BeneficiariosController extends Controller
         $searchModel = new BeneficiariosSearch();
         $dataProvider = $searchModel->searchList(Yii::$app->request->queryParams, $beneficiaries);
         $dataProvider->pagination->pageSize = 10;
+
         return $this->render('agywlist', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
