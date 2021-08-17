@@ -479,7 +479,7 @@ class AgywPrev extends Model {
                             where data_servico between :start and :end
                             and servico_status=1
                         )
-                group by beneficiario_id, faixa_actual, vai_escola, sexualmente_activa, data_registo";
+                group by beneficiario_id, faixa_actual, vai_escola, sexualmente_activa, data_registo, vulnerabilidades";
 
         $preparedQuery = Yii::$app->db->createCommand($query);
         $preparedQuery->bindParam(":province", $province);
