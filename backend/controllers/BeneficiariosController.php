@@ -396,10 +396,10 @@ class BeneficiariosController extends Controller
             $session->open();
 
         if($beneficiaries != null){
-            $session->set('beneficiaries', implode(',',$beneficiaries));
+            $session->set('beneficiaries', gzcompress(implode(',',$beneficiaries),9));
         } else {
-
-            $beneficiaries = $session->has('beneficiaries') ? explode(',',$session->get('beneficiaries')) : [];
+            
+            $beneficiaries = $session->has('beneficiaries') ? explode(',', gzuncompress($session->get('beneficiaries'))) : [];
         };  
         
         $searchModel = new BeneficiariosSearch();
