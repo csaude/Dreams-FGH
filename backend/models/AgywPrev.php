@@ -258,6 +258,13 @@ class AgywPrev extends Model {
                 '7_12' => $results2529,
                 '13_24' => $results2529,
                 '25+' => $results2529,
+            ),
+            'summary' => array(
+                'total_registos' => 0,
+                'total_masculinos' => 0,
+                'total_femininos' => 0,
+                'total_beneficiarias' => 0,
+                'beneficiarias_activas' => 0
             )
         ); 
     }
@@ -472,7 +479,7 @@ class AgywPrev extends Model {
                             where data_servico between :start and :end
                             and servico_status=1
                         )
-                group by beneficiario_id, faixa_actual, vai_escola, sexualmente_activa, data_registo";
+                group by beneficiario_id, faixa_actual, vai_escola, sexualmente_activa, data_registo, vulnerabilidades";
 
         $preparedQuery = Yii::$app->db->createCommand($query);
         $preparedQuery->bindParam(":province", $province);
@@ -480,6 +487,14 @@ class AgywPrev extends Model {
         $preparedQuery->bindParam(":start", $dataInicio);
         $preparedQuery->bindParam(":end", $dataFim);
         $result = $preparedQuery->queryAll();
+
+
+        $summary = $this->computeSummary($province, $district);
+        $desagregationMap['summary']['total_registos'] = $summary['total_registos'];
+        $desagregationMap['summary']['total_masculinos'] = $summary['total_rapazes'];
+        $desagregationMap['summary']['total_femininos'] = $summary['total_raparigas'];
+        $desagregationMap['summary']['total_beneficiarias'] = $summary['total_beneficiarias'];
+        $desagregationMap['summary']['beneficiarias_activas'] = count($result);
 
         foreach ($result as $row){
             
@@ -772,6 +787,52 @@ class AgywPrev extends Model {
         $result = [
             'results' => $results,
             'beneficiaries' =>  $beneficiaries
+        ];
+
+        return $result;
+    }
+
+    private function computeSummary($provincia, $distrito){
+        $query = "select distinct beneficiario_id
+                    from app_dream_vw_agyw_prev
+                    where vulneravel=1
+                    and provincia_id=:province
+                    and distrito_id=:district";
+
+        $preparedQuery = Yii::$app->db->createCommand($query);
+        $preparedQuery->bindParam(":province", $provincia);
+        $preparedQuery->bindParam(":district", $distrito);
+        $result = $preparedQuery->queryAll();
+
+        $total_beneficiarias = count($result);
+        $total_registos = 0;
+        $total_rapazes = 0;
+        $total_raparigas = 0;
+
+        $query = "select count(*) registos,
+                        sum(case when he.emp_gender=1 then 1 else 0 end) rapazes,
+                        sum(case when he.emp_gender=2 then 1 else 0 end) raparigas
+                    from hs_hr_employee he
+                    where he.provin_code=:province
+                    and he.district_code=:district
+                    and he.emp_status=1";
+        
+        $preparedQuery = Yii::$app->db->createCommand($query);
+        $preparedQuery->bindParam(":province", $provincia);
+        $preparedQuery->bindParam(":district", $distrito);
+        $result = $preparedQuery->queryAll();
+
+        foreach ($result as $row){
+            $total_registos = $row['registos'];
+            $total_rapazes = $row['rapazes'];
+            $total_raparigas = $row['raparigas'];
+        }
+
+        $result = [
+            'total_beneficiarias' => $total_beneficiarias,
+            'total_registos' => $total_registos,
+            'total_rapazes' => $total_rapazes,
+            'total_raparigas' => $total_raparigas
         ];
 
         return $result;
