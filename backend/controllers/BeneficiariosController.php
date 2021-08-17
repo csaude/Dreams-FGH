@@ -182,7 +182,7 @@ class BeneficiariosController extends Controller
                         $seconddesagregationResults['9-14']['7_12'] + $seconddesagregationResults['15-19']['7_12'] + $seconddesagregationResults['20-24']['7_12']+$seconddesagregationResults['25-29']['7_12'] +
                         $seconddesagregationResults['9-14']['13_24'] + $seconddesagregationResults['15-19']['13_24'] + $seconddesagregationResults['20-24']['13_24']+$seconddesagregationResults['25-29']['13_24'] +
                         $seconddesagregationResults['9-14']['25+'] + $seconddesagregationResults['15-19']['25+'] + $seconddesagregationResults['20-24']['25+']+$seconddesagregationResults['25-29']['25+'];
-                        
+
             // report third desagregation
             $excelObj->getActiveSheet()
                         ->setCellValue('AS9', $thirddesagregationResults['9-14']['0_6'])
@@ -395,8 +395,8 @@ class BeneficiariosController extends Controller
         } else {
 
             $beneficiaries = explode(',',$_COOKIE["beneficiaries"]);
-        }   
-        //VarDumper::dump($beneficiaries);
+        };  
+        
         $searchModel = new BeneficiariosSearch();
         $dataProvider = $searchModel->searchList(Yii::$app->request->queryParams, $beneficiaries);
         $dataProvider->pagination->pageSize = 10;
@@ -420,14 +420,17 @@ class BeneficiariosController extends Controller
                     ->where(['district_code' => $model->district_code])->one();
 
             $model->execute();
+            
             $firstdesagregationResults = $model->getFirstDesagregationResults();
             $seconddesagregationResults = $model->getSecondDesagregationResults();
             $thirddesagregationResults = $model->getThirdDesagregationResults();
             $fourthdesagregationResults = $model->getFourthDesagregationResults();
             $fifthdesagregationResults = $model->getFifthDesagregationResults();
             $sixthdesagregationResults = $model->getSixthDesagregationResults();
+            $totaisresults = $model->getTotais();
 
-        
+            setcookie("beneficiaries", null);
+
             return $this->render('relatorioagywprev', [
                 'model' => $model,
                 'province' => $province->province_name,
@@ -437,8 +440,10 @@ class BeneficiariosController extends Controller
                 'thirdDesagregation' => $thirddesagregationResults,
                 'fourthdesagregationResults' => $fourthdesagregationResults,
                 'fifthdesagregationResults' => $fifthdesagregationResults,
-                'sixthdesagregationResults' => $sixthdesagregationResults
+                'sixthdesagregationResults' => $sixthdesagregationResults,
+                'totals' => $totaisresults
             ]);
+            
         }
         
         return $this->render('relatorioagyw', [

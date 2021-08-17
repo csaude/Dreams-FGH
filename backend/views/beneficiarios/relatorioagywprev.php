@@ -38,6 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             
                         <td colspan="5" bgcolor="#FFFFFF"><b>Data final: <?php echo $model->end_date ?></b></td>
                     </tr> 
+                    
                 </table>
 
                 <button class="btn btn-primary btn-block  mb1 black bg-darken-1" data-toggle="collapse" data-target="#first"><b> <?php echo $province ?> </b></button>
@@ -54,8 +55,30 @@ $this->params['breadcrumbs'][] = $this->title;
                         <table width="100%" class="table table-dashed">
 
                             <tr>
-                                <td colspan="5" bgcolor="#FFFFFF"><b> Distrito: <?php echo $district ?> </b></td>
+                                <td colspan="6" bgcolor="#FFFFFF"><b> Distrito: <?php echo $district ?> </b></td>
                             </tr>	
+                            <tr>
+                                <td colspan="6" bgcolor="#FFFFFF"><b>RESUMO DISTRITAL</b></td>
+                            </tr>
+                            <tr>
+                                
+                                <td colspan="6" bgcolor="#FFFFFF">Total de Adolescentes Jovens Activos: <b>  <?php echo $totals['total_registos'] ?> </b></td>
+                            </tr> 
+                            <tr>
+                                <td colspan="6" bgcolor="#FFFFFF">Total de adolescentes e Jovens do sexo feminino:<b> <?php echo $totals['total_femininos'] ?></b></td>
+                            </tr> 
+                            
+                            <tr>
+                                <td colspan="6" bgcolor="#FFFFFF">Total de adolescentes e Jovens do sexo masculino:<b> <?php echo $totals['total_masculinos'] ?></b></td>
+                            </tr> 		
+                            
+                            <tr>
+                                <td colspan="6" bgcolor="#FFFFFF">Total de Beneficiarias Activos:<b> <?php echo $totals['beneficiarias_activas'] ?></b></td>
+                            </tr> 
+                            <tr>
+                                <td colspan="6" height="40" bgcolor="#FFFFFF"><b> </b></td>
+                            </tr>
+
                             <tr>
                                 <td width="706" colspan="6" bgcolor="#F4A460"><b>Beneficiaries that have fully completed the DREAMS primary package of services/interventions but no additional services/interventions</b> </td>
                             </tr>
@@ -97,7 +120,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     </tr>
                             <?php  } ?>
                             <tr>
-                                <td colspan="5" height="40" bgcolor="#FFFFFF"><b> </b></td>
+                                <td colspan="6" height="40" bgcolor="#FFFFFF"><b> </b></td>
                             </tr>
 
                             <tr>
