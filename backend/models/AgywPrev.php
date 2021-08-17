@@ -488,7 +488,6 @@ class AgywPrev extends Model {
         $preparedQuery->bindParam(":end", $dataFim);
         $result = $preparedQuery->queryAll();
 
-
         $summary = $this->computeSummary($province, $district);
         $desagregationMap['summary']['total_registos'] = $summary['total_registos'];
         $desagregationMap['summary']['total_masculinos'] = $summary['total_rapazes'];
@@ -612,6 +611,10 @@ class AgywPrev extends Model {
         if($this->start_date && $this->end_date && $this->province_code && $this->district_code){
             $this->completudeness = $this->completude($this->start_date, $this->end_date, $this->province_code, $this->district_code);
         }
+    }
+
+    public function getTotais(){
+        return $this->completudeness['summary'];
     }
 
     /**
@@ -836,48 +839,6 @@ class AgywPrev extends Model {
         ];
 
         return $result;
-    }
-
-    public function report(){
-        $output = "";
-
-        $output . ' <table style="width:100%">
-                        <tr>
-                            <th rowspan="5">Reporting_Period</th>
-                            <th rowspan="5">Province</th>
-                            <th rowspan="5">District</th>
-                            <th colspan="80">AGYW_PREV (Denominator) : Number of active DREAMS beneficiaries that have started or completed any DREAMS service/intervention</th>
-                        </tr>
-                        <tr>
-                            <td rowspan="4">Total</td>
-                            <td colspan="20">Beneficiaries that have fully completed the DREAMS primary package of services/interventions but no additional services/interventions</td>
-                        </tr>
-                        <tr>
-                     
-                            <td colspan="20">Enrollment Time / Age</td>
-                        </tr>
-                        <tr>
-                            <td colspan="5">0-6</td>
-                            <td colspan="5">7-12</td>
-                            <td colspan="5">13-24</td>
-                            <td colspan="5">25+ months</td>
-                        </tr>
-                        <tr>
-                            <td>9-14</td>
-                            <td>15-19</td>
-                            <td>20-24</td>
-                            <td>25-29</td>
-                            <td>SubTotal</td>
-                            <td>9-14</td>
-                            <td>15-19</td>
-                            <td>20-24</td>
-                            <td>25-29</td>
-                            <td>SubTotal</td>
-                        </tr>
-                    </table>
-                    ';
-
-        return $output;
     }
 
 
