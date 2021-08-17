@@ -390,11 +390,16 @@ class BeneficiariosController extends Controller
                     break;        
         };
         
+        // use session storage
+        $session = Yii::$app->session;
+        if (!$session->isActive) 
+            $session->open();
+
         if($beneficiaries != null){
-            setcookie("beneficiaries", implode(',',$beneficiaries)/*json_encode($beneficiaries)*/, time() + 3600 * 365);
+            $session->set('beneficiaries', implode(',',$beneficiaries));
         } else {
 
-            $beneficiaries = explode(',',$_COOKIE["beneficiaries"]);
+            $beneficiaries = $session->has('beneficiaries') ? explode(',',$session->get('beneficiaries')) : [];
         };  
         
         $searchModel = new BeneficiariosSearch();
@@ -405,6 +410,7 @@ class BeneficiariosController extends Controller
             'dataProvider' => $dataProvider,
             'beneficiaries' => implode(',',$beneficiaries)
         ]);
+        
     }
 
     public function actionRelatorioagyw()
@@ -429,7 +435,12 @@ class BeneficiariosController extends Controller
             $sixthdesagregationResults = $model->getSixthDesagregationResults();
             $totaisresults = $model->getTotais();
 
-            setcookie("beneficiaries", null);
+            // reset session storage
+            $session = Yii::$app->session;
+            if (!$session->isActive){
+                $session->open();
+            } 
+            $session->remove('beneficiaries');
 
             return $this->render('relatorioagywprev', [
                 'model' => $model,
