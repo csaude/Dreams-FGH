@@ -7,6 +7,7 @@ use kartik\form\ActiveForm;
 
 use yii\widgets\Pjax;
 use yii\helpers\ArrayHelper;
+use \kartik\widgets\Select2;
 use app\models\Utilizadores;
 use app\models\ReferenciasDreams;
 
@@ -99,21 +100,17 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
             <div class="panel-body">
 
+        
+
 
               <div class="row">
                 <div class="col-lg-6">  
-                  <?= $form->field($model, 'cancel_reason')->dropDownList( 
-                      ['' => '', '1' => ' Serviço não provido nos últimos 6 meses', 
-                        '2' => ' Beneficiária não encontrada',  
-                        '3' => ' Abandono',  
-                        '4' => ' Beneficiária recusou o serviço', 
-                        '5' => ' Outro Motivo'
-                      ]) ?>
-                  
+
+                  <?=  $form->field($model, 'cancel_reason')->widget(Select2::classname(),['data' => ['1' => 'Serviço não provido nos últimos 6 meses','2' => 'Beneficiária não encontrada','3' => 'Abandono','4' => 'Beneficiária recusou o serviço','5' => 'Outro Motivo'],'options' => ['onchange' => 'var valor2 = this.value; if(valor2==5){$("#other_reason").show(1000);}else{$("#other_reason").hide(1000);}', 'placeholder' => '--Selecione Aqui--'],'pluginOptions' => ['allowClear' => true],]); ?>
 
                 </div>
 
-                  <div class="col-lg-6"> <?= $form->field($model, 'other_reason')->textInput() ?></div>
+                  <div class="col-lg-6" id="other_reason"> <?= $form->field($model, 'other_reason')->textArea(['maxlength' => true, 'rows' => '3']) ?> </div>
               </div>
                                
                 <div class="form-group pull-right">
@@ -126,12 +123,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
       </div>
     </div>
-
           
-
-
-
-
     <table width="100%"   class="table table-bordered  table-condensed">
       <tr>
         <td   bgcolor="#261657" bgcolor="" align="center"><font color ="#fff" size="+1"><b>
@@ -146,6 +138,16 @@ $this->params['breadcrumbs'][] = $this->title;
         </tr>
       </table>
 
+
+      <?php $pluginOptions = [
+        'inline'=>false, 
+        'iconChecked'=>'<i class="fas fa-plus"></i>',
+        'iconUnchecked'=>'<i class="fas fa-minus"></i>',
+        'iconNull'=>'<i class="fas fa-times"></i>'
+        ];
+
+      ?>
+
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -155,21 +157,24 @@ $this->params['breadcrumbs'][] = $this->title;
               ['attribute'=> 'id',
                 'format' => 'raw',
                 'label' => 'Select',
-                'value' => function ($model) {
-                
-                  return Html::checkBox($model->id, false,[$model->id]);
+                'value' => function ($model, $key, $index, $column) {               
+                   return Html::checkbox('selection[]', false, 
+                    [
+                      'class'=>'kv-row-checkbox', 'value'=>$key,
+                      'checked'=>false, 'onclick'=>'myAdd('.$model->id.')'
+                    ]);
                 },
               ],	  
 
 
             ['attribute'=> 'criado_em',
-          'format' => 'html',
-          'value' => function ($model) {
-            
-          return $model->criado_em;
-          // return Yii::$app->formatter->asDate($model->criado_em, 'yyyy-MM-dd');
-          },
-          ],		
+              'format' => 'html',
+              'value' => function ($model) {
+                
+              return $model->criado_em;
+              // return Yii::$app->formatter->asDate($model->criado_em, 'yyyy-MM-dd');
+              },
+            ],		
 
 			
             'nota_referencia',
@@ -254,39 +259,76 @@ $utils=Profile::find()->where(['=','id',$model->notificar_ao])->all();
                  ->all(), 'id', 'name'
              ),],
 
-  ['attribute'=> 'status_ref',
-                    'format' => 'html',
-                     'value' => function ($model) {
-        $query = ReferenciasServicosReferidos::find()
-            ->where(['=','referencia_id',$model->id])
-            ->orderBy('id ASC')
-            ->all();
-          $servs=ArrayHelper::getColumn($query,'servico_id');
-          $conta= ServicosBeneficiados::find()
-            ->where(['=','beneficiario_id',$model->beneficiario_id])
-            ->andWhere(['status' => 1])
-            ->andWhere(['IN','servico_id', $servs])
-            ->exists();
-        if($conta>0) {
-
-          // UPDATE
-          $connection = Yii::$app->db;
-          $connection->createCommand()
-          ->update('app_dream_referencias', ['status_ref' => 1],['id'=>$model->id])
-          ->execute();
-
-          return '<font color="green"><b>Atendido</b></font>'; } else
-
-          {return '<font color="red">Pendente</font>';}
-       },
-       'filter'=>array("1"=>"Atendido","0"=>"Pendente"),
-                    ],
+             [
+              'attribute'=>'status_ref',
+              'format' => 'html',
+              'value' => function ($model) {
+                return  $model->status_ref==0? '<font color="red">Pendente</font>':'<font color="green"><b>Atendido</b></font>';
+              },
+              'filter'=>array("1"=>"Atendido","0"=>"Pendente"),
+            ],
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
+
+// ***************************************************
+
+
+        // 'rowOptions' => function($model,$index,$key){
+             
+        //       return [
+        //             'id' => $model['id'], 
+        //             'onclick' => 
+        //               'var linha = this.id; 
+        //               myAdd(linha);
+        //               '
+        //             ]; 
+
+        //       // 'var valor2 = this.value; if(valor2==5){$("#other_reason").show(1000);}else{$("#other_reason").hide(1000);}'          
+         
+        //   },
     ]); ?>
 
     
     <?php ActiveForm::end(); ?>
 
 </div>
+
+<script type="text/javascript">
+  window.onload = function () {
+    $(document).ready(function() {
+      $("#other_reason").hide(1000);
+    });
+  }
+
+  var myIds = [];
+
+
+function myAdd(linha){
+   
+   
+  var item = myIds.includes(linha);
+
+  if (item == false){
+
+    myIds.push(linha);
+
+  }else{
+
+    var index = myIds.indexOf(linha);
+
+    if (index > -1) {
+
+      myIds.splice(index,1);
+    }
+  }
+  
+      // myIds.forEach(myVerification(linha));
+
+    total = myIds.length;
+  // return document.getElementByID("myIds").value = myIds;
+  <?php $myIds = "<script>document.write(myIds)</script>"?>
+  // return alert(total+" - Row clicked: "+linha+"; Array = "+myIds);
+}
+
+</script>

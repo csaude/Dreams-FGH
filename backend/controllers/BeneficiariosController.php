@@ -348,14 +348,16 @@ class BeneficiariosController extends Controller
     }
 
     public function actionRelatorioagywprev(){
-        
-        $enrollmentTime = isset($_POST['enrollmentTime'])? $_POST['enrollmentTime'] : null;
-        $ageBand = isset($_POST['ageBand'])? $_POST['ageBand'] : null;
-        $province_code = isset($_POST['province_code'])? $_POST['province_code'] : null;
-        $district_code = isset($_POST['district_code'])? $_POST['district_code'] : null;
-        $start_date = isset($_POST['start_date'])? $_POST['start_date'] : null;
-        $end_date = isset($_POST['end_date'])? $_POST['end_date'] : null;
-        $indicatorID = isset($_POST['indicatorID'])? $_POST['indicatorID'] : null;
+
+        $params = Yii::$app->request->queryParams;
+        $enrollmentTime = isset($params['eTime'])? $params['eTime'] : null;
+        $ageBand = isset($params['aBand'])? $params['aBand'] : null;
+        $province_code = isset($params['pcode'])? $params['pcode'] : null;
+        $district_code = isset($params['dcode'])? $params['dcode'] : null;
+        $start_date = isset($params['sdate'])? $params['sdate'] : null;
+        $end_date = isset($params['edate'])? $params['edate'] : null;
+        $indicatorID = isset($params['iID'])? $params['iID'] : null;
+
         $model = new AgywPrev();
         $model->province_code = $province_code;
         $model->district_code = $district_code;
@@ -415,6 +417,7 @@ class BeneficiariosController extends Controller
             'dataProvider' => $dataProvider,
             'beneficiaries' => implode(',',$beneficiaries)
         ]);
+        
         
     }
 
