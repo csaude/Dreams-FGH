@@ -104,19 +104,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                             <td bgcolor="#FAEBD7"> 
                                                 
                                                 <?php if( $firstDesagregation[$index1][$index2] > 0 ){ ?>
-                                                    <?= Html::a('<span style="color:#0549a3;"> '.$firstDesagregation[$index1][$index2].'</span>', ['relatorioagywprev'], [
-                                                            'data'=>[
-                                                                'method' => 'post',
-                                                                'params'=>['ageBand' => $index1, 
-                                                                            'enrollmentTime' => $index2,
-                                                                            'province_code' => $model->province_code,
-                                                                            'district_code' => $model->district_code,
-                                                                            'start_date' => $model->start_date,
-                                                                            'end_date' => $model->end_date,
-                                                                            'indicatorID' => 1
-                                                                        ],
-                                                            ]
-                                                        ]) ?>
+                                                    <?= Html::a('<span style="color:#0549a3;"> '.$firstDesagregation[$index1][$index2].'</span>', ['relatorioagywprev', 
+                                                                                                                                                        'aBand' => $index1,
+                                                                                                                                                        'eTime' => $index2,
+                                                                                                                                                        'pcode' => $model->province_code,
+                                                                                                                                                        'dcode' => $model->district_code,
+                                                                                                                                                        'sdate' => $model->start_date,
+                                                                                                                                                        'edate' => $model->end_date,
+                                                                                                                                                        'iID' => 1], []) ?>
                                                 <?php  } else { ?>
                                                     <span style="color:#0549a3;"> <?= $firstDesagregation[$index1][$index2]?> </span>
                                                 <?php  } ?>
@@ -148,19 +143,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                             <td bgcolor="#FAEBD7"> 
                                                 
                                                 <?php if( $secondDesagregation[$index1][$index2] > 0 ){ ?>
-                                                    <?= Html::a('<span style="color:#0549a3;">'.$secondDesagregation[$index1][$index2].'</span>', ['relatorioagywprev'], [
-                                                            'data'=>[
-                                                                'method' => 'post',
-                                                                'params'=>['ageBand' => $index1, 
-                                                                            'enrollmentTime' => $index2,
-                                                                            'province_code' => $model->province_code,
-                                                                            'district_code' => $model->district_code,
-                                                                            'start_date' => $model->start_date,
-                                                                            'end_date' => $model->end_date,
-                                                                            'indicatorID' => 2
-                                                                        ],
-                                                            ]
-                                                        ]) ?>
+                                                    <?= Html::a('<span style="color:#0549a3;">'.$secondDesagregation[$index1][$index2].'</span>', ['relatorioagywprev', 
+                                                                                                                                                        'aBand' => $index1,
+                                                                                                                                                        'eTime' => $index2,
+                                                                                                                                                        'pcode' => $model->province_code,
+                                                                                                                                                        'dcode' => $model->district_code,
+                                                                                                                                                        'sdate' => $model->start_date,
+                                                                                                                                                        'edate' => $model->end_date,
+                                                                                                                                                        'iID' => 2], []) ?>
                                                 <?php  } else { ?>
                                                     <span style="color:#0549a3;"> <?= $secondDesagregation[$index1][$index2]?> </span>
                                                 <?php  } ?>
@@ -192,19 +182,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                             <td bgcolor="#FAEBD7"> 
                                                 
                                                 <?php if( $thirdDesagregation[$index1][$index2] > 0 ){ ?>
-                                                    <?= Html::a('<span style="color:#0549a3;">'.$thirdDesagregation[$index1][$index2].'</span>', ['relatorioagywprev'], [
-                                                            'data'=>[
-                                                                'method' => 'post',
-                                                                'params'=>['ageBand' => $index1, 
-                                                                            'enrollmentTime' => $index2,
-                                                                            'province_code' => $model->province_code,
-                                                                            'district_code' => $model->district_code,
-                                                                            'start_date' => $model->start_date,
-                                                                            'end_date' => $model->end_date,
-                                                                            'indicatorID' => 3
-                                                                        ],
-                                                            ]
-                                                        ]) ?>
+                                                    <?= Html::a('<span style="color:#0549a3;">'.$thirdDesagregation[$index1][$index2].'</span>', ['relatorioagywprev','aBand' => $index1,
+                                                                                                                                                        'eTime' => $index2,
+                                                                                                                                                        'pcode' => $model->province_code,
+                                                                                                                                                        'dcode' => $model->district_code,
+                                                                                                                                                        'sdate' => $model->start_date,
+                                                                                                                                                        'edate' => $model->end_date,
+                                                                                                                                                        'iID' => 3], []) ?>
                                                 <?php  } else { ?>
                                                     <span style="color:#0549a3;"> <?= $thirdDesagregation[$index1][$index2]?> </span>
                                                 <?php  } ?>
@@ -236,19 +220,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                             <td bgcolor="#FAEBD7"> 
                                                 
                                                 <?php if( $fourthdesagregationResults[$index1][$index2] > 0 ){ ?>
-                                                    <?= Html::a('<span style="color:#0549a3;">'.$fourthdesagregationResults[$index1][$index2].'</span>', ['relatorioagywprev'], [
-                                                            'data'=>[
-                                                                'method' => 'post',
-                                                                'params'=>['ageBand' => $index1, 
-                                                                            'enrollmentTime' => $index2,
-                                                                            'province_code' => $model->province_code,
-                                                                            'district_code' => $model->district_code,
-                                                                            'start_date' => $model->start_date,
-                                                                            'end_date' => $model->end_date,
-                                                                            'indicatorID' => 4
-                                                                        ],
-                                                            ]
-                                                        ]) ?>
+                                                    <?= Html::a('<span style="color:#0549a3;">'.$fourthdesagregationResults[$index1][$index2].'</span>', ['relatorioagywprev','aBand' => $index1,
+                                                                                                                                                        'eTime' => $index2,
+                                                                                                                                                        'pcode' => $model->province_code,
+                                                                                                                                                        'dcode' => $model->district_code,
+                                                                                                                                                        'sdate' => $model->start_date,
+                                                                                                                                                        'edate' => $model->end_date,
+                                                                                                                                                        'iID' => 4], []) ?>
                                                 <?php  } else { ?>
                                                     <span style="color:#0549a3;"> <?= $fourthdesagregationResults[$index1][$index2]?> </span>
                                                 <?php  } ?>
@@ -280,19 +258,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                             <td bgcolor="#FAEBD7"> 
                                                 
                                                 <?php if( $fifthdesagregationResults[$index1][$index2] > 0 ){ ?>
-                                                    <?= Html::a('<span style="color:#0549a3;">'.$fifthdesagregationResults[$index1][$index2].'</span>', ['relatorioagywprev'], [
-                                                            'data'=>[
-                                                                'method' => 'post',
-                                                                'params'=>['ageBand' => $index1, 
-                                                                            'enrollmentTime' => $index2,
-                                                                            'province_code' => $model->province_code,
-                                                                            'district_code' => $model->district_code,
-                                                                            'start_date' => $model->start_date,
-                                                                            'end_date' => $model->end_date,
-                                                                            'indicatorID' => 5
-                                                                        ],
-                                                            ]
-                                                        ]) ?>
+                                                    <?= Html::a('<span style="color:#0549a3;">'.$fifthdesagregationResults[$index1][$index2].'</span>', ['relatorioagywprev','aBand' => $index1,
+                                                                                                                                                        'eTime' => $index2,
+                                                                                                                                                        'pcode' => $model->province_code,
+                                                                                                                                                        'dcode' => $model->district_code,
+                                                                                                                                                        'sdate' => $model->start_date,
+                                                                                                                                                        'edate' => $model->end_date,
+                                                                                                                                                        'iID' => 5], []) ?>
                                                 <?php  } else { ?>
                                                     <span style="color:#0549a3;"> <?= $fifthdesagregationResults[$index1][$index2]?> </span>
                                                 <?php  } ?>
@@ -324,19 +296,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                             <td bgcolor="#FAEBD7"> 
                                                 <?php if( $sixthdesagregationResults[$index1][$index2] > 0 ){ ?>
                                                 
-                                                    <?= Html::a('<span style="color:#0549a3;">'.$sixthdesagregationResults[$index1][$index2].'</span>', ['relatorioagywprev'], [
-                                                            'data'=>[
-                                                                'method' => 'post',
-                                                                'params'=>['ageBand' => $index1, 
-                                                                            'enrollmentTime' => $index2,
-                                                                            'province_code' => $model->province_code,
-                                                                            'district_code' => $model->district_code,
-                                                                            'start_date' => $model->start_date,
-                                                                            'end_date' => $model->end_date,
-                                                                            'indicatorID' => 6
-                                                                        ],
-                                                            ]
-                                                        ]) ?>
+                                                    <?= Html::a('<span style="color:#0549a3;">'.$sixthdesagregationResults[$index1][$index2].'</span>', ['relatorioagywprev','aBand' => $index1,
+                                                                                                                                                        'eTime' => $index2,
+                                                                                                                                                        'pcode' => $model->province_code,
+                                                                                                                                                        'dcode' => $model->district_code,
+                                                                                                                                                        'sdate' => $model->start_date,
+                                                                                                                                                        'edate' => $model->end_date,
+                                                                                                                                                        'iID' => 6], []) ?>
 
                                                 <?php  } else { ?>
                                                     <span style="color:#0549a3;"> <?= $sixthdesagregationResults[$index1][$index2]?> </span>
