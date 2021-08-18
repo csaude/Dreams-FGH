@@ -29,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <div class="panel panel-success">
             <div class="panel-heading"> 
-                <b><span class="glyphicon glyphicon-check" aria-hidden="true"></span> Parametros do Indicador AGYW_PREV</b>
+                <b><span class="glyphicon glyphicon-check" aria-hidden="true"></span> Pârametros do Indicador AGYW_PREV</b>
             </div>
             <div class="panel-body">
 
