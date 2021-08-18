@@ -330,26 +330,34 @@ $dists = ArrayHelper::getColumn($distritos, 'district_code');
 
         $model = new ReferenciasDreams();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                            
-             foreach ($_POST['id']as $key => $value){
-                    echo $_POST['id'][$key];
-                    echo '<br>';
-                }
+        /// update - Cancelamento em massa.
 
+        if ($model->load(Yii::$app->request->post())){
+
+            $model->status = 0;
+
+            $myIds = "<script>document.getElementByID('myIds').values</script>";
+
+            foreach ($myIds as $id){
+
+                $model = $this->findModel($id);
+
+                $model->save();
+                // return $this->redirect(['view', 'id' => $model->id]);
+            }
             return $this->render('pendentes', [
                 'searchModel' => $searchModel,
                 'dataProvider' => $dataProvider,
                 'model' => $model,
-                'other_reason' => $key,
             ]);
 
-        } else {
+        }else {
             return $this->render('pendentes', [
                 'searchModel' => $searchModel,
                 'dataProvider' => $dataProvider,
                 'model' => $model,
             ]);
         }
+
     }
 }
