@@ -164,7 +164,10 @@ Pjax::begin(['enablePushState'=>false]); ?>
         // set your toolbar
         'toolbar'=> [
           ['content'=>Html::a('<i class="glyphicon glyphicon-repeat"></i>', [''], ['data-pjax'=>0, 'class'=>'btn btn-default', 'title'=>'Reset List']).' '.
-                      Html::a('<i class="glyphicon glyphicon-export"></i>', ['exportlist', 'beneficiaries'=>$beneficiaries], ['data-pjax'=>0, 'class'=>'btn btn-default', 'title'=>'Export List'])
+                      Html::a('<i class="glyphicon glyphicon-export"></i>', ['exportlist'], ['data'=>[  'method' => 'post',
+                                                                                                        'params'=>['beneficiaries' => $beneficiaries]],
+                                                                                              'data-pjax'=>0, 'class'=>'btn btn-default', 'title'=>'Export List'])
+                      
                   ],
               '{toggleData}',
           ],

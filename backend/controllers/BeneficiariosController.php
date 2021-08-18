@@ -267,7 +267,8 @@ class BeneficiariosController extends Controller
         ]);
     }
 
-    public function actionExportlist($beneficiaries){
+    public function actionExportlist(){
+        $beneficiaries = isset($_POST['beneficiaries'])? $_POST['beneficiaries'] : null;
         
         $searchModel = new BeneficiariosSearch();
         $dataProvider = $searchModel->fetchAGYW($beneficiaries);
