@@ -62,21 +62,25 @@ $this->params['breadcrumbs'][] = $this->title;
                             </tr>
                            
                             <tr>
-                                
-                                <td colspan="6" bgcolor="#FFFFFF"> <b>Total de Adolescentes Jovens Registados: <b>  <?php echo $totals['total_registos'] ?> </b></td>
+                                <td colspan="6" bgcolor="#FFFFFF"> <b>Total de Adolescentes e Jovens Registados: <b>  <?php echo $totals['total_registos'] ?> </b></td>
                             </tr> 
                             <tr>
-                                <td colspan="6" bgcolor="#FFFFFF"><b>Total de adolescentes e Jovens do sexo feminino: <?php echo $totals['total_femininos'] ?></b></td>
+                                <td colspan="6" bgcolor="#FFFFFF"><b>Total de Adolescentes e Jovens do Sexo Feminino: <?php echo $totals['total_femininos'] ?></b></td>
                             </tr> 
                             
                             <tr>
-                                <td colspan="6" bgcolor="#FFFFFF"><b>Total de adolescentes e Jovens do sexo masculino: <?php echo $totals['total_masculinos'] ?></b></td>
+                                <td colspan="6" bgcolor="#FFFFFF"><b>Total de Adolescentes e Jovens do Sexo Masculino: <?php echo $totals['total_masculinos'] ?></b></td>
                             </tr> 		
+                            <!--
+                                <tr>
+                                    <td colspan="6" bgcolor="#FFFFFF"><b> Total de Beneficiárias: <?php echo $totals['total_beneficiarias'] ?></b></td>
+                                </tr> 
+                                <tr>
+                                    <td colspan="6" bgcolor="#FFFFFF"><b> Total de Beneficiárias Activas: <?php echo $totals['beneficiarias_activas'] ?></b></td>
+                                </tr>
+                            --> 
                             <tr>
-                                <td colspan="6" bgcolor="#FFFFFF"><b> Total de Beneficiarias: <?php echo $totals['total_beneficiarias'] ?></b></td>
-                            </tr> 
-                            <tr>
-                                <td colspan="6" bgcolor="#FFFFFF"><b> Total de Beneficiarias Activas: <?php echo $totals['beneficiarias_activas'] ?></b></td>
+                                <td colspan="6" bgcolor="#FFFFFF"><b> Total de Beneficiárias no Indicador AGYW_PREV: <?php echo $totals['total_agyw_prev'] ?></b></td>
                             </tr> 
                             <tr>
                                 <td colspan="6" height="40" bgcolor="#FFFFFF"><b> </b></td>

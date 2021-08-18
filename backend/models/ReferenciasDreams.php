@@ -46,10 +46,10 @@ class ReferenciasDreams extends \yii\db\ActiveRecord
     {
         return [
             [['beneficiario_id', 'nota_referencia','referido_por', 'notificar_ao','projecto','refer_to', 'servico_id', 'ref_livro', 'num_livro'], 'required'],
-            [['beneficiario_id', 'distrito_id', 'servico_id', 'status', 'criado_por', 'actualizado_por'], 'integer'],
+            [['beneficiario_id', 'distrito_id', 'servico_id', 'status', 'cancel_reason', 'criado_por', 'actualizado_por'], 'integer'],
             [['criado_em', 'actualizado_em','intervensao','status_ref'], 'safe'],
             [['nota_referencia'], 'string', 'max' => 100],
-            [['name', 'description','cancel_reason','other_reason'], 'string', 'max' => 250],
+            [['name', 'description','other_reason'], 'string', 'max' => 250],
             [['projecto'], 'string', 'max' => 150],
             [['refer_to', 'num_livro', 'ref_livro'], 'string', 'max' => 100],
             [['referido_por', 'notificar_ao', 'user_location', 'user_location2'], 'string', 'max' => 100],
