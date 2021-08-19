@@ -20,8 +20,34 @@ use app\models\Utilizadores;
 use app\models\Organizacoes;
 
 
-$this->title = 'Adolescentes e Jovens';
+// $this->title = 'Adolescentes e Jovens';
 $this->params['breadcrumbs'][] = $this->title;
+
+$indicatorID = $_GET['iID'];
+$enrollmentTime = str_replace('_', '-',$_GET['eTime']).' meses';
+$ageBand = str_replace('_', '-',$_GET['aBand']).' anos';;
+
+switch($indicatorID){
+  case 1: 
+          $this->title = 'Beneficiárias que completaram o pacote primário completo do DREAMS mas nenhum serviço/intervenção adicional';
+          break;
+  case 2: 
+          $this->title = 'Beneficiárias que completaram o pacote primário completo do DREAMS e pelo menos um serviço/intervenção secundário';
+          break;
+  case 3: 
+          $this->title = 'Beneficiárias que completaram pelo menos um serviço/intervenção do DREAMS mas não o pacote primário completo';
+          break;
+  case 4: 
+          $this->title = 'Beneficiárias que iniciaram um serviço/intervenção do DREAMS mas não o completaram';
+          break;
+  case 5: 
+          $this->title = 'Beneficiárias que completaram uma intervenção baseada em evidências com foco na prevenção da violência';
+          break;
+  case 6: 
+          $this->title = 'Beneficiárias que receberam apoio escolar para manter-se, progredir e/ou matricular-se na escola';
+          break;        
+};
+
   //contabilizar o numero de servicos Core por Beneficiario
   function core($k){
 
@@ -43,8 +69,12 @@ $this->params['breadcrumbs'][] = $this->title;
 
   <h2 align="center">
     <?= Html::img('@web/img/users/bandeira.jpg',['class' => 'img-default','width' => '75px','alt' => 'DREAMS']) ?>   <br>
-    <br>Lista de <?= Html::encode($this->title) ?>
-  </h2><br/>
+    <br><?= Html::encode($this->title) ?>
+  </h2>
+  <h3 align="center">
+    Tempo de Registo como Beneficiária DREAMS: <?= Html::encode($enrollmentTime) ?>
+    <br>Faixa Etária: <?= Html::encode($ageBand) ?>
+  </h3><br/>
 
   <?php
 Pjax::begin(['enablePushState'=>false]); ?>
