@@ -591,18 +591,18 @@ $ben=Beneficiarios::find()->where(['provin_code'=>5])->andWhere(['emp_status'=>1
                                 <li><a href="<?php echo Url::toRoute('beneficiarios/filtros'); ?>">
                                   <i class="fa fa-angle-double-right"></i> FILTROS DREAMS</a>
                                 </li>
-<?php if (Yii::$app->user->identity->role==20) { ?>
+                            <?php if (Yii::$app->user->identity->role==20) { ?>
                                 <li><a href="<?php echo Url::toRoute('/benefits/index'); ?>">
                                   <i class="fa fa-angle-double-right"></i> FILTROS MENSAL</a>
                                 </li>
                               <li><a href="<?php echo Url::toRoute('/utilizadores/index'); ?>">
                                   <i class="fa fa-angle-double-right"></i> FILTROS UTILIZADORES</a>
                                 </li>
-
-<?php } ?>
                                 <li>
                                     <?= Html::a(Yii::t('app', '<i class="fa fa-angle-double-right"></i> PEPFAR MER 2.5 AGYW_PREV'), ['/beneficiarios/relatorioagyw']) ?> 
-                                </li>      
+                                </li>
+
+                            <?php } ?>  
                                                	 
                         <li>
                                <?= Html::a(Yii::t('app', '<i class="fa fa-angle-double-right"></i> FY19'), ['/beneficiarios/relatoriofy19','id'=>5]) ?> 

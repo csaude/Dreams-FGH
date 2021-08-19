@@ -50,7 +50,7 @@ class BeneficiariosController extends Controller
                 ],
                 'rules' => [
                     [
-                        'actions' => ['index', 'view', 'create', 'lists', 'listas', 'servicos', 'localidades', 'bairros', 'todos', 'filtros', 'relatorio', 'relatoriofy19', 'relatoriofy20q1', 'relatoriofy20q2', 'relatorioagyw', 'relatorioagywprev', 'exportlist', 'exportreport'],
+                        'actions' => ['index', 'view', 'create', 'lists', 'listas', 'servicos', 'localidades', 'bairros', 'todos', 'filtros', 'relatorio', 'relatoriofy19', 'relatoriofy20q1', 'relatoriofy20q2'],
 
                         'allow' => true,
                         'roles' => [
@@ -79,6 +79,14 @@ class BeneficiariosController extends Controller
                             User::ROLE_MENTOR,
                             User::ROLE_ENFERMEIRA,
                             User::ROLE_CORDENADOR
+                        ],
+                    ],
+
+                    [
+                        'actions' => ['relatorioagyw', 'relatorioagywprev', 'exportlist', 'exportreport'],
+                        'allow' => true,
+                        'roles' => [
+                            User::ROLE_ADMIN
                         ],
                     ],
 
