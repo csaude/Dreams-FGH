@@ -156,7 +156,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
               ['attribute'=> 'id',
                 'format' => 'raw',
-                'label' => 'Select',
+                'label' => 'Seleccione',
                 'value' => function ($model, $key, $index, $column) {               
                    return Html::checkbox('selection[]', false, 
                     [
@@ -268,7 +268,7 @@ $utils=Profile::find()->where(['=','id',$model->notificar_ao])->all();
               'filter'=>array("1"=>"Atendido","0"=>"Pendente"),
             ],
 
-            ['class' => 'yii\grid\ActionColumn'],
+            // ['class' => 'yii\grid\ActionColumn'],
         ],
 
 // ***************************************************
@@ -297,6 +297,8 @@ $utils=Profile::find()->where(['=','id',$model->notificar_ao])->all();
 <script type="text/javascript">
   window.onload = function () {
     $(document).ready(function() {
+      $("#cancel_reason").value = "";
+      $("#other_reason").value = "";
       $("#other_reason").hide(1000);
     });
   }
