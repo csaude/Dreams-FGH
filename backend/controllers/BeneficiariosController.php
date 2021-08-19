@@ -281,7 +281,7 @@ class BeneficiariosController extends Controller
         $searchModel = new BeneficiariosSearch();
         $dataProvider = $searchModel->fetchAGYW($beneficiaries);
 
-        $tmpfname = 'template_benefitiaries.xls';
+        $tmpfname = 'template_beneficiaries.xls';
         $excelReader = PHPExcel_IOFactory::createReaderForFile($tmpfname);
         $excelObj = $excelReader->load($tmpfname);
         $excelObj->setActiveSheetIndex(0);
@@ -303,13 +303,17 @@ class BeneficiariosController extends Controller
             $worksheet->setCellValue('I'.$row, $data['idade_actual']);
             $worksheet->setCellValue('J'.$row, $data['faixa_registo']);
             $worksheet->setCellValue('K'.$row, $data['faixa_actual']);
-            $worksheet->setCellValue('L'.$row, $data['vulnerabilidades']);
-            $worksheet->setCellValue('M'.$row, $data['tipo_servico']);
-            $worksheet->setCellValue('N'.$row, $data['servico']);
-            $worksheet->setCellValue('O'.$row, $data['subservico']);
-            $worksheet->setCellValue('P'.$row, $data['pacote']);
-            $worksheet->setCellValue('Q'.$row, $data['ponto_entrada_servico']);
-            $worksheet->setCellValue('R'.$row, $data['localizacao']);
+            $worksheet->setCellValue('L'.$row, $data['data_nascimento']);
+            $worksheet->setCellValue('M'.$row, $data['vulnerabilidades']);
+            $worksheet->setCellValue('N'.$row, $data['tipo_servico']);
+            $worksheet->setCellValue('O'.$row, $data['servico']);
+            $worksheet->setCellValue('P'.$row, $data['subservico']);
+            $worksheet->setCellValue('Q'.$row, $data['pacote']);
+            $worksheet->setCellValue('R'.$row, $data['ponto_entrada_servico']);
+            $worksheet->setCellValue('S'.$row, $data['localizacao']);
+            $worksheet->setCellValue('T'.$row, $data['data_servico']);
+            $worksheet->setCellValue('U'.$row, $data['provedor']);
+            $worksheet->setCellValue('V'.$row, $data['observacoes']);
 
         }
 
