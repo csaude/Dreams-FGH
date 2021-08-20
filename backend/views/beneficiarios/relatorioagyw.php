@@ -33,7 +33,19 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
             <div class="panel-body">
 
-                <?= $form->field($model, 'province_code')->dropDownList(ArrayHelper::map(Provincias::find()->where(['status'=>1])->all(), 'id', 'province_name'),
+                <?php
+                    $province_id =  Yii::$app->user->identity->provin_code;
+                    if (isset($province_id)) {
+                        $provincias = ArrayHelper::map(Provincias::find()->where(['id'=>$province_id])->all(), 'id', 'province_name');
+                        $distritos = ArrayHelper::map(Distritos::find()->where(['province_code'=>$province_id])->all(), 'district_code', 'district_name');
+                    }
+                    else{
+                        $provincias = ArrayHelper::map(Provincias::find()->where(['status'=>1])->all(), 'id', 'province_name');
+                        $distritos = ArrayHelper::map(Distritos::find()->all(), 'district_code', 'district_name');
+                    }
+                ?>
+
+                <?= $form->field($model, 'province_code')->dropDownList($provincias,
                     ['class' => 'form-control',
                     'prompt'=>'--Província--',
                     'onchange'=>'$.post("lists.dreams?id='.'"+$(this).val(), function(data) {
@@ -42,7 +54,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 ]); ?>
 
 
-                <?= $form->field($model, 'district_code')->dropDownList(ArrayHelper::map(Distritos::find()->all(), 'district_code', 'district_name'),
+                <?= $form->field($model, 'district_code')->dropDownList($distritos,
                     ['id'=>'form-district_code','class' => 'form-control','prompt'=>'--Distrito--',
                 ]);  ?> 
 

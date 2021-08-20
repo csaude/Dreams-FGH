@@ -124,39 +124,12 @@ class ReferenciasDreamsController extends Controller
         ]);
     }
 
-    /**
-     * Creates a new ReferenciasDreams model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     
-    public function actionCreate()
-    {
-        $model = new ReferenciasDreams();
-        $pontos = new ReferenciasPontosDreams();
-        if ($model->load(Yii::$app->request->post())) {
-
-			if(!empty($_POST['ReferenciasDreams']['intervensao'])) {
-            $model->encarregado_educacao= implode(", ",$_POST['ReferenciasDreams']['intervensao']); } else {}
-			$model->save();
-				
-			  return $this->redirect(['beneficiarios/view', 'id' => $model->beneficiario_id]);
-         
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-                'pontos'=>$pontos,
-            ]);
-        }
-    }
-	*/
 	public function actionCreate()
     {
         $model = new ReferenciasDreams();
         $pontos = new ReferenciasPontosDreams();
         if ($model->load(Yii::$app->request->post()) && $pontos->load(Yii::$app->request->post()) && $model->save()) {
-			
-	//		return $this->redirect(['beneficiarios/view', 'id' => $model->beneficiario_id]);
-       return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -164,31 +137,6 @@ class ReferenciasDreamsController extends Controller
             ]);
         }
     }
-
-    /**
-     * Updates an existing ReferenciasDreams model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     **/
-	/*
-    public function actionUpdate($id)
-    {
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post())) {
-		$model->encarregado_educacao= implode(", ",$_POST['ReferenciasDreams']['intervensao']); } else {}
-		$model->save();
-			
-			
-			
-            return $this->redirect(['beneficiarios/view', 'id' => $model->beneficiario_id]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
-        }
-    }*/
 
     public function actionUpdate($id)
     {
@@ -227,17 +175,17 @@ class ReferenciasDreamsController extends Controller
         $dists = ArrayHelper::getColumn($distritos, 'district_code');
 
         //Contabiliza todos os parceiros daquela provincia
-            $countProjectos = Organizacoes::find()
-                            ->where(['parceria_id'=>$id])
-                            ->andWhere(['>','distrito_id',0])
-                            ->andWhere(['IN','distrito_id',$dists])
-                            ->count();
+        $countProjectos = Organizacoes::find()
+                        ->where(['parceria_id'=>$id])
+                        ->andWhere(['>','distrito_id',0])
+                        ->andWhere(['IN','distrito_id',$dists])
+                        ->count();
         //Lista todos os parceiros daquela provincia			
-            $Projectos  = Organizacoes::find()
-                            ->where(['parceria_id'=>$id])
-                            ->andWhere(['>','distrito_id',0])
-                            ->andWhere(['IN','distrito_id',$dists])
-                            ->all();
+        $Projectos  = Organizacoes::find()
+                        ->where(['parceria_id'=>$id])
+                        ->andWhere(['>','distrito_id',0])
+                        ->andWhere(['IN','distrito_id',$dists])
+                        ->all();
 
         if($countProjectos>0) {
         echo "<option>-</option>";
@@ -250,49 +198,55 @@ class ReferenciasDreamsController extends Controller
     public function actionNotificar($id)
     {
         $countUsers=Utilizadores::find()
-        ->where(['=','parceiro_id',$id])
-        ->count();
-        if($countUsers>0) {
-
-            $countUser=Utilizadores::find()
             ->where(['=','parceiro_id',$id])
-            ->asArray()->all();
-        $ids=ArrayHelper::getColumn($countUser,'id');
+            ->count();
+        
+        if($countUsers>0) {
+            $countUser=Utilizadores::find()
+                ->where(['=','parceiro_id',$id])
+                ->asArray()->all();
+            $ids=ArrayHelper::getColumn($countUser,'id');
 
-        $profiles=Profile::find()
-        ->where(['IN','user_id',$ids])
-        ->andWhere(['<>','name',''])
-        ->orderBy('name ASC')
-        ->all();
+            $profiles=Profile::find()
+                ->where(['IN','user_id',$ids])
+                ->andWhere(['<>','name',''])
+                ->orderBy('name ASC')
+                ->all();
             echo "<option>-</option>";
             foreach($profiles as $nomes)
-                { echo "<option value='".$nomes->id."'>".$nomes->name."</option>";}
-                                }else
-                            { echo "<option>-</option>";}
+            { 
+                echo "<option value='".$nomes->id."'>".$nomes->name."</option>";
+            }
+        } else { 
+            echo "<option>-</option>";
+        }
     }
 
     public function actionLocal($id)
     {
         $countUsers=Utilizadores::find()
-        ->where(['=','us_id',$id])
-        ->count();
-        if($countUsers>0) {
-
-            $countUser=Utilizadores::find()
             ->where(['=','us_id',$id])
-            ->asArray()->all();
-        $ids=ArrayHelper::getColumn($countUser,'id');
+            ->count();
 
-        $profiles=Profile::find()
-        ->where(['IN','user_id',$ids])
-        ->andWhere(['<>','name',''])
-        ->orderBy('name ASC')
-        ->all();
+        if($countUsers>0) {
+            $countUser=Utilizadores::find()
+                ->where(['=','us_id',$id])
+                ->asArray()->all();
+            $ids=ArrayHelper::getColumn($countUser,'id');
+
+            $profiles=Profile::find()
+                ->where(['IN','user_id',$ids])
+                ->andWhere(['<>','name',''])
+                ->orderBy('name ASC')
+                ->all();
             echo "<option>-</option>";
             foreach($profiles as $nomes)
-                { echo "<option value='".$nomes->id."'>".$nomes->name."</option>";}
-                                }else
-                            { echo "<option>-</option>";}
+            { 
+                echo "<option value='".$nomes->id."'>".$nomes->name."</option>";
+            }
+        }else { 
+            echo "<option>-</option>";
+        }
     }
 
     /**

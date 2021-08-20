@@ -46,7 +46,7 @@ class BeneficiariosSearch extends Beneficiarios
             select hs_hr_province.province_name as provincia, hs_hr_district.district_name as distrito, app_dream_bairros.name as bairro, 
                                 if(app_dream_vw_agyw_prev.ponto_entrada=1,'US',if(app_dream_vw_agyw_prev.ponto_entrada=2,'CM','ES')) as ponto_entrada,
                                 app_dream_parceiros.name as organizacao,
-                                data_registo, nui, faixa_registo, faixa_actual, idade_registo, idade_actual, dataNascimento,
+                                data_registo, nui, faixa_registo, faixa_actual, idade_registo, idade_actual, dataNascimento data_nascimento,
                                 if(idade_actual < 20 and sustenta_casa=1,1,0) +
                                 if(idade_actual < 18 and vai_escola=0,1,0) +
                                 if(tem_deficiencia=1,1,0) +
@@ -69,7 +69,7 @@ class BeneficiariosSearch extends Beneficiarios
                     app_dream_servicos_sub.name as subservico,
                     app_dream_nivel_intervensao.name as pacote,
                     if(app_dream_vw_agyw_prev.ponto_entrada_id=1,'US',if(app_dream_vw_agyw_prev.ponto_entrada_id=2,'CM','ES')) as ponto_entrada_servico,
-                    app_dream_us.name as localizacao, data_servico, provedor, observacoes
+                    app_dream_us.name as localizacao, DATE_FORMAT(data_servico,'%d/%m/%Y') data_servico, provedor, observacoes
             from app_dream_vw_agyw_prev 
                 left join hs_hr_province on hs_hr_province.id = app_dream_vw_agyw_prev.provincia_id
                 left join hs_hr_district on hs_hr_district.district_code = app_dream_vw_agyw_prev.distrito_id
