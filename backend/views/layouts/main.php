@@ -386,7 +386,7 @@ $ben=Beneficiarios::find()->where(['provin_code'=>5])->andWhere(['emp_status'=>1
                     }
                 ?>
                 <li>
-                    <a href="<?php echo Url::toRoute('referencias-dreams/pendentes'); ?>"><i class="fa fa-angle-double-right"></i> Refer&ecirc;ncias Pendentes </a>
+                    <a href="<?php echo Url::toRoute('referencias-dreams/pendentes'); ?>"><i class="fa fa-angle-double-right"></i> Cancelamento de Refer&ecirc;ncias Pendentes </a>
                 </li>
             </ul>
         </li>
