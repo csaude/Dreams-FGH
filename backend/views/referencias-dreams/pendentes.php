@@ -1,7 +1,8 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
+// use yii\grid\GridView;
+use kartik\grid\GridView;
 use kartik\form\ActiveForm;
 
 
@@ -153,20 +154,11 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
-              ['attribute'=> 'id',
-                'format' => 'raw',
-                'label' => 'Seleccione',
-                'value' => function ($model, $key, $index, $column) {               
-                   return Html::checkbox('selection[]', false, 
-                    [
-                      'class'=>'kv-row-checkbox', 'value'=>$key,
-                      'checked'=>false, 'onclick'=>'myAdd('.$model->id.')'
-                    ]);
-                },
-              ],	  
-
-
+              [
+                'class' => 'kartik\grid\CheckboxColumn',
+                'headerOptions' => ['class' => 'kartik-sheet-style']
+              ],
+             
             ['attribute'=> 'criado_em',
               'format' => 'html',
               'value' => function ($model) {
