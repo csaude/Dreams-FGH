@@ -412,8 +412,9 @@ class BeneficiariosController extends Controller
         $indicatorID = isset($params['iID'])? $params['iID'] : null;
 
         $model = new AgywPrev();
-        $model->province_code = $province_code;
-        $model->district_code = $district_code;
+        $model->provinces = array($province_code);
+        $model->districts = array($district_code);
+        
         $model->start_date = $start_date;
         $model->end_date = $end_date;
 
@@ -424,28 +425,35 @@ class BeneficiariosController extends Controller
 
         switch($indicatorID){
             case 1: 
-                    $desagregationResults = $model->getFirstDesagregationBeneficiaries();
-                    $beneficiaries = $desagregationResults[$ageBand][$enrollmentTime];
+                    
+                    $desagregationResults = $model->getFirstDesagregationResults();
+                    $firstdesagregationResults = $desagregationResults[$district_code]['beneficiaries'];
+                    $beneficiaries = $firstdesagregationResults[$ageBand][$enrollmentTime];
                     break;
             case 2: 
-                    $desagregationResults = $model->getSecondDesagregationBeneficiaries();
-                    $beneficiaries = $desagregationResults[$ageBand][$enrollmentTime];
+                    $desagregationResults = $model->getSecondDesagregationResults();
+                    $seconddesagregationResults = $desagregationResults[$district_code]['beneficiaries'];
+                    $beneficiaries = $seconddesagregationResults[$ageBand][$enrollmentTime];
                     break;
             case 3: 
-                    $desagregationResults = $model->getThirdDesagregationBeneficiaries();
-                    $beneficiaries = $desagregationResults[$ageBand][$enrollmentTime];
+                    $desagregationResults = $model->getThirdDesagregationResults();
+                    $thirddesagregationResults = $desagregationResults[$district_code]['beneficiaries'];
+                    $beneficiaries = $thirddesagregationResults[$ageBand][$enrollmentTime];
                     break;
             case 4: 
-                    $desagregationResults = $model->getFourthDesagregationBeneficiaries();
-                    $beneficiaries = $desagregationResults[$ageBand][$enrollmentTime];
+                    $desagregationResults = $model->getFourthDesagregationResults();
+                    $fouthdesagregationResults = $desagregationResults[$district_code]['beneficiaries'];
+                    $beneficiaries = $fouthdesagregationResults[$ageBand][$enrollmentTime];
                     break;
             case 5: 
-                    $desagregationResults = $model->getFifthDesagregationBeneficiaries();
-                    $beneficiaries = $desagregationResults[$ageBand][$enrollmentTime];
+                    $desagregationResults = $model->getFifthDesagregationResults();
+                    $fifthdesagregationResults = $desagregationResults[$district_code]['beneficiaries'];
+                    $beneficiaries = $fifthdesagregationResults[$ageBand][$enrollmentTime];
                     break;
             case 6: 
-                    $desagregationResults = $model->getSixthDesagregationBeneficiaries();
-                    $beneficiaries = $desagregationResults[$ageBand][$enrollmentTime];
+                    $desagregationResults = $model->getSixthDesagregationResults();
+                    $sixthdesagregationResults = $desagregationResults[$district_code]['beneficiaries'];
+                    $beneficiaries = $sixthdesagregationResults[$ageBand][$enrollmentTime];
                     break;        
         };
         
@@ -470,6 +478,7 @@ class BeneficiariosController extends Controller
             'dataProvider' => $dataProvider,
             'beneficiaries' => implode(',',$beneficiaries)
         ]);
+        
         
         
     }
