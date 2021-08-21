@@ -90,6 +90,9 @@ $i=0;
                                             <td colspan="6" bgcolor="#FFFFFF"><b>Total de Adolescentes e Jovens do Sexo Masculino: <?php echo $totals[$district->district_code]['total_masculinos'] ?></b></td>
                                         </tr> 
                                         <tr>
+                                            <td colspan="6" bgcolor="#FFFFFF"><b> Total de Beneficiárias no Indicador AGYW_PREV: <?php echo $totalsAgyw[$district->district_code] ?></b></td>
+                                        </tr> 
+                                        <tr>
                                             <td colspan="6" height="40" bgcolor="#FFFFFF"><b> </b></td>
                                         </tr>
 
