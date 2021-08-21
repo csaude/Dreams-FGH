@@ -282,19 +282,24 @@ class ReferenciasDreamsController extends Controller
 
         if ($model->load(Yii::$app->request->post())){
 
-           $myIds = $_POST['selection'];
-
-            foreach ($myIds as $id){
-                $model = $this->findModel($id);
-                $model->status = 0;
-                $model->cancel_reason = $_POST['ReferenciasDreams']['cancel_reason'];
-                if($model->cancel_reason == 5){
-                    $model->other_reason = $_POST['ReferenciasDreams']['other_reason'];
-                }
+            if(isset($_POST['selection'])){
                 
-                $model->save();
-                // return $this->redirect(['view', 'id' => $model->id]);
+                $myIds = $_POST['selection'];
+                foreach ($myIds as $id){
+                    $model = $this->findModel($id);
+                    $model->status = 0;
+                    $model->cancel_reason = $_POST['ReferenciasDreams']['cancel_reason'];
+                    if($model->cancel_reason == 5){
+                        $model->other_reason = $_POST['ReferenciasDreams']['other_reason'];
+                    }
+                    
+                    $model->save();
+                    // return $this->redirect(['view', 'id' => $model->id]);
+                }
+
             }
+
+            
             return $this->render('pendentes', [
                 'searchModel' => $searchModel,
                 'dataProvider' => $dataProvider,
