@@ -59,7 +59,7 @@ class AgywPrev extends Model {
     public function getFirstDesagregationBeneficiaries(){
         $indicator = $this->desagregationCompletedOnlyFirstPackage();
 
-        return $indicator['beneficiaries'];
+        return $indicator;
     }
 
     /**
@@ -82,7 +82,7 @@ class AgywPrev extends Model {
     public function getSecondDesagregationBeneficiaries(){
         $indicator = $this->desagregationCompletedFirstPackageAndSecondaryService();
 
-        return $indicator['beneficiaries'];
+        return $indicator;
     }
 
     /**
@@ -483,8 +483,14 @@ class AgywPrev extends Model {
                         nui <> '' and
                         data_servico is not null and
                         data_servico <> '' and
-                        (data_servico between :start and :end) and
-                        servico_status=1
+                        (data_servico between '2000-01-01' and :end)
+                        and beneficiario_id in
+                        (
+                            select distinct beneficiario_id  
+                            from app_dream_vw_agyw_prev
+                            where data_servico between :start and :end
+                            and servico_status=1
+                        ) 
                 group by beneficiario_id, distrito_id, faixa_actual, vai_escola, sexualmente_activa, data_registo, vulnerabilidades";
 
         $preparedQuery = Yii::$app->db->createCommand($query);
