@@ -48,7 +48,7 @@ class AgywPrev extends Model {
         
         $indicator = $this->desagregationCompletedOnlyFirstPackage();
         
-        return $indicator['results'];
+        return $indicator;
     }
 
     /**
@@ -59,7 +59,7 @@ class AgywPrev extends Model {
     public function getFirstDesagregationBeneficiaries(){
         $indicator = $this->desagregationCompletedOnlyFirstPackage();
 
-        return $indicator['beneficiaries'];
+        return $indicator;
     }
 
     /**
@@ -70,7 +70,8 @@ class AgywPrev extends Model {
     public function getSecondDesagregationResults(){
         $indicator = $this->desagregationCompletedFirstPackageAndSecondaryService();
         
-        return $indicator['results'];
+        //return $indicator['results'];
+        return $indicator;
     }
 
     /**
@@ -81,7 +82,7 @@ class AgywPrev extends Model {
     public function getSecondDesagregationBeneficiaries(){
         $indicator = $this->desagregationCompletedFirstPackageAndSecondaryService();
 
-        return $indicator['beneficiaries'];
+        return $indicator;
     }
 
     /**
@@ -92,7 +93,7 @@ class AgywPrev extends Model {
     public function getThirdDesagregationResults(){
         $indicator = $this->desagregationCompletedOnlyServiceNotPackage();
         
-        return $indicator['results'];
+        return $indicator;
     }
 
     /**
@@ -114,7 +115,7 @@ class AgywPrev extends Model {
     public function getFourthDesagregationResults(){
         $indicator = $this->desagregationStartedServiceNotFinished();
         
-        return $indicator['results'];
+        return $indicator;
     }
 
     /**
@@ -136,7 +137,7 @@ class AgywPrev extends Model {
     public function getFifthDesagregationResults(){
         $indicator = $this->desagregationCompletedViolenceService();
         
-        return $indicator['results'];
+        return $indicator;
     }
 
     /**
@@ -158,7 +159,7 @@ class AgywPrev extends Model {
     public function getSixthDesagregationResults(){
         $indicator = $this->desagregationSubsidioEscolar();
         
-        return $indicator['results'];
+        return $indicator;
     }
 
     /**
@@ -337,27 +338,31 @@ class AgywPrev extends Model {
         return $this->s_datediff("m", $enrollmentdate, $dataFim);
     }
 
-    private function addCompletude(&$matrix, $enrollmentTime, $value, $index1, $index3){
+    private function addCompletude(&$matrix, $districtId, $enrollmentTime, $value, $index1, $index3){
         
         if($enrollmentTime <= 6){
-            array_push($matrix[$index1]['0_6'][$index3], $value);
+            array_push($matrix[$districtId][$index1]['0_6'][$index3], $value);
 
         } else if ($enrollmentTime <= 12){
-            array_push($matrix[$index1]['7_12'][$index3], $value);
+            array_push($matrix[$districtId][$index1]['7_12'][$index3], $value);
 
         }else if ($enrollmentTime <= 24){
-            array_push($matrix[$index1]['13_24'][$index3], $value);
+            array_push($matrix[$districtId][$index1]['13_24'][$index3], $value);
 
         }else {
-            array_push($matrix[$index1]['25+'][$index3], $value);
+            array_push($matrix[$districtId][$index1]['25+'][$index3], $value);
         }
     }
 
-    private function completude($dataInicio,$dataFim, $province, $district){
+    private function completude($dataInicio,$dataFim, $provinces, $districts){
        
-        $desagregationMap = $this->generateDesagregationMatrix();
         $agyw_prev = array();
+        $desagregationMap = array();
 
+        foreach($districts as $district){
+            $desagregationMap[$district] = $this->generateDesagregationMatrix();
+        }
+        $distritos = implode(',', $districts);
         $query = "select beneficiario_id, distrito_id, vai_escola, sexualmente_activa, data_registo, 
                     if(idade_actual = 15  and datediff(min(data_servico),coalesce(STR_TO_DATE(data_nascimento,'%d/%m/%Y'),STR_TO_DATE(data_nascimento,'%m/%d/%Y')))/30 between 120 and 177,'9-14',if(idade_actual = 20  and datediff(min(data_servico),coalesce(STR_TO_DATE(data_nascimento,'%d/%m/%Y'),STR_TO_DATE(data_nascimento,'%m/%d/%Y')))/30 between 180 and 237,'15-19',faixa_actual)) faixa_actual,
                     if(idade_actual < 20 and sustenta_casa=1,1,0) +
@@ -470,31 +475,29 @@ class AgywPrev extends Model {
                     end) prevencao_violencia_15_mais,
                     min(data_servico) data_servico 
                 from app_dream_vw_agyw_prev
-                where   provincia_id = :province and
-                        distrito_id = :district and
+                where   
+                        distrito_id in (".$distritos.") and
                         vulneravel = 1 and
                         faixa_actual <> '' and
                         faixa_actual <> 'NA' and
                         nui <> '' and
                         data_servico is not null and
                         data_servico <> '' and
-                        (data_servico between :start and :end) and
-                        servico_status=1
+                        (data_servico between '2000-01-01' and :end)
+                        and beneficiario_id in
+                        (
+                            select distinct beneficiario_id  
+                            from app_dream_vw_agyw_prev
+                            where data_servico between :start and :end
+                            and servico_status=1
+                        ) 
                 group by beneficiario_id, distrito_id, faixa_actual, vai_escola, sexualmente_activa, data_registo, vulnerabilidades";
 
         $preparedQuery = Yii::$app->db->createCommand($query);
-        $preparedQuery->bindParam(":province", $province);
-        $preparedQuery->bindParam(":district", $district);
+        
         $preparedQuery->bindParam(":start", $dataInicio);
         $preparedQuery->bindParam(":end", $dataFim);
         $result = $preparedQuery->queryAll();
-
-        $summary = $this->computeSummary($province, $district);
-        $desagregationMap['summary']['total_registos'] = $summary['total_registos'];
-        $desagregationMap['summary']['total_masculinos'] = $summary['total_rapazes'];
-        $desagregationMap['summary']['total_femininos'] = $summary['total_raparigas'];
-        $desagregationMap['summary']['total_beneficiarias'] = $summary['total_beneficiarias'];
-        $desagregationMap['summary']['beneficiarias_activas'] = count($result);
 
         foreach ($result as $row){
             
@@ -526,113 +529,117 @@ class AgywPrev extends Model {
             $prevencao_violencia_15_mais = $row['prevencao_violencia_15_mais'];
             $data_servico = $row['data_servico'];
             $enrollmentTime = $this->getEnrollmentTimeInMonths($data_servico, $dataFim);
+            $districtId = $row['distrito_id'];
 
             if($faixa_etaria == '9-14'){
                 if($vai_escola == 1){    //Na escola
                     if($recursos_mandatorios == 15 && $outros_recursos > 6 && $modulos_ogaac == 3 && $sessoes_saaj == 4 && $literacia_financeira == 1 && ($sexualmente_activa == 1 && $testagem_hiv > 0)){
-                        $this->addCompletude($desagregationMap, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_pacote_primario');
-                        array_push($agyw_prev, $beneficiary_id);
+                        $this->addCompletude($desagregationMap, $districtId, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_pacote_primario');
+                        //array_push($agyw_prev, $beneficiary_id);
                     }
                     if($recursos_mandatorios == 15 || $outros_recursos > 6 || $modulos_ogaac == 3 || $sessoes_saaj == 4 || $literacia_financeira == 1 || ($sexualmente_activa == 1 && $testagem_hiv > 0)){
-                        $this->addCompletude($desagregationMap, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_servico_primario');
-                        array_push($agyw_prev, $beneficiary_id);
+                        $this->addCompletude($desagregationMap, $districtId, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_servico_primario');
+                        //array_push($agyw_prev, $beneficiary_id);
                     }
                     if($prevencao_violencia_estudante == 3){
-                        $this->addCompletude($desagregationMap, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_servico_violencia');
-                        array_push($agyw_prev, $beneficiary_id);
+                        $this->addCompletude($desagregationMap, $districtId, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_servico_violencia');
+                        //array_push($agyw_prev, $beneficiary_id);
                     }
                     if($recursos_mandatorios > 0 || $outros_recursos > 0 || $modulos_ogaac > 0 || $sessoes_saaj > 0 || $prevencao_violencia_estudante > 0){
-                        $this->addCompletude($desagregationMap, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'iniciaram_servico');
-                        array_push($agyw_prev, $beneficiary_id);
+                        $this->addCompletude($desagregationMap, $districtId, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'iniciaram_servico');
+                        //array_push($agyw_prev, $beneficiary_id);
                     }
                 }
                 else{   // Fora da escola
                     if($recursos_mandatorios == 8 && $outros_recursos > 5 && $modulos_ogaac == 3 && $sessoes_saaj == 4 && $literacia_financeira == 1 && ($sexualmente_activa == 1 && $testagem_hiv > 0)){
-                        $this->addCompletude($desagregationMap, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_pacote_primario');
-                        array_push($agyw_prev, $beneficiary_id);
+                        $this->addCompletude($desagregationMap, $districtId, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_pacote_primario');
+                        //array_push($agyw_prev, $beneficiary_id);
                     }
                     if($recursos_mandatorios == 8 || $outros_recursos > 5 || $modulos_ogaac == 3 || $sessoes_saaj == 4 || $literacia_financeira == 1 || ($sexualmente_activa == 1 && $testagem_hiv > 0)){
-                        $this->addCompletude($desagregationMap, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_servico_primario');
-                        array_push($agyw_prev, $beneficiary_id);
+                        $this->addCompletude($desagregationMap, $districtId, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_servico_primario');
+                        //array_push($agyw_prev, $beneficiary_id);
                     }
                     if($prevencao_violencia_rapariga == 5){
-                        $this->addCompletude($desagregationMap, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_servico_violencia');
-                        array_push($agyw_prev, $beneficiary_id);
+                        $this->addCompletude($desagregationMap, $districtId, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_servico_violencia');
+                        //array_push($agyw_prev, $beneficiary_id);
                     }
                     if($recursos_mandatorios > 0 || $outros_recursos > 0 || $modulos_ogaac > 0 || $sessoes_saaj > 0 || $prevencao_violencia_rapariga > 0){
-                        $this->addCompletude($desagregationMap, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'iniciaram_servico');
-                        array_push($agyw_prev, $beneficiary_id);
+                        $this->addCompletude($desagregationMap, $districtId, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'iniciaram_servico');
+                        //array_push($agyw_prev, $beneficiary_id);
                     }
                 }
                 if($subsidio_escolar > 0 || $preservativos > 0 || $contracepcao > 0 || ($sexualmente_activa == 0 && $testagem_hiv > 0) || $cuidados_pos_violencia_us > 0 || $cuidados_pos_violencia_comunidade > 0 || $outros_servicos_saaj > 0){
-                    $this->addCompletude($desagregationMap, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_servico_secundario');
-                    array_push($agyw_prev, $beneficiary_id);
+                    $this->addCompletude($desagregationMap, $districtId, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_servico_secundario');
+                    //array_push($agyw_prev, $beneficiary_id);
                 }
                 // Antigo curriculo
                 if($recursos_antigo > 9 && $sessoes_saaj == 4 && ($sexualmente_activa == 1 && ($preservativos > 0 || $testagem_hiv > 0))){
-                    $this->addCompletude($desagregationMap, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_pacote_primario');
-                    array_push($agyw_prev, $beneficiary_id);
+                    $this->addCompletude($desagregationMap, $districtId, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_pacote_primario');
+                    //array_push($agyw_prev, $beneficiary_id);
                 }
                 if($recursos_antigo > 9 || $sessoes_saaj == 4 || ($sexualmente_activa == 1 && ($preservativos > 0 || $testagem_hiv > 0))){
-                    $this->addCompletude($desagregationMap, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_servico_primario');
-                    array_push($agyw_prev, $beneficiary_id);
+                    $this->addCompletude($desagregationMap, $districtId, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_servico_primario');
+                    //array_push($agyw_prev, $beneficiary_id);
                 }
                 if($subsidio_escolar > 0 || ($sexualmente_activa == 0 && ($testagem_hiv > 0 || $preservativos > 0 || $contracepcao > 0)) || $cuidados_pos_violencia_us >0 || $cuidados_pos_violencia_comunidade > 0 || $outros_servicos_saaj > 0){
-                    $this->addCompletude($desagregationMap, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_servico_secundario');
-                    array_push($agyw_prev, $beneficiary_id);
+                    $this->addCompletude($desagregationMap, $districtId, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_servico_secundario');
+                    //array_push($agyw_prev, $beneficiary_id);
                 }
                 if($recursos_antigo > 0){
-                    $this->addCompletude($desagregationMap, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'iniciaram_servico');
-                    array_push($agyw_prev, $beneficiary_id);
+                    $this->addCompletude($desagregationMap, $districtId, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'iniciaram_servico');
+                    //array_push($agyw_prev, $beneficiary_id);
                 }
             }else{  // 15-24 Anos
                 if($preservativos > 0 && $sessoes_hiv_vbg > 7 && $testagem_hiv > 0 && $literacia_financeira == 1){
-                    $this->addCompletude($desagregationMap, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_pacote_primario');
-                    array_push($agyw_prev, $beneficiary_id);
+                    $this->addCompletude($desagregationMap, $districtId, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_pacote_primario');
+                    //array_push($agyw_prev, $beneficiary_id);
                 }
                 if($preservativos > 0 || $sessoes_hiv_vbg > 7 || $testagem_hiv > 0 || $literacia_financeira == 1){
-                    $this->addCompletude($desagregationMap, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_servico_primario');
-                    array_push($agyw_prev, $beneficiary_id);
+                    $this->addCompletude($desagregationMap, $districtId, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_servico_primario');
+                    //array_push($agyw_prev, $beneficiary_id);
                 }
                 if($recursos_sociais_15_mais > 0 || ($faixa_etaria == '15-19' && ($subsidio_escolar > 0 || $recursos_antigo > 9)) || $cuidados_pos_violencia_us >0 || $cuidados_pos_violencia_comunidade > 0 || $abordagens_socio_economicas > 0 || $outros_servicos_saaj > 0 || $prep > 0 || $contracepcao > 0){
-                    $this->addCompletude($desagregationMap, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_servico_secundario');
-                    array_push($agyw_prev, $beneficiary_id);
+                    $this->addCompletude($desagregationMap, $districtId, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_servico_secundario');
+                    //array_push($agyw_prev, $beneficiary_id);
                 }
                 if($prevencao_violencia_15_mais == 3){
-                    $this->addCompletude($desagregationMap, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_servico_violencia');
-                    array_push($agyw_prev, $beneficiary_id);
+                    $this->addCompletude($desagregationMap, $districtId, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_servico_violencia');
+                    //array_push($agyw_prev, $beneficiary_id);
                 }
                 if($sessoes_hiv_vbg > 0 || $prevencao_violencia_15_mais > 0 || ($faixa_etaria == '15-19' && $recursos_antigo > 0)){
-                    $this->addCompletude($desagregationMap, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'iniciaram_servico');
-                    array_push($agyw_prev, $beneficiary_id);
+                    $this->addCompletude($desagregationMap, $districtId, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'iniciaram_servico');
+                    //array_push($agyw_prev, $beneficiary_id);
                 }
                 // Antigo curriculo
                 if($preservativos > 0 && $testagem_hiv > 0 && $sessoes_hiv > 0 && $sessoes_vbg > 0){
-                    $this->addCompletude($desagregationMap, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_pacote_primario');
-                    array_push($agyw_prev, $beneficiary_id);
+                    $this->addCompletude($desagregationMap, $districtId, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_pacote_primario');
+                    //array_push($agyw_prev, $beneficiary_id);
                 }
                 if($sessoes_hiv > 0 || 0 && $sessoes_vbg > 0){
-                    $this->addCompletude($desagregationMap, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_servico_primario');
-                    array_push($agyw_prev, $beneficiary_id);
+                    $this->addCompletude($desagregationMap, $districtId, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_servico_primario');
+                    //array_push($agyw_prev, $beneficiary_id);
                 }
             }
             if($subsidio_escolar > 0){
-                $this->addCompletude($desagregationMap, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'tiveram_intervencao_subsidio_escolar');
-                array_push($agyw_prev, $beneficiary_id);
+                $this->addCompletude($desagregationMap, $districtId, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'tiveram_intervencao_subsidio_escolar');
+                //array_push($agyw_prev, $beneficiary_id);
             }
         }
 
-        $desagregationMap['summary']['total_agyw_prev'] = count(array_unique($agyw_prev));
+        //$desagregationMap['summary']['total_agyw_prev'] = count(array_unique($agyw_prev));
         return $desagregationMap;
     }
+
+
+
 
     /**
      * Executes the completude operation
      */
     public function execute(){
         
-        if($this->start_date && $this->end_date && $this->province_code && $this->district_code){
-            $this->completudeness = $this->completude($this->start_date, $this->end_date, $this->province_code, $this->district_code);
+        if($this->start_date && $this->end_date && $this->provinces && $this->districts){
+            $this->completudeness = $this->completude($this->start_date, $this->end_date, $this->provinces, $this->districts);
         }
     }
 
@@ -648,25 +655,31 @@ class AgywPrev extends Model {
     private function desagregationCompletedOnlyFirstPackage(){
         $ageBands = ['9-14','15-19','20-24','25-29'];
         $enrollmentTimes = ['0_6','7_12','13_24','25+'];
-        $results = $this->generateTotalDesagregationMatrix();
-        $completudes = $this->completudeness;
-        //store the IDs for further consultation
-        $beneficiaries = $this->beneficiaryIdsMatrix();
 
-        foreach($ageBands as $index1){
-            foreach($enrollmentTimes as $index2){
-                $completaramApenasPacotePrimario = array_unique(array_diff($completudes[$index1][$index2]['completaram_pacote_primario'], $completudes[$index1][$index2]['completaram_servico_secundario']));
-                $beneficiaries[$index1][$index2] = $completaramApenasPacotePrimario;
-                $results[$index1][$index2] = count($completaramApenasPacotePrimario);
+        $results = array();
+        $beneficiaries = array();
+        $finalResult = array();
+        $completudes = $this->completudeness;
+
+        foreach($this->districts as $district){
+            $results[$district] = $this->generateTotalDesagregationMatrix();
+            $beneficiaries[$district] = $this->beneficiaryIdsMatrix();
+
+            foreach($ageBands as $index1){
+                foreach($enrollmentTimes as $index2){
+                    $completaramApenasPacotePrimario = array_unique(array_diff($completudes[$district][$index1][$index2]['completaram_pacote_primario'], $completudes[$district][$index1][$index2]['completaram_servico_secundario']));
+                    $beneficiaries[$district][$index1][$index2] = $completaramApenasPacotePrimario;
+                    $results[$district][$index1][$index2] = count($completaramApenasPacotePrimario);
+                }
             }
+
+            $finalResult[$district] = array(
+                'results' => $results[$district],
+                'beneficiaries' =>  $beneficiaries[$district]
+            );
         }
 
-        $result = [
-            'results' => $results,
-            'beneficiaries' =>  $beneficiaries
-        ];
-        
-        return $result;
+        return $finalResult;
     } 
 
     /**
@@ -677,25 +690,30 @@ class AgywPrev extends Model {
         $ageBands = ['9-14','15-19','20-24','25-29'];
         $enrollmentTimes = ['0_6','7_12','13_24','25+'];
 
-        $results = $this->generateTotalDesagregationMatrix();
         $completudes = $this->completudeness;
-        //store the IDs for further consultation
-        $beneficiaries = $this->beneficiaryIdsMatrix();
+        $results = array();
+        $beneficiaries = array();
+        $finalResult = array();
 
-        foreach($ageBands as $index1){
-            foreach($enrollmentTimes as $index2){
-                $completaramPPeServico = array_unique(array_intersect($completudes[$index1][$index2]['completaram_pacote_primario'], $completudes[$index1][$index2]['completaram_servico_secundario']));
-                $beneficiaries[$index1][$index2] = $completaramPPeServico;
-                $results[$index1][$index2] = count($completaramPPeServico);
+        foreach($this->districts as $district){
+            $results[$district] = $this->generateTotalDesagregationMatrix();
+            $beneficiaries[$district] = $this->beneficiaryIdsMatrix();
+
+            foreach($ageBands as $index1){
+                foreach($enrollmentTimes as $index2){
+                    $completaramPPeServico = array_unique(array_intersect($completudes[$district][$index1][$index2]['completaram_pacote_primario'], $completudes[$district][$index1][$index2]['completaram_servico_secundario']));
+                    $beneficiaries[$district][$index1][$index2] = $completaramPPeServico;
+                    $results[$district][$index1][$index2] = count($completaramPPeServico);
+                }
             }
+
+            $finalResult[$district] = array(
+                'results' => $results[$district],
+                'beneficiaries' =>  $beneficiaries[$district]
+            );
         }
 
-        $result = [
-            'results' => $results,
-            'beneficiaries' =>  $beneficiaries
-        ];
-
-        return $result;
+        return $finalResult;
     }
 
      /**
@@ -706,25 +724,30 @@ class AgywPrev extends Model {
         $ageBands = ['9-14','15-19','20-24','25-29'];
         $enrollmentTimes = ['0_6','7_12','13_24','25+'];
         
-        $results = $this->generateTotalDesagregationMatrix();
         $completudes = $this->completudeness;
-        //store the IDs for further consultation
-        $beneficiaries = $this->beneficiaryIdsMatrix();
+        $results = array();
+        $beneficiaries = array();
+        $finalResult = array();
 
-        foreach($ageBands as $index1){
-            foreach($enrollmentTimes as $index2){
-                $completaramServiconPP =  array_unique(array_diff(array_merge($completudes[$index1][$index2]['completaram_servico_primario'], $completudes[$index1][$index2]['completaram_servico_secundario']), $completudes[$index1][$index2]['completaram_pacote_primario']));
-                $beneficiaries[$index1][$index2] = $completaramServiconPP;
-                $results[$index1][$index2] = count($completaramServiconPP);
+        foreach($this->districts as $district){
+            $results[$district] = $this->generateTotalDesagregationMatrix();
+            $beneficiaries[$district] = $this->beneficiaryIdsMatrix();
+
+            foreach($ageBands as $index1){
+                foreach($enrollmentTimes as $index2){
+                    $completaramServiconPP =  array_unique(array_diff(array_merge($completudes[$district][$index1][$index2]['completaram_servico_primario'], $completudes[$district][$index1][$index2]['completaram_servico_secundario']), $completudes[$district][$index1][$index2]['completaram_pacote_primario']));
+                    $beneficiaries[$district][$index1][$index2] = $completaramServiconPP;
+                    $results[$district][$index1][$index2] = count($completaramServiconPP);
+                }
             }
+
+            $finalResult[$district] = array(
+                'results' => $results[$district],
+                'beneficiaries' =>  $beneficiaries[$district]
+            );
         }
 
-        $result = [
-            'results' => $results,
-            'beneficiaries' =>  $beneficiaries
-        ];
-
-        return $result;
+        return $finalResult;
     }
 
      /**
@@ -735,29 +758,35 @@ class AgywPrev extends Model {
         $ageBands = ['9-14','15-19','20-24','25-29'];
         $enrollmentTimes = ['0_6','7_12','13_24','25+'];
         
-        $results = $this->generateTotalDesagregationMatrix();
         $completudes = $this->completudeness;
-        //store the IDs for further consultation
-        $beneficiaries = $this->beneficiaryIdsMatrix();
+        $results = array();
+        $beneficiaries = array();
+        $finalResult = array();
 
-        foreach($ageBands as $index1){
-            foreach($enrollmentTimes as $index2){
-                $completaramApenasPacotePrimario = array_diff($completudes[$index1][$index2]['completaram_pacote_primario'], $completudes[$index1][$index2]['completaram_servico_secundario']);
-                $completaramPPeServico = array_intersect($completudes[$index1][$index2]['completaram_pacote_primario'], $completudes[$index1][$index2]['completaram_servico_secundario']);
-                $completaramServiconPP =  array_diff(array_merge($completudes[$index1][$index2]['completaram_servico_primario'], $completudes[$index1][$index2]['completaram_servico_secundario']), $completudes[$index1][$index2]['completaram_pacote_primario']);
-                
-                $iniciaraServicoNaoCompletaram =  array_unique(array_diff($completudes[$index1][$index2]['iniciaram_servico'], $completudes[$index1][$index2]['completaram_pacote_primario'], $completaramApenasPacotePrimario, $completaramPPeServico, $completaramServiconPP));
-                $beneficiaries[$index1][$index2] = $iniciaraServicoNaoCompletaram;
-                $results[$index1][$index2] = count($iniciaraServicoNaoCompletaram);
+
+        foreach($this->districts as $district){
+            $results[$district] = $this->generateTotalDesagregationMatrix();
+            $beneficiaries[$district] = $this->beneficiaryIdsMatrix();
+
+            foreach($ageBands as $index1){
+                foreach($enrollmentTimes as $index2){
+                    $completaramApenasPacotePrimario = array_diff($completudes[$district][$index1][$index2]['completaram_pacote_primario'], $completudes[$district][$index1][$index2]['completaram_servico_secundario']);
+                    $completaramPPeServico = array_intersect($completudes[$district][$index1][$index2]['completaram_pacote_primario'], $completudes[$district][$index1][$index2]['completaram_servico_secundario']);
+                    $completaramServiconPP =  array_diff(array_merge($completudes[$district][$index1][$index2]['completaram_servico_primario'], $completudes[$district][$index1][$index2]['completaram_servico_secundario']), $completudes[$district][$index1][$index2]['completaram_pacote_primario']);
+                    
+                    $iniciaraServicoNaoCompletaram =  array_unique(array_diff($completudes[$district][$index1][$index2]['iniciaram_servico'], $completudes[$district][$index1][$index2]['completaram_pacote_primario'], $completaramApenasPacotePrimario, $completaramPPeServico, $completaramServiconPP));
+                    $beneficiaries[$district][$index1][$index2] = $iniciaraServicoNaoCompletaram;
+                    $results[$district][$index1][$index2] = count($iniciaraServicoNaoCompletaram);
+                }
             }
+
+            $finalResult[$district] = array(
+                'results' => $results[$district],
+                'beneficiaries' =>  $beneficiaries[$district]
+            );
         }
 
-        $result = [
-            'results' => $results,
-            'beneficiaries' =>  $beneficiaries
-        ];
-
-        return $result;
+        return $finalResult;
     }
 
     /**
@@ -768,25 +797,31 @@ class AgywPrev extends Model {
         $ageBands = ['9-14','15-19','20-24','25-29'];
         $enrollmentTimes = ['0_6','7_12','13_24','25+'];
         
-        $results = $this->generateTotalDesagregationMatrix();
         $completudes = $this->completudeness;
-        //store the IDs for further consultation
-        $beneficiaries = $this->beneficiaryIdsMatrix();
+        $results = array();
+        $beneficiaries = array();
+        $finalResult = array();
 
-        foreach($ageBands as $index1){
-            foreach($enrollmentTimes as $index2){
-                $completaramServicoViolencia =  $completudes[$index1][$index2]['completaram_servico_violencia'];
-                $beneficiaries[$index1][$index2] = $completaramServicoViolencia;
-                $results[$index1][$index2] = count($completaramServicoViolencia);
+
+        foreach($this->districts as $district){
+            $results[$district] = $this->generateTotalDesagregationMatrix();
+            $beneficiaries[$district] = $this->beneficiaryIdsMatrix();
+
+            foreach($ageBands as $index1){
+                foreach($enrollmentTimes as $index2){
+                    $completaramServicoViolencia =  $completudes[$district][$index1][$index2]['completaram_servico_violencia'];
+                    $beneficiaries[$district][$index1][$index2] = $completaramServicoViolencia;
+                    $results[$district][$index1][$index2] = count($completaramServicoViolencia);
+                }
             }
+
+            $finalResult[$district] = array(
+                'results' => $results[$district],
+                'beneficiaries' =>  $beneficiaries[$district]
+            );
         }
 
-        $result = [
-            'results' => $results,
-            'beneficiaries' =>  $beneficiaries
-        ];
-
-        return $result;
+        return $finalResult;
     }
 
     /**
@@ -797,25 +832,47 @@ class AgywPrev extends Model {
         $ageBands = ['9-14','15-19','20-24','25-29'];
         $enrollmentTimes = ['0_6','7_12','13_24','25+'];
         
-        $results = $this->generateTotalDesagregationMatrix();
         $completudes = $this->completudeness;
-        //store the IDs for further consultation
-        $beneficiaries = $this->beneficiaryIdsMatrix();
+        $results = array();
+        $beneficiaries = array();
+        $finalResult = array();
 
-        foreach($ageBands as $index1){
-            foreach($enrollmentTimes as $index2){
-                $completaramServicoEscolar =  $completudes[$index1][$index2]['tiveram_intervencao_subsidio_escolar'];
-                $beneficiaries[$index1][$index2] = $completaramServicoEscolar;
-                $results[$index1][$index2] = count($completaramServicoEscolar);
+        foreach($this->districts as $district){
+            $results[$district] = $this->generateTotalDesagregationMatrix();
+            $beneficiaries[$district] = $this->beneficiaryIdsMatrix();
+
+            foreach($ageBands as $index1){
+                foreach($enrollmentTimes as $index2){
+                    $completaramServicoEscolar =  $completudes[$district][$index1][$index2]['tiveram_intervencao_subsidio_escolar'];
+                    $beneficiaries[$district][$index1][$index2] = $completaramServicoEscolar;
+                    $results[$district][$index1][$index2] = count($completaramServicoEscolar);
+                }
             }
+
+            $finalResult[$district] = array(
+                'results' => $results[$district],
+                'beneficiaries' =>  $beneficiaries[$district]
+            );
         }
 
-        $result = [
-            'results' => $results,
-            'beneficiaries' =>  $beneficiaries
-        ];
 
-        return $result;
+        return $finalResult;
+    }
+
+    public function getSummary($districts){
+        $resultsMap = array();
+
+
+        foreach($districts as $district){
+            $summary = $this->computeSummary($district->province_code, $district->district_code);
+            $resultsMap[$district->district_code]['total_registos'] = $summary['total_registos'];
+            $resultsMap[$district->district_code]['total_masculinos'] = $summary['total_rapazes'];
+            $resultsMap[$district->district_code]['total_femininos'] = $summary['total_raparigas'];
+            $resultsMap[$district->district_code]['total_beneficiarias'] = $summary['total_beneficiarias'];
+            //$desagregationMap[$district->district_code]['beneficiarias_activas'] = count($result);
+        }
+
+        return $resultsMap ;
     }
 
     private function computeSummary($provincia, $distrito){
