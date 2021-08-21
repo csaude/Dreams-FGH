@@ -506,8 +506,6 @@ class BeneficiariosController extends Controller
 
     public function actionRelatorioagyw()
     {
-     
-        
         $model = new AgywPrev();
 
         if ($model->load(Yii::$app->request->post()) /* && $model->validate() */) {
@@ -517,7 +515,6 @@ class BeneficiariosController extends Controller
 
             $districts = Distritos::find()
                     ->where(['in','district_code', $model->districts])->all();
-            $districsMap = implode(',', $model->districts);
             
             $model->execute();
             
@@ -529,6 +526,7 @@ class BeneficiariosController extends Controller
             $sixthdesagregationResults = $model->getSixthDesagregationResults();
 
             $totaisresults = $model->getSummary($districts);
+            $totalAgyw = $model->getTotaisAgyW();
 
             // reset session storage
             $session = Yii::$app->session;
@@ -547,7 +545,8 @@ class BeneficiariosController extends Controller
                 'fourthdesagregation' => $fourthdesagregationResults,
                 'fifthdesagregation' => $fifthdesagregationResults,
                 'sixthdesagregation' => $sixthdesagregationResults,
-                'totals' => $totaisresults
+                'totals' => $totaisresults,
+                'totalsAgyw' => $totalAgyw
             ]);
             
         }
