@@ -125,7 +125,16 @@ $i=0;
                                                         
                                                         </td>
                                                     <?php  } ?>
-                                                    <td bgcolor="#FAEBD7"><b><?php echo $firstdesagregationResults['9-14'][$index2] + $firstdesagregationResults['15-19'][$index2] + $firstdesagregationResults['20-24'][$index2] + $firstdesagregationResults['25-29'][$index2] ?></b></td>
+                                                        <td bgcolor="#FAEBD7"><b>
+                                                            <?= Html::a('<span style="color:#0549a3;"> '.($firstdesagregationResults['9-14'][$index2] + $firstdesagregationResults['15-19'][$index2] + $firstdesagregationResults['20-24'][$index2] + $firstdesagregationResults['25-29'][$index2]).'</span>', ['relatorioagywprev', 
+                                                                                                                                                                    'eTime' => $index2,
+                                                                                                                                                                    'pcode' => $district->province_code,
+                                                                                                                                                                    'dcode' => $district->district_code,
+                                                                                                                                                                    'sdate' => $model->start_date,
+                                                                                                                                                                    'edate' => $model->end_date,
+                                                                                                                                                                    'iID' => 1], []) ?>
+                                                    </b></td>
+                                                    <!-- <td bgcolor="#FAEBD7"><b><?php echo $firstdesagregationResults['9-14'][$index2] + $firstdesagregationResults['15-19'][$index2] + $firstdesagregationResults['20-24'][$index2] + $firstdesagregationResults['25-29'][$index2] ?></b></td> -->
                                                 </tr>
                                         <?php  } ?>
                                         <tr>
@@ -163,7 +172,16 @@ $i=0;
                                                         
                                                         </td>
                                                     <?php  } ?>
-                                                    <td bgcolor="#FAEBD7"><b><?php echo $seconddesagregationResults['9-14'][$index2] + $seconddesagregationResults['15-19'][$index2] + $seconddesagregationResults['20-24'][$index2] + $seconddesagregationResults['25-29'][$index2] ?></b></td>
+                                                        <td bgcolor="#FAEBD7"><b>
+                                                            <?= Html::a('<span style="color:#0549a3;"> '.($seconddesagregationResults['9-14'][$index2] + $seconddesagregationResults['15-19'][$index2] + $seconddesagregationResults['20-24'][$index2] + $seconddesagregationResults['25-29'][$index2]).'</span>', ['relatorioagywprev', 
+                                                                                                                                                                    'eTime' => $index2,
+                                                                                                                                                                    'pcode' => $district->province_code,
+                                                                                                                                                                    'dcode' => $district->district_code,
+                                                                                                                                                                    'sdate' => $model->start_date,
+                                                                                                                                                                    'edate' => $model->end_date,
+                                                                                                                                                                    'iID' => 2], []) ?>
+                                                        </b></td>
+                                                    <!-- <td bgcolor="#FAEBD7"><b><?php echo $seconddesagregationResults['9-14'][$index2] + $seconddesagregationResults['15-19'][$index2] + $seconddesagregationResults['20-24'][$index2] + $seconddesagregationResults['25-29'][$index2] ?></b></td> -->
                                                 </tr>
                                         <?php  } ?>
                                         <tr>
@@ -200,7 +218,16 @@ $i=0;
                                                                 
                                                         </td>
                                                     <?php  } ?>
-                                                    <td bgcolor="#FAEBD7"><b><?php echo $thirddesagregationResults['9-14'][$index2] + $thirddesagregationResults['15-19'][$index2] + $thirddesagregationResults['20-24'][$index2] + $thirddesagregationResults['25-29'][$index2] ?></b></td>
+                                                        <td bgcolor="#FAEBD7"><b>
+                                                            <?= Html::a('<span style="color:#0549a3;"> '.($thirddesagregationResults['9-14'][$index2] + $thirddesagregationResults['15-19'][$index2] + $thirddesagregationResults['20-24'][$index2] + $thirddesagregationResults['25-29'][$index2]).'</span>', ['relatorioagywprev', 
+                                                                                                                                                                    'eTime' => $index2,
+                                                                                                                                                                    'pcode' => $district->province_code,
+                                                                                                                                                                    'dcode' => $district->district_code,
+                                                                                                                                                                    'sdate' => $model->start_date,
+                                                                                                                                                                    'edate' => $model->end_date,
+                                                                                                                                                                    'iID' => 3], []) ?>
+                                                        </b></td>
+                                                    <!-- <td bgcolor="#FAEBD7"><b><?php echo $thirddesagregationResults['9-14'][$index2] + $thirddesagregationResults['15-19'][$index2] + $thirddesagregationResults['20-24'][$index2] + $thirddesagregationResults['25-29'][$index2] ?></b></td> -->
                                                 </tr>
                                         <?php  } ?>
                                         <tr>
@@ -237,7 +264,16 @@ $i=0;
                                                         
                                                         </td>
                                                     <?php  } ?>
-                                                    <td bgcolor="#FAEBD7"><b><?php echo $fourthdesagregationResults['9-14'][$index2] + $fourthdesagregationResults['15-19'][$index2] + $fourthdesagregationResults['20-24'][$index2] + $fourthdesagregationResults['25-29'][$index2] ?></b></td>
+                                                        <td bgcolor="#FAEBD7"><b>
+                                                            <?= Html::a('<span style="color:#0549a3;"> '.($fourthdesagregationResults['9-14'][$index2] + $fourthdesagregationResults['15-19'][$index2] + $fourthdesagregationResults['20-24'][$index2] + $fourthdesagregationResults['25-29'][$index2]).'</span>', ['relatorioagywprev', 
+                                                                                                                                                                    'eTime' => $index2,
+                                                                                                                                                                    'pcode' => $district->province_code,
+                                                                                                                                                                    'dcode' => $district->district_code,
+                                                                                                                                                                    'sdate' => $model->start_date,
+                                                                                                                                                                    'edate' => $model->end_date,
+                                                                                                                                                                    'iID' => 4], []) ?>
+                                                        </b></td>
+                                                    <!-- <td bgcolor="#FAEBD7"><b><?php echo $fourthdesagregationResults['9-14'][$index2] + $fourthdesagregationResults['15-19'][$index2] + $fourthdesagregationResults['20-24'][$index2] + $fourthdesagregationResults['25-29'][$index2] ?></b></td> -->
                                                 </tr>
                                         <?php  } ?>
                                         <tr>
@@ -274,7 +310,16 @@ $i=0;
                                                         
                                                         </td>
                                                     <?php  } ?>
-                                                    <td bgcolor="#FAEBD7"><b><?php echo $fifthdesagregationResults['9-14'][$index2] + $fifthdesagregationResults['15-19'][$index2] + $fifthdesagregationResults['20-24'][$index2] + $fifthdesagregationResults['25-29'][$index2] ?></b></td>
+                                                        <td bgcolor="#FAEBD7"><b>
+                                                            <?= Html::a('<span style="color:#0549a3;"> '.($fifthdesagregationResults['9-14'][$index2] + $fifthdesagregationResults['15-19'][$index2] + $fifthdesagregationResults['20-24'][$index2] + $fifthdesagregationResults['25-29'][$index2]).'</span>', ['relatorioagywprev', 
+                                                                                                                                                                    'eTime' => $index2,
+                                                                                                                                                                    'pcode' => $district->province_code,
+                                                                                                                                                                    'dcode' => $district->district_code,
+                                                                                                                                                                    'sdate' => $model->start_date,
+                                                                                                                                                                    'edate' => $model->end_date,
+                                                                                                                                                                    'iID' => 5], []) ?>
+                                                        </b></td>
+                                                    <!-- <td bgcolor="#FAEBD7"><b><?php echo $fifthdesagregationResults['9-14'][$index2] + $fifthdesagregationResults['15-19'][$index2] + $fifthdesagregationResults['20-24'][$index2] + $fifthdesagregationResults['25-29'][$index2] ?></b></td> -->
                                                 </tr>
                                         <?php  } ?>
                                         <tr>
@@ -311,7 +356,16 @@ $i=0;
                                                             <?php  } ?>
                                                         </td>
                                                     <?php  } ?>
-                                                    <td bgcolor="#FAEBD7"><b><?php echo $sixthdesagregationResults['9-14'][$index2] + $sixthdesagregationResults['15-19'][$index2] + $sixthdesagregationResults['20-24'][$index2] + $sixthdesagregationResults['25-29'][$index2] ?></b></td>
+                                                        <td bgcolor="#FAEBD7"><b>
+                                                            <?= Html::a('<span style="color:#0549a3;"> '.($sixthdesagregationResults['9-14'][$index2] + $sixthdesagregationResults['15-19'][$index2] + $sixthdesagregationResults['20-24'][$index2] + $sixthdesagregationResults['25-29'][$index2]).'</span>', ['relatorioagywprev', 
+                                                                                                                                                                    'eTime' => $index2,
+                                                                                                                                                                    'pcode' => $district->province_code,
+                                                                                                                                                                    'dcode' => $district->district_code,
+                                                                                                                                                                    'sdate' => $model->start_date,
+                                                                                                                                                                    'edate' => $model->end_date,
+                                                                                                                                                                    'iID' => 6], []) ?>
+                                                        </b></td>
+                                                    <!-- <td bgcolor="#FAEBD7"><b><?php echo $sixthdesagregationResults['9-14'][$index2] + $sixthdesagregationResults['15-19'][$index2] + $sixthdesagregationResults['20-24'][$index2] + $sixthdesagregationResults['25-29'][$index2] ?></b></td> -->
                                                 </tr>
                                         <?php  } ?>
                                         <tr>
