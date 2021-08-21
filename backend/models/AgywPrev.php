@@ -356,14 +356,13 @@ class AgywPrev extends Model {
 
     private function completude($dataInicio,$dataFim, $provinces, $districts){
        
-        //$desagregationMap = $this->generateDesagregationMatrix();
         $agyw_prev = array();
         $desagregationMap = array();
 
         foreach($districts as $district){
             $desagregationMap[$district] = $this->generateDesagregationMatrix();
         }
-
+        $distritos = implode(',', $districts);
         $query = "select beneficiario_id, distrito_id, vai_escola, sexualmente_activa, data_registo, 
                     if(idade_actual = 15  and datediff(min(data_servico),coalesce(STR_TO_DATE(data_nascimento,'%d/%m/%Y'),STR_TO_DATE(data_nascimento,'%m/%d/%Y')))/30 between 120 and 177,'9-14',if(idade_actual = 20  and datediff(min(data_servico),coalesce(STR_TO_DATE(data_nascimento,'%d/%m/%Y'),STR_TO_DATE(data_nascimento,'%m/%d/%Y')))/30 between 180 and 237,'15-19',faixa_actual)) faixa_actual,
                     if(idade_actual < 20 and sustenta_casa=1,1,0) +
@@ -477,7 +476,7 @@ class AgywPrev extends Model {
                     min(data_servico) data_servico 
                 from app_dream_vw_agyw_prev
                 where   
-                        distrito_id in (:district) and
+                        distrito_id in (".$distritos.") and
                         vulneravel = 1 and
                         faixa_actual <> '' and
                         faixa_actual <> 'NA' and
@@ -489,9 +488,7 @@ class AgywPrev extends Model {
                 group by beneficiario_id, distrito_id, faixa_actual, vai_escola, sexualmente_activa, data_registo, vulnerabilidades";
 
         $preparedQuery = Yii::$app->db->createCommand($query);
-        $ditritos = implode(',', $districts);
-        //$preparedQuery->bindParam(":province", $province);
-        $preparedQuery->bindParam(":district", $ditritos);
+        
         $preparedQuery->bindParam(":start", $dataInicio);
         $preparedQuery->bindParam(":end", $dataFim);
         $result = $preparedQuery->queryAll();
