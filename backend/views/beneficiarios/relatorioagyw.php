@@ -37,20 +37,13 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 <?php
                     $province_id =  Yii::$app->user->identity->provin_code;
-                    if (isset($province_id)) {
-                        $provincias = ArrayHelper::map(Provincias::find()->where(['id'=>$province_id])->all(), 'id', 'province_name');
-                        $distritos = ArrayHelper::map(Distritos::find()->where(['province_code'=>$province_id])->all(), 'district_code', 'district_name');
-                    }
-                    else{
-                        $provincias = ArrayHelper::map(Provincias::find()->where(['status'=>1])->all(), 'id', 'province_name');
-                        $distritos = ArrayHelper::map(Distritos::find()->all(), 'district_code', 'district_name');
-                    }
+                    $clause = isset($province_id)? ['id'=>$province_id] : ['status'=>1];
                 ?>
 
                 <?= 
                  $form->field($model, 'provinces')->widget(Select2::classname(), [
                                                             'name' => 'kv-state-250',
-                                                            'data' =>(ArrayHelper::map(Provincias::find()->where(['status'=>1])->all(), 'id', 'province_name')),
+                                                            'data' =>(ArrayHelper::map(Provincias::find()->where($clause)->all(), 'id', 'province_name')),
                                                             'options' => ['multiple'=>'multiple' ,
                                                                             'placeholder' => 'Selecione a Provincia',
                                                                             'id' => 'provinces'],
