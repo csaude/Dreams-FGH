@@ -50,7 +50,7 @@ class BeneficiariosController extends Controller
                 ],
                 'rules' => [
                     [
-                        'actions' => ['index', 'view', 'create', 'lists', 'listas', 'servicos', 'localidades', 'bairros', 'todos', 'filtros', 'relatorio', 'relatoriofy19', 'relatoriofy20q1', 'relatoriofy20q2'],
+                        'actions' => ['index', 'view', 'create', 'lists', 'listas', 'servicos', 'localidades', 'bairros', 'todos', 'filtros', 'relatorio', 'relatoriofy19', 'relatoriofy20q1', 'relatoriofy20q2', 'listdistricts'],
 
                         'allow' => true,
                         'roles' => [
@@ -660,6 +660,46 @@ class BeneficiariosController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+    public function actionListdistricts()
+    {
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        
+        if (isset($_POST['depdrop_parents'])) {
+            $ids = end($_POST['depdrop_parents']);
+            $provinces = implode(',',$ids);
+            
+            $query = "select district_code as id, district_name, hs_hr_province.province_name, hs_hr_province.id as province_id
+                    from hs_hr_district left join hs_hr_province on hs_hr_district.province_code = hs_hr_province.id
+                    where hs_hr_district.province_code in (".$provinces.");";
+            $preparedQuery = Yii::$app->db->createCommand($query);
+            $result = $preparedQuery->queryAll();
+
+            $selected  = null;
+            if ($ids != null && count($result) > 0) {
+                $selected = '';
+                
+                $map=array();
+                foreach ($ids as $provinceId) {
+                    foreach($result as $district){
+                        if(!isset($map[$district['province_name']])){
+                            $map[$district['province_name']] = array();
+                        }
+                        if($district['province_id'] == $provinceId){
+                            array_push($map[$district['province_name']], ['id' => $district['id'], 'name' => $district['district_name']]);
+                        }
+                        
+                    }
+                   
+                }
+                
+                return ['output' => $map, 'selected' => $selected];
+            }
+            
+        }
+        return ['output' => '', 'selected' => ''];
+
     }
 
 

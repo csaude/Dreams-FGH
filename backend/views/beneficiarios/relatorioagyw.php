@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 //use yii\widgets\ActiveForm;
+use \kartik\widgets\Select2;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use app\models\Provincias;
@@ -9,6 +10,7 @@ use app\models\Distritos;
 use kartik\widgets\DatePicker;
 use kartik\form\ActiveForm;
 use kartik\daterange\DateRangePicker;
+use kartik\depdrop\DepDrop;
 
 
 $this->title = "INDICADORES DREAMS";
@@ -45,19 +47,38 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
                 ?>
 
-                <?= $form->field($model, 'province_code')->dropDownList($provincias,
-                    ['class' => 'form-control',
-                    'prompt'=>'--Província--',
-                    'onchange'=>'$.post("lists.dreams?id='.'"+$(this).val(), function(data) {
-                        $("select#form-district_code").html(data);
-                    });',
-                ]); ?>
+                <?= 
+                 $form->field($model, 'provinces')->widget(Select2::classname(), [
+                                                            'name' => 'kv-state-250',
+                                                            'data' =>(ArrayHelper::map(Provincias::find()->where(['status'=>1])->all(), 'id', 'province_name')),
+                                                            'options' => ['multiple'=>'multiple' ,
+                                                                            'placeholder' => 'Selecione a Provincia',
+                                                                            'id' => 'provinces'],
+                                                            'pluginOptions' => [
+                                                                            'allowClear' => true
+                                                                            ],
+                                                        ]);
+                          
+                ?>
 
 
-                <?= $form->field($model, 'district_code')->dropDownList($distritos,
-                    ['id'=>'form-district_code','class' => 'form-control','prompt'=>'--Distrito--',
-                ]);  ?> 
+                <?= 
+                    $form->field($model, 'districts')->widget(DepDrop::classname(), [
+                                                    'options' => [
+                                                    'multiple'=>true,
+                                                    'placeholder' => 'Select ...'],
+                                                    'type' => DepDrop::TYPE_SELECT2,
+                                                    'select2Options' => ['pluginOptions' => ['allowClear' => true]],
+                                                    'pluginOptions' => [
+                                                                    'depends' => ['provinces'],
+                                                                    'url' => Url::to(['listdistricts']),
+                                                                    'loadingText' => 'Loading child level 1 ...',
+                                                                ]
+                                                    ]);     
 
+                ?>
+                
+                
                 <?=
                     $form->field($model, 'start_date', [
                         'addon'=>['prepend'=>['content'=>'<i class="glyphicon glyphicon-calendar"></i>']],
