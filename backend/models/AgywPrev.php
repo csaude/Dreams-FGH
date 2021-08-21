@@ -7,7 +7,9 @@ use yii\base\Model;
 
 class AgywPrev extends Model {
     public $province_code;
+    public $provinces;
     public $district_code;
+    public $districts;
     public $start_date;
     public $end_date;
     private $completudeness;
@@ -17,6 +19,7 @@ class AgywPrev extends Model {
         return [
             [['province_code','district_code', 'start_date', 'end_date'], 'required'],
             [['province_code','district_code'], 'string', 'max' => 100],
+            [['provinces','districts'], 'required'],
         ];
     }
 
@@ -27,6 +30,8 @@ class AgywPrev extends Model {
             'start_date' => 'Data Inicial',
             'end_date' => 'Data Final',
             'district_code' => 'Distrito',
+            'provinces' => 'Provincias',
+            'districts' => 'Distritos',
         ];
     }
 
@@ -353,7 +358,7 @@ class AgywPrev extends Model {
         $desagregationMap = $this->generateDesagregationMatrix();
         $agyw_prev = array();
 
-        $query = "select beneficiario_id, vai_escola, sexualmente_activa, data_registo, 
+        $query = "select beneficiario_id, distrito_id, vai_escola, sexualmente_activa, data_registo, 
                     if(idade_actual = 15  and datediff(min(data_servico),coalesce(STR_TO_DATE(data_nascimento,'%d/%m/%Y'),STR_TO_DATE(data_nascimento,'%m/%d/%Y')))/30 between 120 and 177,'9-14',if(idade_actual = 20  and datediff(min(data_servico),coalesce(STR_TO_DATE(data_nascimento,'%d/%m/%Y'),STR_TO_DATE(data_nascimento,'%m/%d/%Y')))/30 between 180 and 237,'15-19',faixa_actual)) faixa_actual,
                     if(idade_actual < 20 and sustenta_casa=1,1,0) +
                     if(idade_actual < 18 and vai_escola=0,1,0) +
@@ -473,15 +478,9 @@ class AgywPrev extends Model {
                         nui <> '' and
                         data_servico is not null and
                         data_servico <> '' and
-                        (data_servico between '2000-01-01' and :end)
-                and     beneficiario_id in
-                        (
-                            select distinct beneficiario_id  
-                            from app_dream_vw_agyw_prev
-                            where data_servico between :start and :end
-                            and servico_status=1
-                        )
-                group by beneficiario_id, faixa_actual, vai_escola, sexualmente_activa, data_registo, vulnerabilidades";
+                        (data_servico between :start and :end) and
+                        servico_status=1
+                group by beneficiario_id, distrito_id, faixa_actual, vai_escola, sexualmente_activa, data_registo, vulnerabilidades";
 
         $preparedQuery = Yii::$app->db->createCommand($query);
         $preparedQuery->bindParam(":province", $province);
