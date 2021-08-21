@@ -123,10 +123,7 @@ class BeneficiariosController extends Controller
             $fifthdesagregation = $model->getFifthDesagregationResults();
             $sixthdesagregation = $model->getSixthDesagregationResults();
 
-            //echo json_encode($firstdesagregation);
-
             // load report template
-            
             $tmpfname = 'template_agywprev.xls';
             $excelReader = PHPExcel_IOFactory::createReaderForFile($tmpfname);
             $excelObj = $excelReader->load($tmpfname);
@@ -135,7 +132,6 @@ class BeneficiariosController extends Controller
 
             // fill the report 
             // report identification
-
             $row = 9; //starting row in the template
             foreach($model->districts as $districtId){
                 $total = 0;
@@ -146,8 +142,6 @@ class BeneficiariosController extends Controller
                 $province = Provincias::find()
                     ->where(['id' => $district->province_code])->one();
 
-                    //VarDumper::dump($seconddesagregationResults[$districtId]);
-                    //echo json_encode($seconddesagregationResults[$districtId]);
                 $excelObj->getActiveSheet()
                         ->setCellValue('A'.$row, $model->start_date.' - '.$model->end_date)
                         ->setCellValue('B'.$row, $province->province_name)
@@ -182,9 +176,6 @@ class BeneficiariosController extends Controller
                 ->setCellValue('W'.$row, $firstdesagregationResults['25-29']['25+'])
                 ->setCellValue('X'.$row, $subtotal4);
                 
-                // calculate desagregation total
-                
-
                 // report second desagregation
                 $seconddesagregationResults = $seconddesagregation[$districtId]['results'];
                 $subtotal5 = $seconddesagregationResults['9-14']['0_6'] + $seconddesagregationResults['15-19']['0_6'] + $seconddesagregationResults['20-24']['0_6']+$seconddesagregationResults['25-29']['0_6'];
@@ -213,9 +204,6 @@ class BeneficiariosController extends Controller
                 ->setCellValue('AP'.$row, $seconddesagregationResults['20-24']['25+'])
                 ->setCellValue('AQ'.$row, $seconddesagregationResults['25-29']['25+'])
                 ->setCellValue('AR'.$row, $subtotal8);
-                // calculate desagregation total
-               
-
 
                 // report third desagregation
                 $thirddesagregationResults = $thirddesagregation[$districtId]['results'];
@@ -244,9 +232,6 @@ class BeneficiariosController extends Controller
                 ->setCellValue('BJ'.$row, $thirddesagregationResults['20-24']['25+'])
                 ->setCellValue('BK'.$row, $thirddesagregationResults['25-29']['25+'])
                 ->setCellValue('BL'.$row, $subtota12);
-                // calculate desagregation total
-               
-
 
                 // report fourth desagregation
                 $fourthdesagregationResults = $fourthdesagregation[$districtId]['results'];
@@ -277,8 +262,6 @@ class BeneficiariosController extends Controller
                 ->setCellValue('CD'.$row, $fourthdesagregationResults['20-24']['25+'])
                 ->setCellValue('CE'.$row, $fourthdesagregationResults['25-29']['25+'])
                 ->setCellValue('CF'.$row, $subtotal16);
-                // calculate desagregation total
-             
 
                 // report fifth desagregation
                 $violencePreventionCount = 0;
@@ -493,18 +476,19 @@ class BeneficiariosController extends Controller
 
     public function actionRelatorioagyw()
     {
+     
         
         $model = new AgywPrev();
 
         if ($model->load(Yii::$app->request->post()) /* && $model->validate() */) {
-            //VarDumper::dump(Yii::$app->request->post());
             
-            $province = Provincias::find()
-                    ->where(['id' => $model->province_code])->one();
+            $provinces = Provincias::find()
+                    ->where(['in','id', $model->provinces])->all();
 
-            $district = Distritos::find()
-                    ->where(['district_code' => $model->district_code])->one();
-
+            $districts = Distritos::find()
+                    ->where(['in','district_code', $model->districts])->all();
+            $districsMap = implode(',', $model->districts);
+            
             $model->execute();
             
             $firstdesagregationResults = $model->getFirstDesagregationResults();
@@ -513,7 +497,8 @@ class BeneficiariosController extends Controller
             $fourthdesagregationResults = $model->getFourthDesagregationResults();
             $fifthdesagregationResults = $model->getFifthDesagregationResults();
             $sixthdesagregationResults = $model->getSixthDesagregationResults();
-            $totaisresults = $model->getTotais();
+
+            $totaisresults = $model->getSummary($districts);
 
             // reset session storage
             $session = Yii::$app->session;
@@ -524,17 +509,16 @@ class BeneficiariosController extends Controller
 
             return $this->render('relatorioagywprev', [
                 'model' => $model,
-                'province' => $province->province_name,
-                'district' => $district->district_name,
-                'firstDesagregation' => $firstdesagregationResults,
-                'secondDesagregation' => $seconddesagregationResults,
-                'thirdDesagregation' => $thirddesagregationResults,
-                'fourthdesagregationResults' => $fourthdesagregationResults,
-                'fifthdesagregationResults' => $fifthdesagregationResults,
-                'sixthdesagregationResults' => $sixthdesagregationResults,
+                'provinces' => $provinces,
+                'districts' => $districts,
+                'firstdesagregation' => $firstdesagregationResults,
+                'seconddesagregation' => $seconddesagregationResults,
+                'thirddesagregation' => $thirddesagregationResults,
+                'fourthdesagregation' => $fourthdesagregationResults,
+                'fifthdesagregation' => $fifthdesagregationResults,
+                'sixthdesagregation' => $sixthdesagregationResults,
                 'totals' => $totaisresults
             ]);
-            
             
         }
         

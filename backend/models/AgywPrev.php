@@ -492,14 +492,6 @@ class AgywPrev extends Model {
         $preparedQuery->bindParam(":start", $dataInicio);
         $preparedQuery->bindParam(":end", $dataFim);
         $result = $preparedQuery->queryAll();
-/*
-        $summary = $this->computeSummary($province, $district);
-        $desagregationMap['summary']['total_registos'] = $summary['total_registos'];
-        $desagregationMap['summary']['total_masculinos'] = $summary['total_rapazes'];
-        $desagregationMap['summary']['total_femininos'] = $summary['total_raparigas'];
-        $desagregationMap['summary']['total_beneficiarias'] = $summary['total_beneficiarias'];
-        $desagregationMap['summary']['beneficiarias_activas'] = count($result);
-*/
 
         foreach ($result as $row){
             
@@ -631,6 +623,9 @@ class AgywPrev extends Model {
         //$desagregationMap['summary']['total_agyw_prev'] = count(array_unique($agyw_prev));
         return $desagregationMap;
     }
+
+
+
 
     /**
      * Executes the completude operation
@@ -856,6 +851,22 @@ class AgywPrev extends Model {
 
 
         return $finalResult;
+    }
+
+    public function getSummary($districts){
+        $resultsMap = array();
+
+
+        foreach($districts as $district){
+            $summary = $this->computeSummary($district->province_code, $district->district_code);
+            $resultsMap[$district->district_code]['total_registos'] = $summary['total_registos'];
+            $resultsMap[$district->district_code]['total_masculinos'] = $summary['total_rapazes'];
+            $resultsMap[$district->district_code]['total_femininos'] = $summary['total_raparigas'];
+            $resultsMap[$district->district_code]['total_beneficiarias'] = $summary['total_beneficiarias'];
+            //$desagregationMap[$district->district_code]['beneficiarias_activas'] = count($result);
+        }
+
+        return $resultsMap ;
     }
 
     private function computeSummary($provincia, $distrito){
