@@ -281,11 +281,15 @@ $ids = ArrayHelper::getColumn($users, 'id');
     <div class="col-lg-4">
       <?= $form->field($model, 'status')->widget(Select2::classname(),['data' => ['1' => ' Activo', '0' => ' Cancelado'],'options' => ['onchange' => 'var valor2 = this.value; if(valor2==1){$("#teste1").hide(1000);$("#teste2").hide(1000);}else{$("#teste1").show(1000);}', 'placeholder' => '--Selecione Aqui--'],'pluginOptions' => ['allowClear' => true],]); ?>
     </div>
-    <div class="col-lg-4" id="teste1">
-      <?=  $form->field($model, 'cancel_reason')->widget(Select2::classname(),['data' => ['1' => 'Serviço não provido nos últimos 6 meses','2' => 'Beneficiária não encontrada','3' => 'Abandono','4' => 'Beneficiária recusou o serviço','5' => 'Outro Motivo'],'options' => ['onchange' => 'var valor2 = this.value; if(valor2==5){$("#teste2").show(1000);}else{$("#teste2").hide(1000);}', 'placeholder' => '--Selecione Aqui--'],'pluginOptions' => ['allowClear' => true],]); ?>
+    <div class="col-lg-4" id="teste1"> 
+      <div class="form-group required">
+        <?=  $form->field($model, 'cancel_reason')->widget(Select2::classname(),['data' => ['1' => 'Serviço não provido nos últimos 6 meses','2' => 'Beneficiária não encontrada','3' => 'Abandono','4' => 'Beneficiária recusou o serviço','5' => 'Outro Motivo'],'options' => ['onchange' => 'var valor2 = this.value; if(valor2==5){$("#teste2").show(1000);}else{$("#teste2").hide(1000);}', 'placeholder' => '--Selecione Aqui--'],'pluginOptions' => ['allowClear' => true],]); ?>
+      </div>
     </div>
     <div class="col-lg-4" id="teste2">
-      <?= $form->field($model, 'other_reason')->textArea(['maxlength' => true, 'rows' => '3']) ?>
+      <div class="form-group required">
+        <?= $form->field($model, 'other_reason')->textArea(['maxlength' => true, 'rows' => '3']) ?>
+      </div>
     </div>
   </div>
   <?php
