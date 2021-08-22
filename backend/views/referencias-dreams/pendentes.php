@@ -107,17 +107,33 @@ $this->params['breadcrumbs'][] = $this->title;
               <div class="row">
                 <div class="col-lg-6">  
                 <div class="form-group required">
-                  <?=  $form->field($model, 'cancel_reason')->widget(Select2::classname(),['data' => ['1' => 'Serviço não provido nos últimos 6 meses','2' => 'Beneficiária não encontrada','3' => 'Abandono','4' => 'Beneficiária recusou o serviço','5' => 'Outro Motivo'],'options' => ['onchange' => 'var valor2 = this.value; if(valor2==5){$("#other_reason").show(1000);}else{$("#other_reason").hide(1000);}', 'placeholder' => '--Selecione Aqui--'],'pluginOptions' => ['allowClear' => true],]); ?>
+                  <?=  $form->field($model, 'cancel_reason')->widget(Select2::classname(),['data' => ['1' => 'Serviço não provido nos últimos 6 meses','2' => 'Beneficiária não encontrada','3' => 'Abandono','4' => 'Beneficiária recusou o serviço','5' => 'Outro Motivo'],
+                      'options' => ['onchange' => 'var valor2 = this.value; 
+                        if(valor2==5){
+                          $("#other_reason").show(1000);
+                          $("#SALVAR").attr("disabled", "disabled"); 
+                        }
+                        else{
+                          $("#other_reason").hide(1000);
+                          $("#SALVAR").prop("disabled", false);}
+                        
+                        if(valor2==="")
+                        {
+                          $("#SALVAR").attr("disabled", "disabled");
+                        }', 
+                      'placeholder' => '--Selecione Aqui--'],'pluginOptions' => ['allowClear' => true],]); ?>
                   </div>
                 </div>
 
                   <div class="form-group required">
-                    <div class="col-lg-6" id="other_reason"> <?= $form->field($model, 'other_reason')->textArea(['maxlength' => true, 'rows' => '3']) ?> </div>
+                    <div class="col-lg-6" id="other_reason"> 
+                      <?= $form->field($model, 'other_reason')->textArea(['maxlength' => true, 'rows' => '3',
+                      'oninput' => 'validacao();']) ?> </div>
                 </div>
               </div>
                                
                 <div class="form-group pull-right">
-                    <?= Html::submitButton('SALVAR' , ['class' => 'btn btn-success']) ?>
+                    <?= Html::submitButton('SALVAR' , ['class' => 'btn btn-success','id'=>'SALVAR']) ?>
                     <?= Html::a('Cancelar', ['index'], ['class' => 'btn btn-warning']) ?>
                 </div>
             </div>
@@ -294,37 +310,17 @@ $utils=Profile::find()->where(['=','id',$model->notificar_ao])->all();
       $("#cancel_reason").value = "";
       $("#other_reason").value = "";
       $("#other_reason").hide(1000);
+      $("#SALVAR").attr("disabled", "disabled");
     });
   }
 
-  var myIds = [];
-
-
-function myAdd(linha){
-   
-   
-  var item = myIds.includes(linha);
-
-  if (item == false){
-
-    myIds.push(linha);
-
-  }else{
-
-    var index = myIds.indexOf(linha);
-
-    if (index > -1) {
-
-      myIds.splice(index,1);
+  function validacao(){
+    var reason = document.getElementById("referenciasdreams-other_reason").value;
+    if(reason===""){  
+      $("#SALVAR").attr("disabled", "disabled");                     
+    }else{
+      $("#SALVAR").prop("disabled", false);
     }
-  }
-  
-      // myIds.forEach(myVerification(linha));
-
-    total = myIds.length;
-  // return document.getElementByID("myIds").value = myIds;
-  <?php $myIds = "<script>document.write(myIds)</script>"?>
-  // return alert(total+" - Row clicked: "+linha+"; Array = "+myIds);
-}
+})
 
 </script>
