@@ -305,7 +305,12 @@ $ids = ArrayHelper::getColumn($users, 'id');
                                                                                           }else{
                                                                                             $("#teste2").hide(1000);
                                                                                             $("#btnSubmit").attr("disabled", false);
-                                                                                          }', 
+                                                                                          }
+                                                                                          if(valor2==="")
+                                                                                          {
+                                                                                            $("#btnSubmit").attr("disabled", "disabled");
+                                                                                          }
+                                                                                          ', 
                                                                                 'placeholder' => '--Selecione Aqui--'],'pluginOptions' => ['allowClear' => true],]); ?>
       </div>
     </div>
