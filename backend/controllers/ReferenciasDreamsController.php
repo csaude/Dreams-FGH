@@ -304,8 +304,12 @@ class ReferenciasDreamsController extends Controller
                 if($cancelReason <> 5 || ($cancelReason == 5 && $otherReason <> '')){
 
                     $myIds = $_POST['selection'];
+                    
                     foreach ($myIds as $id){
-                        $model = $this->findModel($id);                        
+                        $model = $this->findModel($id);
+                        $model->status = 0;
+                        $model->cancel_reason = $cancelReason;
+                        $model->other_reason = $otherReason;
                         $model->save();
                     }
 
