@@ -138,18 +138,26 @@ if (isset($_REQUEST['ts'])&&($_REQUEST['ts']>0)) {echo Html::activeDropDownList(
 	<?php // $form->field($model, 'resultado')->textInput();
 ?> 
 
-  
-
- <?= $form->field($model, 'data_beneficio')->widget(DatePicker::classname(), [
-    'options' => ['placeholder' => 'Data da Sessão...', 'dateFormat' => 'dd-MM-YYYY'],
-    'pluginOptions' => [
-        'autoclose'=>true
-    ]
+<?= 
+  $form->field($model, 'data_beneficio', [
+  'addon'=>['prepend'=>['content'=>'<i class="glyphicon glyphicon-calendar"></i>']],
+  'options'=>['class'=>'input-group drp-container']
+])->widget(DateRangePicker::classname(), [
+  'useWithAddon'=>true,
+  'readonly' => true,
+  'options' => ['placeholder' => 'Data da Sessão...', 'dateFormat' => 'dd-MM-YYYY'],
+  'pluginOptions'=>[
+      'language'=>'pt',
+      'singleDatePicker'=>true,
+      'hideInput'=>true,
+      'showDropdowns'=>true,
+      'minYear' => 1990,
+      'autoclose'=>true,
+      'locale' => ['format' => 'DD/MM/YYYY'],
+  ]
 ]);
- ?> 
 
-
-
+?>
 
 
  </div>

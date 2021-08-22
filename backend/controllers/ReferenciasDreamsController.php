@@ -5,6 +5,7 @@ namespace backend\controllers;
 use Yii;
 use app\models\ReferenciasDreams;
 use app\models\ReferenciasDreamsSearch;
+use app\models\ReferenciasDreamsPendentesSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -40,55 +41,59 @@ class ReferenciasDreamsController extends Controller
             ],
 
             'access' => [
-            'class' => AccessControl::className(),
-            'ruleConfig' => [
-            'class' => AccessRule::className(),
-            ],
-            'rules' => [
-            [
-            'actions' => ['index','create','projecto','view','notificar', 'local'],
+                'class' => AccessControl::className(),
+                'ruleConfig' => [
+                    'class' => AccessRule::className(),
+                ],
+                'rules' => [
+                    [
+                        'actions' => ['index','create','projecto','view','notificar', 'local'],
+                        'allow' => true,
+                        'roles' => [
+                            User::ROLE_USER,
+                            User::ROLE_ADMIN,
+                            User::ROLE_GESTOR,
+                            User::ROLE_DIGITADOR,
+                            User::ROLE_EDUCADOR_DE_PAR,
+                            User::ROLE_MENTOR,
+                            User::ROLE_ENFERMEIRA,
+                            User::ROLE_CORDENADOR
+                        ],
+                    ],
 
-            'allow' => true,
-            'roles' => [
-            User::ROLE_USER,
-            User::ROLE_ADMIN,
-            User::ROLE_GESTOR,
-User::ROLE_DIGITADOR,
-            User::ROLE_EDUCADOR_DE_PAR,
-            User::ROLE_MENTOR,
-            User::ROLE_ENFERMEIRA,
-            User::ROLE_CORDENADOR
-            ],
-            ],
+                    [
+                        'actions' => ['update'],
+                        'allow' => true,
+                        //  'roles' => ['@'],
 
-            [
-            'actions' => ['update'],
-            'allow' => true,
-            //  'roles' => ['@'],
+                        'roles' => [
+                            User::ROLE_ADMIN,
+                            User::ROLE_GESTOR,
+                            User::ROLE_DIGITADOR,
+                            User::ROLE_EDUCADOR_DE_PAR,
+                            User::ROLE_MENTOR,
+                            User::ROLE_ENFERMEIRA,
+                            User::ROLE_CORDENADOR
+                        ],
+                    ],
 
-            'roles' => [
-            User::ROLE_ADMIN,
-            User::ROLE_GESTOR,
-User::ROLE_DIGITADOR,
-            User::ROLE_EDUCADOR_DE_PAR,
-            User::ROLE_MENTOR,
-            User::ROLE_ENFERMEIRA,
-            User::ROLE_CORDENADOR
-            ],
-            ],
+                    [
+                        'actions' => ['pendentes'],
+                        'allow' => true,
+                        'roles' => [
+                            User::ROLE_ADMIN
+                        ],
+                    ],
 
-            [
-            'actions' => ['delete'],
-            'allow' => true,
-            'roles' => ['@'],
-            'matchCallback' => function ($rule, $action) {
-            return User::isUserAdmin(Yii::$app->user->identity->username);}
-            ],
+                    [
+                        'actions' => ['delete'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                        return User::isUserAdmin(Yii::$app->user->identity->username);}
+                    ],
+                ]
             ]
-            ]
-
-
-
         ];
     }
 
@@ -119,39 +124,12 @@ User::ROLE_DIGITADOR,
         ]);
     }
 
-    /**
-     * Creates a new ReferenciasDreams model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     
-    public function actionCreate()
-    {
-        $model = new ReferenciasDreams();
-        $pontos = new ReferenciasPontosDreams();
-        if ($model->load(Yii::$app->request->post())) {
-
-			if(!empty($_POST['ReferenciasDreams']['intervensao'])) {
-            $model->encarregado_educacao= implode(", ",$_POST['ReferenciasDreams']['intervensao']); } else {}
-			$model->save();
-				
-			  return $this->redirect(['beneficiarios/view', 'id' => $model->beneficiario_id]);
-         
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-                'pontos'=>$pontos,
-            ]);
-        }
-    }
-	*/
-	  public function actionCreate()
+	public function actionCreate()
     {
         $model = new ReferenciasDreams();
         $pontos = new ReferenciasPontosDreams();
         if ($model->load(Yii::$app->request->post()) && $pontos->load(Yii::$app->request->post()) && $model->save()) {
-			
-	//		return $this->redirect(['beneficiarios/view', 'id' => $model->beneficiario_id]);
-       return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -160,37 +138,26 @@ User::ROLE_DIGITADOR,
         }
     }
 
-    /**
-     * Updates an existing ReferenciasDreams model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     **/
-	/*
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post())) {
-		$model->encarregado_educacao= implode(", ",$_POST['ReferenciasDreams']['intervensao']); } else {}
-		$model->save();
-			
-			
-			
-            return $this->redirect(['beneficiarios/view', 'id' => $model->beneficiario_id]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
-        }
-    }*/
+            $status =  $model->status;
+            $cancelReason = $model->cancel_reason;
+            $otherReason =  $model->other_reason;
 
-public function actionUpdate($id)
-    {
-        $model = $this->findModel($id);
+            if ($status == '0' && ($cancelReason == '' || $cancelReason == 5 && $otherReason == '')){
+                return $this->render('update', [
+                    $model->cancel_reason = '',
+                    $model->other_reason = '',
+                    'model' => $model,
+                ]);
+            }
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $model->save();
             return $this->redirect(['view', 'id' => $model->id]);
+           
         } else {
             return $this->render('update', [
                 'model' => $model,
@@ -212,85 +179,89 @@ public function actionUpdate($id)
     }
 	
 	
-	    public function actionProjecto($id)
- {
+    public function actionProjecto($id)
+    {
 
-//Seleciona todos os distritos da Provincia onde pertence o Activista			
-$distritos=Distritos::find()
-->where(['=','province_code',Yii::$app->user->identity->provin_code])
-->asArray()->all();
-$dists = ArrayHelper::getColumn($distritos, 'district_code');
+        //Seleciona todos os distritos da Provincia onde pertence o Activista			
+        $distritos=Distritos::find()
+        ->where(['=','province_code',Yii::$app->user->identity->provin_code])
+        ->asArray()->all();
+        $dists = ArrayHelper::getColumn($distritos, 'district_code');
 
-//Contabiliza todos os parceiros daquela provincia
-    $countProjectos = Organizacoes::find()
-                    ->where(['parceria_id'=>$id])
-                    ->andWhere(['>','distrito_id',0])
-					->andWhere(['IN','distrito_id',$dists])
-                    ->count();
-//Lista todos os parceiros daquela provincia			
-     $Projectos  = Organizacoes::find()
-                    ->where(['parceria_id'=>$id])
-                    ->andWhere(['>','distrito_id',0])
-		            ->andWhere(['IN','distrito_id',$dists])
-                    ->all();
+        //Contabiliza todos os parceiros daquela provincia
+        $countProjectos = Organizacoes::find()
+                        ->where(['parceria_id'=>$id])
+                        ->andWhere(['>','distrito_id',0])
+                        ->andWhere(['IN','distrito_id',$dists])
+                        ->count();
+        //Lista todos os parceiros daquela provincia			
+        $Projectos  = Organizacoes::find()
+                        ->where(['parceria_id'=>$id])
+                        ->andWhere(['>','distrito_id',0])
+                        ->andWhere(['IN','distrito_id',$dists])
+                        ->all();
 
- if($countProjectos>0) {
-   echo "<option>-</option>";
-     foreach($Projectos as $projecto)
-         { echo "<option value='".$projecto->id."'>".$projecto->name."</option>";}
-                       }else
-                     { echo "<option>-</option>";}
- }
+        if($countProjectos>0) {
+        echo "<option>-</option>";
+            foreach($Projectos as $projecto)
+                { echo "<option value='".$projecto->id."'>".$projecto->name."</option>";}
+                            }else
+                            { echo "<option>-</option>";}
+    }
 
- public function actionNotificar($id)
-{
-  $countUsers=Utilizadores::find()
-  ->where(['=','parceiro_id',$id])
-  ->count();
-  if($countUsers>0) {
+    public function actionNotificar($id)
+    {
+        $countUsers=Utilizadores::find()
+            ->where(['=','parceiro_id',$id])
+            ->count();
+        
+        if($countUsers>0) {
+            $countUser=Utilizadores::find()
+                ->where(['=','parceiro_id',$id])
+                ->asArray()->all();
+            $ids=ArrayHelper::getColumn($countUser,'id');
 
-    $countUser=Utilizadores::find()
-    ->where(['=','parceiro_id',$id])
-    ->asArray()->all();
-   $ids=ArrayHelper::getColumn($countUser,'id');
+            $profiles=Profile::find()
+                ->where(['IN','user_id',$ids])
+                ->andWhere(['<>','name',''])
+                ->orderBy('name ASC')
+                ->all();
+            echo "<option>-</option>";
+            foreach($profiles as $nomes)
+            { 
+                echo "<option value='".$nomes->id."'>".$nomes->name."</option>";
+            }
+        } else { 
+            echo "<option>-</option>";
+        }
+    }
 
-   $profiles=Profile::find()
-   ->where(['IN','user_id',$ids])
-   ->andWhere(['<>','name',''])
-   ->orderBy('name ASC')
-   ->all();
-    echo "<option>-</option>";
-      foreach($profiles as $nomes)
-          { echo "<option value='".$nomes->id."'>".$nomes->name."</option>";}
-                        }else
-                      { echo "<option>-</option>";}
-}
+    public function actionLocal($id)
+    {
+        $countUsers=Utilizadores::find()
+            ->where(['=','us_id',$id])
+            ->count();
 
-  
-  
- public function actionLocal($id)
-{
-  $countUsers=Utilizadores::find()
-  ->where(['=','us_id',$id])
-  ->count();
-  if($countUsers>0) {
+        if($countUsers>0) {
+            $countUser=Utilizadores::find()
+                ->where(['=','us_id',$id])
+                ->asArray()->all();
+            $ids=ArrayHelper::getColumn($countUser,'id');
 
-    $countUser=Utilizadores::find()
-    ->where(['=','us_id',$id])
-    ->asArray()->all();
-   $ids=ArrayHelper::getColumn($countUser,'id');
-
-   $profiles=Profile::find()
-   ->where(['IN','user_id',$ids])
-   ->andWhere(['<>','name',''])
-   ->orderBy('name ASC')
-   ->all();
-    echo "<option>-</option>";
-      foreach($profiles as $nomes)
-          { echo "<option value='".$nomes->id."'>".$nomes->name."</option>";}
-                        }else
-                      { echo "<option>-</option>";}
-}
+            $profiles=Profile::find()
+                ->where(['IN','user_id',$ids])
+                ->andWhere(['<>','name',''])
+                ->orderBy('name ASC')
+                ->all();
+            echo "<option>-</option>";
+            foreach($profiles as $nomes)
+            { 
+                echo "<option value='".$nomes->id."'>".$nomes->name."</option>";
+            }
+        }else { 
+            echo "<option>-</option>";
+        }
+    }
 
     /**
      * Finds the ReferenciasDreams model based on its primary key value.
@@ -306,5 +277,62 @@ $dists = ArrayHelper::getColumn($distritos, 'district_code');
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+
+    /**
+     * Lists all Referencias Dreams Pendentes.
+     * @return mixed
+     */
+    public function actionPendentes()
+    {
+
+        $searchModel = new ReferenciasDreamsPendentesSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->andFilterWhere(['status_ref'=>0]); 
+
+        $model = new ReferenciasDreams();
+
+        /// update - Cancelamento em massa.
+
+        if ($model->load(Yii::$app->request->post())){
+            $cancelReason = $model->cancel_reason;
+            $otherReason = $model->other_reason;
+
+            if((isset($_POST['selection'])) && ($cancelReason <> '')){
+
+                if($cancelReason <> 5 || ($cancelReason == 5 && $otherReason <> '')){
+
+                    $myIds = $_POST['selection'];
+                    
+                    foreach ($myIds as $id){
+                        $model = $this->findModel($id);
+                        $model->status = 0;
+                        $model->cancel_reason = $cancelReason;
+                        $model->other_reason = $otherReason;
+                        $model->save();
+                    }
+
+                }
+
+            }
+            
+            return $this->render('pendentes', [
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+                $model->cancel_reason = '',
+                $model->other_reason = '',
+                'model' => $model,
+            ]);
+
+        }else {
+            return $this->render('pendentes', [
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+                'model' => $model,
+                'cancel_reason'=>'',
+            ]);
+        }
+
     }
 }

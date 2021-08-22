@@ -29,6 +29,8 @@ use app\models\ServicosDream;
 use app\models\TipoUs;
 use app\models\ServicosBeneficiados;
 use app\models\Bairros;
+use app\models\Curriculum;
+use app\models\CurriculumServicos;
 use app\models\Us;
 use app\models\EscolasDreams;
 use app\models\SubServicosDreams;
@@ -204,6 +206,12 @@ MaterialAsset::register($this);}
                                 <a href="<?php echo Url::toRoute('parceiros-tipo/index'); ?>"><i class="fa fa-plus-circle"  style="color:green;"></i> <span>Tipos de Parceirias<span class="badge pull-right"> <?php // ParceirosTipo::find()->count();?>
 </span></span></a>
                                 </li>
+                                <li>
+                                <a href="<?php echo Url::toRoute('curriculum/index'); ?>"><i class="fa fa-plus-circle"  style="color:green;"></i> <span>Curriculum<span class="badge pull-right"></span></span></a>
+                                </li>
+                                <li>
+                                <a href="<?php echo Url::toRoute('curriculum-servicos/index'); ?>"><i class="fa fa-plus-circle"  style="color:green;"></i> <span>Curriculum-Serviço<span class="badge pull-right"></span></span></a>
+                                </li>
 
                             </ul>
                         </li>
@@ -358,18 +366,39 @@ $ben=Beneficiarios::find()->where(['provin_code'=>5])->andWhere(['emp_status'=>1
                         </li>
 
      <li>
-		 <?php
-												  if(isset(Yii::$app->user->identity->provin_code)&&Yii::$app->user->identity->provin_code>0) {
-								echo				  Html::a(Yii::t('app', '<i class="fa fa-exchange"></i> <span>Gest&atilde;o de Refer&ecirc;ncias<small class="badge pull-right bg-yellow">
-   0 </small></span>'), ['referencias-dreams/index', 'id' => Yii::$app->user->identity->provin_code]); } else {
-												  
-	echo	Html::a(Yii::t('app', '<i class="fa fa-exchange"></i> <span>Gest&atilde;o de Refer&ecirc;ncias<small class="badge pull-right bg-yellow">
-   0 </small></span>'), ['referencias-dreams/index', 'id' => 5]);										  
-												  }
-		 
-		 ?>
-                             
-                        </li>            
+     <?php if (Yii::$app->user->identity->role==20) { ?>
+        <li class="treeview">
+            <a href="#" data-toggle="collapse" data-target="#referencias">
+
+                <i class="fa fa-exchange"></i>
+                <span>Refer&ecirc;ncias</span>
+                <i class="fa fa-angle-left pull-right"> </i>
+
+            </a>
+            <ul id="referencias" class="collapse">
+
+               <?php
+                    if(isset(Yii::$app->user->identity->provin_code)&&Yii::$app->user->identity->provin_code>0) 
+                    {
+                        echo Html::a(Yii::t('app', '<li><i class="fa fa-angle-double-right"></i> <span>Gest&atilde;o de Refer&ecirc;ncias<small class="badge pull-right bg-yellow"> 0 </small></span></li>'), ['referencias-dreams/index', 'id' => Yii::$app->user->identity->provin_code]); 
+                    } else {
+                        echo	Html::a(Yii::t('app', '<li><i class="fa fa-angle-double-right"></i> <span>Gest&atilde;o de Refer&ecirc;ncias<small class="badge pull-right bg-yellow"> 0 </small></span></li>'), ['referencias-dreams/index', 'id' => 5]);										  
+                    }
+                ?>
+                <li>
+                    <a href="<?php echo Url::toRoute('referencias-dreams/pendentes'); ?>"><i class="fa fa-angle-double-right"></i> Cancelamento de Refer&ecirc;ncias Pendentes </a>
+                </li>
+            </ul>
+        </li>
+        <?php } else {
+            if(isset(Yii::$app->user->identity->provin_code)&&Yii::$app->user->identity->provin_code>0) 
+            {
+                echo Html::a(Yii::t('app', '<i class="fa fa-exchange"></i> <span>Gest&atilde;o de Refer&ecirc;ncias<small class="badge pull-right bg-yellow"> 0 </small></span>'), ['referencias-dreams/index', 'id' => Yii::$app->user->identity->provin_code]); 
+            } else {
+                echo	Html::a(Yii::t('app', '<i class="fa fa-exchange"></i> <span>Gest&atilde;o de Refer&ecirc;ncias<small class="badge pull-right bg-yellow"> 0 </small></span>'), ['referencias-dreams/index', 'id' => 5]);										  
+            }
+        } ?>                             
+    </li>            
 
 
 
@@ -465,8 +494,14 @@ $ben=Beneficiarios::find()->where(['provin_code'=>5])->andWhere(['emp_status'=>1
                                    <li>
                                 <a href="<?php echo Url::toRoute('tipo-us/index'); ?>"><i class="fa fa-gears"  style="color:green;"></i> <span>Tipos de US<span class="badge pull-right"> <?= TipoUs::find()->count();?></span></span></a>
                                 </li>
-                        
-
+                                <li>
+                                <a href="<?php echo Url::toRoute('curriculum/index'); ?>"><i class="fa fa-gears"  style="color:green;"></i> <span>Curriculum<span class="badge pull-right"> <?= Curriculum::find()->count();?></span></span></a>
+                                </li>
+                                <li>
+                                <a href="<?php echo Url::toRoute('curriculum-servicos/index'); ?>">
+                                  <i class="fa fa-list-ol"  style="color:green;"></i> <span>Curriculum-Serviço
+                                  <span class="badge pull-right"> <?= CurriculumServicos::find()->count();?></span></span></a>
+                                </li>
                          
 
                       
@@ -556,18 +591,23 @@ $ben=Beneficiarios::find()->where(['provin_code'=>5])->andWhere(['emp_status'=>1
                                 <li><a href="<?php echo Url::toRoute('beneficiarios/filtros'); ?>">
                                   <i class="fa fa-angle-double-right"></i> FILTROS DREAMS</a>
                                 </li>
-<?php if (Yii::$app->user->identity->role==20) { ?>
+                            <?php if (Yii::$app->user->identity->role==20) { ?>
                                 <li><a href="<?php echo Url::toRoute('/benefits/index'); ?>">
                                   <i class="fa fa-angle-double-right"></i> FILTROS MENSAL</a>
                                 </li>
                               <li><a href="<?php echo Url::toRoute('/utilizadores/index'); ?>">
                                   <i class="fa fa-angle-double-right"></i> FILTROS UTILIZADORES</a>
                                 </li>
+                                <li>
+                                    <?= Html::a(Yii::t('app', '<i class="fa fa-angle-double-right"></i> PEPFAR MER 2.5 AGYW_PREV'), ['/beneficiarios/relatorioagyw']) ?> 
+                                </li>
 
-<?php } ?>
-                                                            	 <li>
+                            <?php } ?>  
+                                               	 
+                        <li>
                                <?= Html::a(Yii::t('app', '<i class="fa fa-angle-double-right"></i> FY19'), ['/beneficiarios/relatoriofy19','id'=>5]) ?> 
                         </li>
+                        
 
 		<li class="treeview">
                             <a href="#"  data-toggle="collapse" data-target="#apr">
@@ -581,7 +621,7 @@ $ben=Beneficiarios::find()->where(['provin_code'=>5])->andWhere(['emp_status'=>1
                               <li>
                                 <?= Html::a(Yii::t('app', '<i class="fa fa-angle-double-right"></i> Q2'), ['/beneficiarios/relatoriofy20q2']) ?>
                              </li>
-
+                             
                           </ul>
                             </ul>
     </li>

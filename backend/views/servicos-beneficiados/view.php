@@ -26,6 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             //'id',
+            'tipoServicos.name',
             'servicos.name',
             'beneficiario.member_id',
             'us.name',
@@ -44,6 +45,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 </div>
   <p>
+    <?= Html::a('<i class="glyphicon glyphicon-backward"></i>', ['beneficiarios/' . $model->beneficiario_id ], ['class' => 'btn btn-warning']) ?> 
         <?= Html::a('<i class="fa fa-pensil"></i> Actualizar', ['servicos-beneficiados/update.dreams?m='.$model->beneficiario_id.'&id='.$model->id], ['class' => 'btn btn-primary']) ?>
   <?php Html::a('<i class="fa fa-pensil"></i> Actualizar', ['servicos-beneficiados/update.dreams?m='.$model->beneficiario_id.'&id='.$model->id], ['data-toggle'=>'modal', 'data-target'=>'#myModal', 'class' => 'btn btn-primary']) ?>
 

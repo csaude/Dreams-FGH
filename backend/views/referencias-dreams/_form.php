@@ -30,8 +30,7 @@ $pontos= new ReferenciasPontosDreams();
 
 <div class="referencias-dreams-form">
 
-
-    <div class="panel-body">
+  <div class="panel-body">
 
 
 
@@ -48,94 +47,80 @@ $pontos= new ReferenciasPontosDreams();
 
     <div class="row">
       <div class="col-lg-4">
-    <?php
-    if($model->isNewRecord) {
-$conta = 1+ReferenciasDreams::find()->where(['criado_por' => Yii::$app->user->identity->id])->count();
-if (strlen(utf8_decode($conta))==1) {$conta='00'.$conta;}
-elseif(strlen(utf8_decode($conta))==1) { $conta='0'.$conta;}
+        <?php
+        if($model->isNewRecord) {
+          $conta = 1+ReferenciasDreams::find()->where(['criado_por' => Yii::$app->user->identity->id])->count();
+          if (strlen(utf8_decode($conta))==1) {
+            $conta='00'.$conta;
+          }
+          elseif(strlen(utf8_decode($conta))==1) { 
+            $conta='0'.$conta;
+          }
 
-  echo  $form->field($model, 'nota_referencia')
-    ->textInput(['maxlength' => true, 'value'=>'REFDR'.Yii::$app->user->identity->id.Yii::$app->user->identity->provin_code.$conta,'readOnly'=> true]);
+          echo  $form->field($model, 'nota_referencia')
+            ->textInput(['maxlength' => true, 'value'=>'REFDR'.Yii::$app->user->identity->id.Yii::$app->user->identity->provin_code.$conta,'readOnly'=> true]);
+        } else {
+          echo  $form->field($model, 'nota_referencia')->textInput(['readOnly'=> true]);
+        }
+        ?>
+    </div>
 
-} else {
- echo  $form->field($model, 'nota_referencia')->textInput(['readOnly'=> true]);
+    <div class="col-lg-4">
 
-}
-    ?>
- </div>
+      <?php if(!$model->isNewRecord) {
+      } else {
+      }?>
 
+      <?php
+        if($model->isNewRecord) {
+          if (isset($_REQUEST['ben']) && $_REQUEST['ben'] > 0) {
+            $bens=Beneficiarios::find() ->where(['=','id',$_REQUEST['ben']])->count();
+            if($bens>0) {
+      ?>
+              <label class="control-label" for="referenciasdreams-beneficiario_id">Nº de Beneficiário</label>
 
+              <?php
+                echo  Html::activeDropDownList($model, 'beneficiario_id', ArrayHelper::map(Beneficiarios::find()
+                        ->where(['=','id',$_REQUEST['ben']])
+                        ->all(), 'emp_number', 'member_id'),
+                        ['class' => 'form-control','readOnly'=> true]);
+            } else {
+                echo $form->field($model, 'beneficiario_id')->textInput(['readOnly' => true, 'placeholder'=>'000001']);
+            }
+          }
+          else {
+            echo $form->field($model, 'beneficiario_id')->textInput(['maxlength' => true, 'placeholder'=>'000001']);
+          }
+        }
+        else { ?>
+          <label class="control-label" for="referenciasdreams-beneficiario_id">Nº de Beneficiário</label>
 
- <div class="col-lg-4">
-
-<?php if(!$model->isNewRecord) {
-
-
-} else {
-
-
-
-}?>
-
-
-
-    <?php
-
-if($model->isNewRecord) {
-
-if (isset($_REQUEST['ben'])&&($_REQUEST['ben']>0)) {
-
- $bens=Beneficiarios::find() ->where(['=','id',$_REQUEST['ben']])->count();
-if($bens>0) {
-  ?>
-<label class="control-label" for="referenciasdreams-beneficiario_id">Nº de Beneficiário</label>
-
-<?php
-echo  Html::activeDropDownList($model, 'beneficiario_id', ArrayHelper::map(Beneficiarios::find()
-     ->where(['=','id',$_REQUEST['ben']])
-     ->all(), 'emp_number', 'member_id'),
-     ['class' => 'form-control','readOnly'=> true]);
-   } else {
-echo $form->field($model, 'beneficiario_id')->textInput(['readOnly' => true, 'placeholder'=>'000001']);
-
-   }
-
-   }
- else {
-echo $form->field($model, 'beneficiario_id')->textInput(['maxlength' => true, 'placeholder'=>'000001']);
-
- }
-
-}
-   else { ?>
-     <label class="control-label" for="referenciasdreams-beneficiario_id">Nº de Beneficiário</label>
-
-  <?= Html::activeDropDownList($model, 'beneficiario_id', ArrayHelper::map(Beneficiarios::find()
-    ->where(['=','provin_code',Yii::$app->user->identity->provin_code])
-    ->all(), 'emp_number', 'member_id'),
-    ['class' => 'form-control','readOnly'=> true]);
-}
-     ?>
-</div>
+          <?= Html::activeDropDownList($model, 'beneficiario_id', ArrayHelper::map(Beneficiarios::find()
+            ->where(['=','provin_code',Yii::$app->user->identity->provin_code])
+            ->all(), 'emp_number', 'member_id'),
+            ['class' => 'form-control','readOnly'=> true]);
+        }
+      ?>
+    </div>
 		<div class="col-lg-4">
-  <label class="control-label" for="referenciasdreams-referido_por">Referente</label>
+      <label class="control-label" for="referenciasdreams-referido_por">Referente</label>
 
-  <?php
-if($model->isNewRecord) { ?>
-   <?= Html::activeDropDownList($model, 'referido_por', ArrayHelper::map(Profile::find()
-   ->where(['=','user_id',Yii::$app->user->identity->id])
-   ->all(), 'user_id', 'name'),
-   ['class' => 'form-control','readOnly'=> true]); ?>
-<?php } else {
+      <?php
+        if($model->isNewRecord) { ?>
+          <?= Html::activeDropDownList($model, 'referido_por', ArrayHelper::map(Profile::find()
+          ->where(['=','user_id',Yii::$app->user->identity->id])
+          ->all(), 'user_id', 'name'),
+          ['class' => 'form-control','readOnly'=> true]); ?>
+          <?php 
+          } else {
 
-echo  Html::activeDropDownList($model, 'referido_por', ArrayHelper::map(Profile::find()
- ->where(['=','user_id',$model->referido_por])
- ->all(), 'user_id', 'name'),
- ['class' => 'form-control','readOnly'=> true]);
-}
- ?>
-
-</div>
+            echo  Html::activeDropDownList($model, 'referido_por', ArrayHelper::map(Profile::find()
+            ->where(['=','user_id',$model->referido_por])
+            ->all(), 'user_id', 'name'),
+            ['class' => 'form-control','readOnly'=> true]);
+        }
+      ?>
+    </div>
 
  <div class="col-lg-6">
 
@@ -166,19 +151,19 @@ echo  Html::activeDropDownList($model, 'referido_por', ArrayHelper::map(Profile:
 			</div>
 			<div class="col-lg-4">
 
-				   <?php $form->field($model, 'projecto')->widget(Select2::classname(), [
+		<?php /* $form->field($model, 'projecto')->widget(Select2::classname(), [
        'data' => ArrayHelper::map(Organizacoes::find()
        ->where(['>','distrito_id',0])
        ->asArray()->all(), 'abreviatura', 'name')
    ], ['prompt' => '--','id' => 'projecto', 'onchange' => '$.post("notificar.dreams?id='.'"+$(this).val(), function(data) {
              $("select#referenciasdreams-notificar_ao").html(data);
-          });']);
+          });']); */
    ?>
 
   <?= $form->field($model, 'projecto')
 	       ->dropDownList(['data' => ArrayHelper::map(Organizacoes::find()
          ->where(['>','distrito_id',0])
-         ->asArray()->all(), 'abreviatura', 'name')],['prompt' => '--',
+         ->asArray()->all(), 'id', 'name')],['prompt' => '--',
           'onchange' => '$.post("notificar.dreams?id='.'"+$(this).val(), function(data) {
              $("select#referenciasdreams-notificar_ao").html(data);
           });',
@@ -288,17 +273,68 @@ $ids = ArrayHelper::getColumn($users, 'id');
 	
 	 echo $form->field($model, 'status')->radioButtonGroup([1 => ' Activo']);
 	//$model->status = 1;
-} else {
+  } else {
 	   
-   echo $form->field($model, 'status')->radioButtonGroup([1 => ' Activo', '0' => ' Cancelado']); } ?>
-	   
+  //  echo $form->field($model, 'status')->radioButtonGroup(['1' => ' Activo', '0' => ' Cancelado'], ['onchange' => 'var valor2 = this.value; if(valor2==1){$("#teste1").hide(1000);}else{$("#teste1").show(1000);}']); 
+  ?>
+  <div class="row">
+    <div class="col-lg-4">
+      <?= $form->field($model, 'status')->widget(Select2::classname(),['data' => ['1' => ' Activo', '0' => ' Cancelado'],
+                                                                        'options' => [
+                                                                            'onchange' => '
+                                                                              var valor2 = this.value; 
+                                                                              if(valor2==1){
+                                                                                $("#teste1").hide(1000);
+                                                                                $("#teste2").hide(1000);
+                                                                                $("#btnSubmit").attr("disabled", false);
+                                                                              }else{
+                                                                                $("#teste1").show(1000);
+                                                                                $("#btnSubmit").attr("disabled", "disabled");
+                                                                              }', 
+                                                                        'placeholder' => '--Selecione Aqui--'],'pluginOptions' => ['allowClear' => true],]); ?>
+    </div>
+    <div class="col-lg-4" id="teste1"> 
+      <div class="form-group required">
+        <?=  $form->field($model, 'cancel_reason')->widget(Select2::classname(),['data' => ['1' => 'Serviço não provido nos últimos 6 meses','2' => 'Beneficiária não encontrada','3' => 'Abandono','4' => 'Beneficiária recusou o serviço','5' => 'Outro Motivo'],
+                                                                                  'options' => [
+                                                                                      'onchange' => '
+                                                                                          var valor2 = this.value; 
+                                                                                          if(valor2==5){
+                                                                                            $("#teste2").show(1000);
+                                                                                            $("#btnSubmit").attr("disabled", "disabled");
+                                                                                          }else{
+                                                                                            $("#teste2").hide(1000);
+                                                                                            $("#btnSubmit").attr("disabled", false);
+                                                                                          }
+                                                                                          if(valor2==="")
+                                                                                          {
+                                                                                            $("#btnSubmit").attr("disabled", "disabled");
+                                                                                          }
+                                                                                          ', 
+                                                                                'placeholder' => '--Selecione Aqui--'],'pluginOptions' => ['allowClear' => true],]); ?>
+      </div>
+    </div>
+    <div class="col-lg-4" id="teste2">
+      <div class="form-group required">
+        <?= $form->field($model, 'other_reason')->textArea(['maxlength' => true, 'rows' => '3',
+                                                            'oninput'=>'
+                                                              var valor2 = this.value; 
+                                                              if(valor2===""){  
+                                                                $("#btnSubmit").attr("disabled", "disabled");                   
+                                                              }else{
+                                                                $("#btnSubmit").attr("disabled", false);
+                                                              }
+                                                            ']) ?>
+      </div>
+    </div>
+  </div>
+  <?php
+  } ?>
    </div>
    </div>
-
-
 
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Prosseguir >>') : Yii::t('app', 'Actualizar'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Prosseguir >>') : Yii::t('app', 'Actualizar'), ['id'=>'btnSubmit', 'class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
@@ -315,10 +351,17 @@ $ids = ArrayHelper::getColumn($users, 'id');
 
     <?php } ?>
 
-
-
-
 </div>
 
 </div>
 
+<script type="text/javascript">
+  window.onload = function () {
+    $(document).ready(function() {
+      $("#teste1").hide(1000);
+      $("#teste2").hide(1000);
+    });
+  }
+
+
+</script>

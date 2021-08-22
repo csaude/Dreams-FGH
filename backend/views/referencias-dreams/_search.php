@@ -2,28 +2,78 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use kartik\daterange\DateRangePicker;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\ReferenciasDreamsSearch */
+/* @var $model app\models\ReferenciasPendentesDreamsSearch */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
 <div class="referencias-dreams-search">
 
     <?php $form = ActiveForm::begin([
-        'action' => ['index'],
+        'action' => ['pendentes'],
         'method' => 'get',
-    ]); ?>
+    ]); 
+    ?>
 
-    <?= $form->field($model, 'id') ?>
+    <div class="row">
 
-    <?= $form->field($model, 'beneficiario_id') ?>
+        <div class="col-lg-6">
+            <?= 
+                $form->field($model, 'start', [
+                'options'=>['class'=>'input-group drp-container']
+                ])->widget(DateRangePicker::classname(), [
+                'useWithAddon'=>true,
+                'readonly' => true,
+                'pluginOptions'=>[
+                    'language'=>'pt',
+                    'singleDatePicker'=>true,
+                    'hideInput'=>true,
+                    'showDropdowns'=>false,
+                    'maxYear' => 2025,
+                    'minYear' => 2017,
+                    'autoclose'=>true,
+                    'locale' => ['format' => 'YYYY-MM-DD'],
+                ]
+                ])->label('Data Inicio');
 
-    <?= $form->field($model, 'nota_referencia') ?>
+            ?>
+        </div>
 
-    <?= $form->field($model, 'name') ?>
+        <div class="col-lg-6">
+            <?= 
 
-    <?= $form->field($model, 'projecto') ?>
+                $form->field($model, 'end', [
+                'options'=>['class'=>'input-group drp-container']
+                ])->widget(DateRangePicker::classname(), [
+                'useWithAddon'=>true,
+                'readonly' => true,
+                'pluginOptions'=>[
+                    'language'=>'pt',
+                    'singleDatePicker'=>true,
+                    'hideInput'=>true,
+                    'showDropdowns'=>false,
+                    'maxYear' => 2025,
+                    'minYear' => 2017,
+                    'autoclose'=>true,
+                    'locale' => ['format' => 'YYYY-MM-DD'],
+                ]
+                ])->label('Data Fim');
+
+            ?>
+        </div>
+    </div>
+
+    <?php // $form->field($model, 'id') ?>
+
+    <?php // $form->field($model, 'beneficiario_id') ?>
+
+    <?php // $form->field($model, 'nota_referencia') ?>
+
+    <?php // $form->field($model, 'name') ?>
+
+    <?php // $form->field($model, 'projecto') ?>
 
     <?php // echo $form->field($model, 'referido_por') ?>
 
@@ -37,7 +87,7 @@ use yii\widgets\ActiveForm;
 
     <?php // echo $form->field($model, 'actualizado_por') ?>
 
-    <?php // echo $form->field($model, 'criado_em') ?>
+    <?php // echo $form->field($model) ?>
 
     <?php // echo $form->field($model, 'actualizado_em') ?>
 
@@ -45,9 +95,10 @@ use yii\widgets\ActiveForm;
 
     <?php // echo $form->field($model, 'user_location2') ?>
 
-    <div class="form-group">
+    <div class="form-group pull-right">
+        </br>
         <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton(Yii::t('app', 'Reset'), ['class' => 'btn btn-default']) ?>
+        <!-- <?= Html::resetButton(Yii::t('app', 'Reset'), ['class' => 'btn btn-default']) ?> -->
     </div>
 
     <?php ActiveForm::end(); ?>

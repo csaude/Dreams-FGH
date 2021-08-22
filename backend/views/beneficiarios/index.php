@@ -626,7 +626,7 @@ foreach ($cliservicos as $core) {
    ->count();
 
 ?>
-
+,
 {
    value: <?= $cliServices?>,
    color: "#F7464A"
