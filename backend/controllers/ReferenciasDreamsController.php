@@ -272,6 +272,7 @@ class ReferenciasDreamsController extends Controller
      */
     public function actionPendentes()
     {
+
         $searchModel = new ReferenciasDreamsPendentesSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->andFilterWhere(['status_ref'=>0]); 
@@ -282,27 +283,34 @@ class ReferenciasDreamsController extends Controller
 
         if ($model->load(Yii::$app->request->post())){
 
-            if(isset($_POST['selection'])){
-                
-                $myIds = $_POST['selection'];
-                foreach ($myIds as $id){
-                    $model = $this->findModel($id);
-                    $model->status = 0;
-                    $model->cancel_reason = $_POST['ReferenciasDreams']['cancel_reason'];
-                    if($model->cancel_reason == 5){
+            if((isset($_POST['selection'])) && ($_POST['ReferenciasDreams']['cancel_reason']<>'')){
+
+                if($_POST['ReferenciasDreams']['cancel_reason']<>5){
+
+                    $myIds = $_POST['selection'];
+                    foreach ($myIds as $id){
+                        $model = $this->findModel($id);
+                        $model->status = 0;
+                        $model->cancel_reason = $_POST['ReferenciasDreams']['cancel_reason'];
+                        // if($model->cancel_reason == 5){
                         $model->other_reason = $_POST['ReferenciasDreams']['other_reason'];
+                        // }
+                        
+                        $model->save();
                     }
-                    
-                    $model->save();
-                    // return $this->redirect(['view', 'id' => $model->id]);
+
                 }
 
             }
-
             
             return $this->render('pendentes', [
+
                 'searchModel' => $searchModel,
                 'dataProvider' => $dataProvider,
+
+                $model->cancel_reason = '',
+                $model->other_reason = '',
+
                 'model' => $model,
             ]);
 
@@ -311,6 +319,7 @@ class ReferenciasDreamsController extends Controller
                 'searchModel' => $searchModel,
                 'dataProvider' => $dataProvider,
                 'model' => $model,
+                'cancel_reason'=>'',
             ]);
         }
 
