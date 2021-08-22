@@ -279,16 +279,47 @@ $ids = ArrayHelper::getColumn($users, 'id');
   ?>
   <div class="row">
     <div class="col-lg-4">
-      <?= $form->field($model, 'status')->widget(Select2::classname(),['data' => ['1' => ' Activo', '0' => ' Cancelado'],'options' => ['onchange' => 'var valor2 = this.value; if(valor2==1){$("#teste1").hide(1000);$("#teste2").hide(1000);}else{$("#teste1").show(1000);}', 'placeholder' => '--Selecione Aqui--'],'pluginOptions' => ['allowClear' => true],]); ?>
+      <?= $form->field($model, 'status')->widget(Select2::classname(),['data' => ['1' => ' Activo', '0' => ' Cancelado'],
+                                                                        'options' => [
+                                                                            'onchange' => '
+                                                                              var valor2 = this.value; 
+                                                                              if(valor2==1){
+                                                                                $("#teste1").hide(1000);
+                                                                                $("#teste2").hide(1000);
+                                                                                $("#btnSubmit").attr("disabled", false);
+                                                                              }else{
+                                                                                $("#teste1").show(1000);
+                                                                                $("#btnSubmit").attr("disabled", "disabled");
+                                                                              }', 
+                                                                        'placeholder' => '--Selecione Aqui--'],'pluginOptions' => ['allowClear' => true],]); ?>
     </div>
     <div class="col-lg-4" id="teste1"> 
       <div class="form-group required">
-        <?=  $form->field($model, 'cancel_reason')->widget(Select2::classname(),['data' => ['1' => 'Serviço não provido nos últimos 6 meses','2' => 'Beneficiária não encontrada','3' => 'Abandono','4' => 'Beneficiária recusou o serviço','5' => 'Outro Motivo'],'options' => ['onchange' => 'var valor2 = this.value; if(valor2==5){$("#teste2").show(1000);}else{$("#teste2").hide(1000);}', 'placeholder' => '--Selecione Aqui--'],'pluginOptions' => ['allowClear' => true],]); ?>
+        <?=  $form->field($model, 'cancel_reason')->widget(Select2::classname(),['data' => ['1' => 'Serviço não provido nos últimos 6 meses','2' => 'Beneficiária não encontrada','3' => 'Abandono','4' => 'Beneficiária recusou o serviço','5' => 'Outro Motivo'],
+                                                                                  'options' => [
+                                                                                      'onchange' => '
+                                                                                          var valor2 = this.value; 
+                                                                                          if(valor2==5){
+                                                                                            $("#teste2").show(1000);
+                                                                                            $("#btnSubmit").attr("disabled", "disabled");
+                                                                                          }else{
+                                                                                            $("#teste2").hide(1000);
+                                                                                            $("#btnSubmit").attr("disabled", false);
+                                                                                          }', 
+                                                                                'placeholder' => '--Selecione Aqui--'],'pluginOptions' => ['allowClear' => true],]); ?>
       </div>
     </div>
     <div class="col-lg-4" id="teste2">
       <div class="form-group required">
-        <?= $form->field($model, 'other_reason')->textArea(['maxlength' => true, 'rows' => '3']) ?>
+        <?= $form->field($model, 'other_reason')->textArea(['maxlength' => true, 'rows' => '3',
+                                                            'oninput'=>'
+                                                              var valor2 = this.value; 
+                                                              if(valor2===""){  
+                                                                $("#btnSubmit").attr("disabled", "disabled");                   
+                                                              }else{
+                                                                $("#btnSubmit").attr("disabled", false);
+                                                              }
+                                                            ']) ?>
       </div>
     </div>
   </div>
@@ -298,7 +329,7 @@ $ids = ArrayHelper::getColumn($users, 'id');
    </div>
 
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Prosseguir >>') : Yii::t('app', 'Actualizar'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Prosseguir >>') : Yii::t('app', 'Actualizar'), ['id'=>'btnSubmit', 'class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
@@ -326,4 +357,6 @@ $ids = ArrayHelper::getColumn($users, 'id');
       $("#teste2").hide(1000);
     });
   }
+
+
 </script>
