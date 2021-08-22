@@ -128,12 +128,14 @@ $this->params['breadcrumbs'][] = $this->title;
                   <div class="form-group required">
                     <div class="col-lg-6" id="other_reason"> 
                       <?= $form->field($model, 'other_reason')->textArea(['maxlength' => true, 'rows' => '3',
-                      'oninput' => 'validacao();']) ?> </div>
+                                                               'oninput'=>'validacao()'           
+                                                              ]) ?> 
+                    </div>
                 </div>
               </div>
                                
                 <div class="form-group pull-right">
-                    <?= Html::submitButton('SALVAR' , ['class' => 'btn btn-success','id'=>'SALVAR']) ?>
+                    <?= Html::submitButton('SALVAR' , ['class' => 'btn btn-success','id'=>'SALVAR', 'disabled'=>true]) ?>
                     <?= Html::a('Cancelar', ['index'], ['class' => 'btn btn-warning']) ?>
                 </div>
             </div>
@@ -310,7 +312,7 @@ $utils=Profile::find()->where(['=','id',$model->notificar_ao])->all();
       $("#cancel_reason").value = "";
       $("#other_reason").value = "";
       $("#other_reason").hide(1000);
-      $("#SALVAR").attr("disabled", "disabled");
+      //$("#SALVAR").attr("disabled", "disabled");
     });
   }
 
@@ -319,8 +321,8 @@ $utils=Profile::find()->where(['=','id',$model->notificar_ao])->all();
     if(reason===""){  
       $("#SALVAR").attr("disabled", "disabled");                     
     }else{
-      $("#SALVAR").prop("disabled", false);
+      $("#SALVAR").attr("disabled", false);
     }
-})
+}
 
 </script>
