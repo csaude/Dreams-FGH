@@ -106,12 +106,14 @@ $this->params['breadcrumbs'][] = $this->title;
 
               <div class="row">
                 <div class="col-lg-6">  
-
+                <div class="form-group required">
                   <?=  $form->field($model, 'cancel_reason')->widget(Select2::classname(),['data' => ['1' => 'Serviço não provido nos últimos 6 meses','2' => 'Beneficiária não encontrada','3' => 'Abandono','4' => 'Beneficiária recusou o serviço','5' => 'Outro Motivo'],'options' => ['onchange' => 'var valor2 = this.value; if(valor2==5){$("#other_reason").show(1000);}else{$("#other_reason").hide(1000);}', 'placeholder' => '--Selecione Aqui--'],'pluginOptions' => ['allowClear' => true],]); ?>
-
+                  </div>
                 </div>
 
-                  <div class="col-lg-6" id="other_reason"> <?= $form->field($model, 'other_reason')->textArea(['maxlength' => true, 'rows' => '3']) ?> </div>
+                  <div class="form-group required">
+                    <div class="col-lg-6" id="other_reason"> <?= $form->field($model, 'other_reason')->textArea(['maxlength' => true, 'rows' => '3']) ?> </div>
+                </div>
               </div>
                                
                 <div class="form-group pull-right">
