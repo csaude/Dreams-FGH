@@ -142,8 +142,22 @@ class ReferenciasDreamsController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+            $status =  $model->status;
+            $cancelReason = $model->cancel_reason;
+            $otherReason =  $model->other_reason;
+
+            if ($status == '0' && ($cancelReason == '' || $cancelReason == 5 && $otherReason == '')){
+                return $this->render('update', [
+                    $model->cancel_reason = '',
+                    $model->other_reason = '',
+                    'model' => $model,
+                ]);
+            }
+
+            $model->save();
             return $this->redirect(['view', 'id' => $model->id]);
+           
         } else {
             return $this->render('update', [
                 'model' => $model,
@@ -282,20 +296,16 @@ class ReferenciasDreamsController extends Controller
         /// update - Cancelamento em massa.
 
         if ($model->load(Yii::$app->request->post())){
+            $cancelReason = $model->cancel_reason;
+            $otherReason = $model->other_reason;
 
-            if((isset($_POST['selection'])) && ($_POST['ReferenciasDreams']['cancel_reason']<>'')){
+            if((isset($_POST['selection'])) && ($cancelReason <> '')){
 
-                if($_POST['ReferenciasDreams']['cancel_reason']<>5){
+                if($cancelReason <> 5 || ($cancelReason == 5 && $otherReason <> '')){
 
                     $myIds = $_POST['selection'];
                     foreach ($myIds as $id){
-                        $model = $this->findModel($id);
-                        $model->status = 0;
-                        $model->cancel_reason = $_POST['ReferenciasDreams']['cancel_reason'];
-                        // if($model->cancel_reason == 5){
-                        $model->other_reason = $_POST['ReferenciasDreams']['other_reason'];
-                        // }
-                        
+                        $model = $this->findModel($id);                        
                         $model->save();
                     }
 
@@ -304,13 +314,10 @@ class ReferenciasDreamsController extends Controller
             }
             
             return $this->render('pendentes', [
-
                 'searchModel' => $searchModel,
                 'dataProvider' => $dataProvider,
-
                 $model->cancel_reason = '',
                 $model->other_reason = '',
-
                 'model' => $model,
             ]);
 
