@@ -6,8 +6,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\FaixaEtariaServico */
 
-$this->title = Yii::t('app', 'Create Curriculum Servico');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Curriculum Servicos'), 'url' => ['index']];
+$this->title = Yii::t('app', 'Create Curriculum Serviços');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Curriculum Serviço'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="curriculum-servico-create">

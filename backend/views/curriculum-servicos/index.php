@@ -9,7 +9,7 @@ use app\models\ServicosDream;
 use app\models\Curriculum;
 
 
-$this->title = Yii::t('app', 'Curriculum Servicos');
+$this->title = Yii::t('app', 'Curriculum Serviços');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
