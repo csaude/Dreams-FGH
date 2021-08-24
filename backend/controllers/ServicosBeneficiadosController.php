@@ -8,6 +8,7 @@ use app\models\ServicosBeneficiadosSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\helpers\ArrayHelper;
 
 
 use yii\filters\AccessControl;
@@ -15,6 +16,7 @@ use common\models\User;
 use common\components\AccessRule;
 use app\models\SubServicosDreams;
 use app\models\ServicosDream;
+use app\models\ReferenciasServicosReferidos;
 /**
  * ServicosBeneficiadosController implements the CRUD actions for ServicosBeneficiados model.
  */
@@ -153,11 +155,33 @@ class ServicosBeneficiadosController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
 
-if($model->save()) {
-Yii::$app->db->close();
-Yii::$app->db->open();
+            if($model->save()) {
+            Yii::$app->db->close();
+            Yii::$app->db->open();
+
+            if(isset($_GET['atender']) && isset($_GET['m']) && $_GET['m'] > 0 && $_GET['atender'] == sha1(1)){
+                $referencia_id = explode('.', $_GET['rfid'])[0];
+                $query = ReferenciasServicosReferidos::find()
+                    ->where(['=','referencia_id',$referencia_id])
+                    ->orderBy('id ASC')
+                    ->all();
+                $servs=ArrayHelper::getColumn($query,'servico_id');
+                $conta= ServicosBeneficiados::find()
+                    ->where(['=','beneficiario_id',$model->beneficiario_id])
+                    ->andWhere(['status' => 1])
+                    ->andWhere(['IN','servico_id', $servs])
+                    ->exists();
+                    if($conta>0) {
+                    // UPDATE
+                        $connection = Yii::$app->db;
+                        $connection->createCommand()
+                        ->update('app_dream_referencias', ['status_ref' => 1],['id'=>$referencia_id])
+                        ->execute();
+                    }
+            }
+
             return $this->redirect(['beneficiarios/view', 'id' => $model->beneficiario_id]);
-}
+        }
 
         } else {
            // return $this->renderAjax('create', [
