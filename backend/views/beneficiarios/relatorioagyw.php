@@ -136,3 +136,14 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 
 <?php ActiveForm::end(); ?>
+
+
+
+<script type="text/javascript">
+  window.onload = function () {
+    $('#provinces').on('krajeeselect2:selectall krajeeselect2:unselectall',function (e) {
+    $('#provinces').trigger('select2:select');
+    });
+  } 
+
+</script>
