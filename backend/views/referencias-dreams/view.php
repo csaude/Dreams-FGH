@@ -194,7 +194,7 @@ if($contas>0) {?>
   foreach($query as $query) {   ?>
 
   <tr>
-  <td class='data_pagamento'> <?= date('d-m-Y', strtotime($query->data_beneficio)) ?>  </td>
+  <td class='data_pagamento'> <?= $query->data_beneficio ?>  </td>
   <td  class='quota_id'> <?= $query->servicos['name']; ?> </td>
   <td  class='quota_id'> <?= $query->receptor['name']; ?> </td>
   <td class='status'>
