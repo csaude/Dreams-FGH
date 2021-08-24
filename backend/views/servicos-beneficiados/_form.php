@@ -137,7 +137,7 @@ if (isset($_REQUEST['ts'])&&($_REQUEST['ts']>0)) {echo Html::activeDropDownList(
 	<div class="col-lg-4"> 
 	<?php // $form->field($model, 'resultado')->textInput();
 ?> 
-
+    
 <?=
   $form->field($model, 'data_beneficio', [
     ])->widget(
@@ -151,6 +151,7 @@ if (isset($_REQUEST['ts'])&&($_REQUEST['ts']>0)) {echo Html::activeDropDownList(
               'format' => 'dd/mm/yyyy'
           ]
   ]);
+
 
 ?>
 
