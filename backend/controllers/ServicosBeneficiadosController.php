@@ -153,11 +153,13 @@ class ServicosBeneficiadosController extends Controller
     {
         $model = new ServicosBeneficiados();
 
+        
+
         if ($model->load(Yii::$app->request->post())) {
 
-            if($model->save()) {
-            Yii::$app->db->close();
-            Yii::$app->db->open();
+
+
+            $model->save();
 
             if(isset($_GET['atender']) && isset($_GET['m']) && $_GET['m'] > 0 && $_GET['atender'] == sha1(1)){
                 $referencia_id = explode('.', $_GET['rfid'])[0];
@@ -173,15 +175,16 @@ class ServicosBeneficiadosController extends Controller
                     ->exists();
                     if($conta>0) {
                     // UPDATE
-                        $connection = Yii::$app->db;
-                        $connection->createCommand()
-                        ->update('app_dream_referencias', ['status_ref' => 1],['id'=>$referencia_id])
-                        ->execute();
+
+                        $command = Yii::$app->db->createCommand();
+                        $command->update('app_dream_referencias', array(
+                            'status_ref'=>1,
+                        ), 'id=:id', array(':id'=>$referencia_id))->execute();
+
                     }
             }
 
             return $this->redirect(['beneficiarios/view', 'id' => $model->beneficiario_id]);
-        }
 
         } else {
            // return $this->renderAjax('create', [
@@ -189,6 +192,8 @@ class ServicosBeneficiadosController extends Controller
                 'model' => $model,
             ]);
         }
+
+        
     }
 
     /**
