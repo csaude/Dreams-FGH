@@ -180,44 +180,44 @@ $this->params['breadcrumbs'][] = $this->title;
                 ),
               ],
 
-              [
-                'attribute'=>'status_ref',
-                'format' => 'html',
-                'value' => function ($model) {
-                  return  $model->status_ref==0? '<font color="red">Pendente</font>':'<font color="green"><b>Atendido</b></font>';
-                },
-                'filter'=>array("1"=>"Atendido","0"=>"Pendente"),
-              ],
+              // [
+              //   'attribute'=>'status_ref',
+              //   'format' => 'html',
+              //   'value' => function ($model) {
+              //     return  $model->status_ref==0? '<font color="red">Pendente</font>':'<font color="green"><b>Atendido</b></font>';
+              //   },
+              //   'filter'=>array("1"=>"Atendido","0"=>"Pendente"),
+              // ],
 
               // Comentado para fixar o bug que mistura referências activas e pendentes (o código acima é suficiente para este filtro)
               // TODO Remover este código depois da próxima release de 23 de Agosto de 2021
 
-              // ['attribute'=> 'status_ref',
-              //   'format' => 'html',
-              //   'value' => function ($model) {
-              //     $query = ReferenciasServicosReferidos::find()
-              //     ->where(['=','referencia_id',$model->id])
-              //     ->orderBy('id ASC')
-              //     ->all();
-              //     $servs=ArrayHelper::getColumn($query,'servico_id');
-              //     $conta= ServicosBeneficiados::find()
-              //     ->where(['=','beneficiario_id',$model->beneficiario_id])
-              //     ->andWhere(['status' => 1])
-              //     ->andWhere(['IN','servico_id', $servs])
-              //     ->exists();
-              //     if($conta>0) {
-              //       // UPDATE
-              //       $connection = Yii::$app->db;
-              //       $connection->createCommand()
-              //       ->update('app_dream_referencias', ['status_ref' => 1],['id'=>$model->id])
-              //       ->execute();
-              //       return '<font color="green"><b>Atendido</b></font>'; 
-              //     } else
-              //     {
-              //       return '<font color="red">Pendente</font>';}
-              //     },
-              //     'filter'=>array("1"=>"Atendido","0"=>"Pendente"),
-              // ],
+              ['attribute'=> 'status_ref',
+                'format' => 'html',
+                'value' => function ($model) {
+                  $query = ReferenciasServicosReferidos::find()
+                  ->where(['=','referencia_id',$model->id])
+                  ->orderBy('id ASC')
+                  ->all();
+                  $servs=ArrayHelper::getColumn($query,'servico_id');
+                  $conta= ServicosBeneficiados::find()
+                  ->where(['=','beneficiario_id',$model->beneficiario_id])
+                  ->andWhere(['status' => 1])
+                  ->andWhere(['IN','servico_id', $servs])
+                  ->exists();
+                  if($conta>0) {
+                  //   // UPDATE
+                  //   $connection = Yii::$app->db;
+                  //   $connection->createCommand()
+                  //   ->update('app_dream_referencias', ['status_ref' => 1],['id'=>$model->id])
+                  //   ->execute();
+                    return '<font color="green"><b>Atendido</b></font>'; 
+                  } else
+                  {
+                    return '<font color="red">Pendente</font>';}
+                  },
+                  'filter'=>array("1"=>"Atendido","0"=>"Pendente"),
+              ],
             
             ['class' => 'yii\grid\ActionColumn'],
         ],
