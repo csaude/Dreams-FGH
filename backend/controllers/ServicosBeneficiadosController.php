@@ -158,6 +158,7 @@ class ServicosBeneficiadosController extends Controller
         if ($model->load(Yii::$app->request->post())) {
 
 
+
             $model->save();
 
             if(isset($_GET['atender']) && isset($_GET['m']) && $_GET['m'] > 0 && $_GET['atender'] == sha1(1)){
@@ -174,10 +175,12 @@ class ServicosBeneficiadosController extends Controller
                     ->exists();
                     if($conta>0) {
                     // UPDATE
+
                         $command = Yii::$app->db->createCommand();
                         $command->update('app_dream_referencias', array(
                             'status_ref'=>1,
                         ), 'id=:id', array(':id'=>$referencia_id))->execute();
+
                     }
             }
 
