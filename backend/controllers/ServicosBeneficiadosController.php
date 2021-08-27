@@ -17,6 +17,7 @@ use common\components\AccessRule;
 use app\models\SubServicosDreams;
 use app\models\ServicosDream;
 use app\models\ReferenciasServicosReferidos;
+use app\models\ReferenciasDreams;
 /**
  * ServicosBeneficiadosController implements the CRUD actions for ServicosBeneficiados model.
  */
@@ -153,35 +154,21 @@ class ServicosBeneficiadosController extends Controller
     {
         $model = new ServicosBeneficiados();
 
-        
-
         if ($model->load(Yii::$app->request->post())) {
-
-
-
             $model->save();
 
-            if(isset($_GET['atender']) && isset($_GET['m']) && $_GET['m'] > 0 && $_GET['atender'] == sha1(1)){
-                $referencia_id = explode('.', $_GET['rfid'])[0];
-                $query = ReferenciasServicosReferidos::find()
-                    ->where(['=','referencia_id',$referencia_id])
-                    ->orderBy('id ASC')
-                    ->all();
-                $servs=ArrayHelper::getColumn($query,'servico_id');
-                $conta= ServicosBeneficiados::find()
-                    ->where(['=','beneficiario_id',$model->beneficiario_id])
-                    ->andWhere(['status' => 1])
-                    ->andWhere(['IN','servico_id', $servs])
-                    ->exists();
-                    if($conta>0) {
-                    // UPDATE
-
-                        $command = Yii::$app->db->createCommand();
-                        $command->update('app_dream_referencias', array(
-                            'status_ref'=>1,
-                        ), 'id=:id', array(':id'=>$referencia_id))->execute();
-
-                    }
+            $referencias = ReferenciasDreams::find()
+                ->select('app_dream_referencias.*')
+                ->innerjoin('app_dream_referencias_s', '`app_dream_referencias_s`.`referencia_id` = `app_dream_referencias`.`id`')
+                ->where(['app_dream_referencias_s.servico_id' => $model->servico_id])
+                ->andwhere(['app_dream_referencias.beneficiario_id' => $model->beneficiario_id])
+                ->andwhere(['app_dream_referencias.status_ref' => 0])
+                ->all();
+            
+            foreach ($referencias as $referencia)
+            {
+                $referencia->status_ref = 1;
+                $referencia->save();
             }
 
             return $this->redirect(['beneficiarios/view', 'id' => $model->beneficiario_id]);
@@ -192,8 +179,6 @@ class ServicosBeneficiadosController extends Controller
                 'model' => $model,
             ]);
         }
-
-        
     }
 
     /**
