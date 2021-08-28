@@ -3,7 +3,6 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 
-
 use yii\widgets\Pjax;
 use yii\helpers\ArrayHelper;
 use app\models\Utilizadores;
@@ -17,10 +16,6 @@ use app\models\Organizacoes;
 use app\models\Distritos;
 //use app\models\Beneficiarios;
 
-
-
-
-
 use common\models\User;
 use dektrium\user\models\Profile;
 use kartik\widgets\DepDrop;
@@ -30,10 +25,7 @@ use yii\helpers\Url;
 /* @var $searchModel app\models\ReferenciasDreamsSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-
 //seleciona todos os utilizadores da sua provincia
-
-
 if (isset(Yii::$app->user->identity->provin_code)&&Yii::$app->user->identity->provin_code>0)
 {
   $provs=User::find()->where(['provin_code'=>(int)Yii::$app->user->identity->provin_code])->asArray()->all();
@@ -49,7 +41,6 @@ if (isset(Yii::$app->user->identity->provin_code)&&Yii::$app->user->identity->pr
   $users2=ReferenciasDreams::find()->asArray()->where(['=', 'status', 1])->all();
   $orgs=Organizacoes::find()->where(['=', 'status', 1])->orderBy('parceria_id ASC')->asArray()->all();
 }
-
 
 $orgs=Organizacoes::find()->where(['=', 'status', 1])->orderBy('parceria_id ASC')->asArray()->all();
 $org=ArrayHelper::getColumn($orgs, 'id');
@@ -173,50 +164,20 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
                 'filter'=>ArrayHelper::map(
                   Organizacoes::find()
-                  ->where(['IN','id',$org])
-                  ->andWhere(['<>','status','0'])
-                  ->orderBy('distrito_id ASC')
-                  ->all(), 'id', 'name'
+                    ->where(['IN','id',$org])
+                    ->andWhere(['<>','status','0'])
+                    ->orderBy('distrito_id ASC')
+                    ->all(), 'id', 'name'
                 ),
               ],
 
-              // [
-              //   'attribute'=>'status_ref',
-              //   'format' => 'html',
-              //   'value' => function ($model) {
-              //     return  $model->status_ref==0? '<font color="red">Pendente</font>':'<font color="green"><b>Atendido</b></font>';
-              //   },
-              //   'filter'=>array("1"=>"Atendido","0"=>"Pendente"),
-              // ],
-
-              // Comentado para fixar o bug que mistura referências activas e pendentes (o código acima é suficiente para este filtro)
-              // TODO Remover este código depois da próxima release de 23 de Agosto de 2021
-
-              ['attribute'=> 'status_ref',
+              [
+                'attribute'=>'status_ref',
                 'format' => 'html',
                 'value' => function ($model) {
-                  $query = ReferenciasServicosReferidos::find()
-                  ->where(['=','referencia_id',$model->id])
-                  ->orderBy('id ASC')
-                  ->all();
-                  $servs=ArrayHelper::getColumn($query,'servico_id');
-                  $conta= ServicosBeneficiados::find()
-                  ->where(['=','beneficiario_id',$model->beneficiario_id])
-                  ->andWhere(['status' => 1])
-                  ->andWhere(['IN','servico_id', $servs])
-                  ->exists();
-                  if($conta>0) {
-                  //   // UPDATE
-                  //   $connection = Yii::$app->db;
-                  //   $connection->createCommand()
-                  //   ->update('app_dream_referencias', ['status_ref' => 1],['id'=>$model->id])
-                  //   ->execute();
-                    return '<font color="green"><b>Atendido</b></font>'; 
-                  } else
-                  {
-                    return '<font color="red">Pendente</font>';}
-                  },
-                  'filter'=>array("1"=>"Atendido","0"=>"Pendente"),
+                  return  $model->status_ref==0? '<font color="red">Pendente</font>':'<font color="green"><b>Atendido</b></font>';
+                },
+                'filter'=>array("1"=>"Atendido","0"=>"Pendente"),
               ],
             
             ['class' => 'yii\grid\ActionColumn'],
