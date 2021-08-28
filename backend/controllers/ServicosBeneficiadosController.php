@@ -17,7 +17,6 @@ use common\components\AccessRule;
 use app\models\SubServicosDreams;
 use app\models\ServicosDream;
 use app\models\ReferenciasServicosReferidos;
-use app\models\ReferenciasDreams;
 /**
  * ServicosBeneficiadosController implements the CRUD actions for ServicosBeneficiados model.
  */
@@ -36,34 +35,32 @@ class ServicosBeneficiadosController extends Controller
                 ],
             ],
 
-                                      'access' => [
+            'access' => [
                 'class' => AccessControl::className(),
                 'ruleConfig' => [
-        'class' => AccessRule::className(),
-    ],
+                    'class' => AccessRule::className(),
+                ],
                 'rules' => [
                     [
                         'actions' => ['index','create','listas','servicos'],
 
                         'allow' => true,
                         'roles' => [
-                User::ROLE_USER,
-                User::ROLE_ADMIN,
-                User::ROLE_GESTOR,
-                User::ROLE_CORDENADOR
-                ],
+                            User::ROLE_USER,
+                            User::ROLE_ADMIN,
+                            User::ROLE_GESTOR,
+                            User::ROLE_CORDENADOR
+                        ],
                     ],
 
-                     [
+                    [
                         'actions' => ['view','update'],
-                        'allow' => true,
-                      //  'roles' => ['@'],
-                        
+                        'allow' => true,                    
                         'roles' => [
-                User::ROLE_ADMIN,
-                User::ROLE_GESTOR,
-                User::ROLE_CORDENADOR
-            ],
+                            User::ROLE_ADMIN,
+                            User::ROLE_GESTOR,
+                            User::ROLE_CORDENADOR
+                        ],
                     ],
 
                     [
@@ -71,7 +68,7 @@ class ServicosBeneficiadosController extends Controller
                         'allow' => true,
                         'roles' => ['@'],
                         'matchCallback' => function ($rule, $action) {
-                       return User::isUserAdmin(Yii::$app->user->identity->username);}
+                        return User::isUserAdmin(Yii::$app->user->identity->username);}
                     ],
                 ]
             ]
@@ -93,45 +90,43 @@ class ServicosBeneficiadosController extends Controller
         ]);
     }
 	
-      public function actionServicos($id)
+    public function actionServicos($id)
     {
         $countServicos = ServicosDream::find() 
-                       ->where(['servico_id'=>$id])
-                       ->count();
+            ->where(['servico_id'=>$id])
+            ->count();
         $Servicos  = ServicosDream::find() 
-                       ->where(['servico_id'=>$id])->andWhere(['=','status',1])
-                       ->all();
+            ->where(['servico_id'=>$id])->andWhere(['=','status',1])
+            ->all();
 
-    if($countServicos>0) {
-        echo "<option value='NULL'>--SELECIONE O SERVI&Ccedil;O--</option>";
-        foreach($Servicos as $servico) 
-            { echo "<option value='".$servico->id."'>".$servico->name."</option>";}
-                          }else 
-                        { }  
-
+        if($countServicos>0) {
+            echo "<option value='NULL'>--SELECIONE O SERVI&Ccedil;O--</option>";
+            foreach($Servicos as $servico) { 
+                echo "<option value='".$servico->id."'>".$servico->name."</option>";
+            }
+        }
     }
 	
 	public function actionListas($id)
     {
        $countSubservicos = SubServicosDreams::find() 
-                       ->where(['servico_id'=>$id])
+            ->where(['servico_id'=>$id])
 			->andWhere(['=','status',1])
-                       ->count();
+            ->count();
         $Subservicos  = SubServicosDreams::find() 
-                       ->where(['servico_id'=>$id])
-		       ->andWhere(['=','status',1])
-                       ->all();
+            ->where(['servico_id'=>$id])
+            ->andWhere(['=','status',1])
+            ->all();
 
-    if($countSubservicos>0) {
-		 echo "<option value='NULL'>--SELECIONE--</option>";
-        foreach($Subservicos as $subservico) 
-            { echo "<option value='".$subservico->id."'>".$subservico->name."</option>";;}
-                          }else 
-                        {}  
-
+        if($countSubservicos>0) {
+            echo "<option value='NULL'>--SELECIONE--</option>";
+            foreach($Subservicos as $subservico) { 
+                echo "<option value='".$subservico->id."'>".$subservico->name."</option>";
+            }
+        }
     }
 	
-		public $enableCsrfValidation = false;
+    public $enableCsrfValidation = false;
 
     /**
      * Displays a single ServicosBeneficiados model.
@@ -156,20 +151,6 @@ class ServicosBeneficiadosController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             $model->save();
-
-            $referencias = ReferenciasDreams::find()
-                ->select('app_dream_referencias.*')
-                ->innerjoin('app_dream_referencias_s', '`app_dream_referencias_s`.`referencia_id` = `app_dream_referencias`.`id`')
-                ->where(['app_dream_referencias_s.servico_id' => $model->servico_id])
-                ->andwhere(['app_dream_referencias.beneficiario_id' => $model->beneficiario_id])
-                ->andwhere(['app_dream_referencias.status_ref' => 0])
-                ->all();
-            
-            foreach ($referencias as $referencia)
-            {
-                $referencia->status_ref = 1;
-                $referencia->save();
-            }
 
             return $this->redirect(['beneficiarios/view', 'id' => $model->beneficiario_id]);
 
