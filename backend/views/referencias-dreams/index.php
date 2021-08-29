@@ -178,6 +178,7 @@ $this->params['breadcrumbs'][] = $this->title;
                   return  $model->status_ref==0? '<font color="red">Pendente</font>':'<font color="green"><b>Atendido</b></font>';
                 },
                 'filter'=>array("1"=>"Atendido","0"=>"Pendente"),
+
               ],
             
             ['class' => 'yii\grid\ActionColumn'],

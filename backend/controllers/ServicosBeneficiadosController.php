@@ -149,7 +149,10 @@ class ServicosBeneficiadosController extends Controller
     {
         $model = new ServicosBeneficiados();
 
+        
+
         if ($model->load(Yii::$app->request->post())) {
+
             $model->save();
             Yii::$app->db->close();
             Yii::$app->db->open();
@@ -158,10 +161,12 @@ class ServicosBeneficiadosController extends Controller
 
         } else {
            // return $this->renderAjax('create', [
-			return $this->render('create', [
+			      return $this->render('create', [
                 'model' => $model,
             ]);
         }
+
+        
     }
 
     /**
