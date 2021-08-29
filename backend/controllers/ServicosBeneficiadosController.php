@@ -151,6 +151,8 @@ class ServicosBeneficiadosController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             $model->save();
+            Yii::$app->db->close();
+            Yii::$app->db->open();
 
             return $this->redirect(['beneficiarios/view', 'id' => $model->beneficiario_id]);
 
