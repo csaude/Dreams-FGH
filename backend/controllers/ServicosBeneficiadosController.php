@@ -35,34 +35,32 @@ class ServicosBeneficiadosController extends Controller
                 ],
             ],
 
-                                      'access' => [
+            'access' => [
                 'class' => AccessControl::className(),
                 'ruleConfig' => [
-        'class' => AccessRule::className(),
-    ],
+                    'class' => AccessRule::className(),
+                ],
                 'rules' => [
                     [
                         'actions' => ['index','create','listas','servicos'],
 
                         'allow' => true,
                         'roles' => [
-                User::ROLE_USER,
-                User::ROLE_ADMIN,
-                User::ROLE_GESTOR,
-                User::ROLE_CORDENADOR
-                ],
+                            User::ROLE_USER,
+                            User::ROLE_ADMIN,
+                            User::ROLE_GESTOR,
+                            User::ROLE_CORDENADOR
+                        ],
                     ],
 
-                     [
+                    [
                         'actions' => ['view','update'],
-                        'allow' => true,
-                      //  'roles' => ['@'],
-                        
+                        'allow' => true,                    
                         'roles' => [
-                User::ROLE_ADMIN,
-                User::ROLE_GESTOR,
-                User::ROLE_CORDENADOR
-            ],
+                            User::ROLE_ADMIN,
+                            User::ROLE_GESTOR,
+                            User::ROLE_CORDENADOR
+                        ],
                     ],
 
                     [
@@ -70,7 +68,7 @@ class ServicosBeneficiadosController extends Controller
                         'allow' => true,
                         'roles' => ['@'],
                         'matchCallback' => function ($rule, $action) {
-                       return User::isUserAdmin(Yii::$app->user->identity->username);}
+                        return User::isUserAdmin(Yii::$app->user->identity->username);}
                     ],
                 ]
             ]
@@ -92,45 +90,43 @@ class ServicosBeneficiadosController extends Controller
         ]);
     }
 	
-      public function actionServicos($id)
+    public function actionServicos($id)
     {
         $countServicos = ServicosDream::find() 
-                       ->where(['servico_id'=>$id])
-                       ->count();
+            ->where(['servico_id'=>$id])
+            ->count();
         $Servicos  = ServicosDream::find() 
-                       ->where(['servico_id'=>$id])->andWhere(['=','status',1])
-                       ->all();
+            ->where(['servico_id'=>$id])->andWhere(['=','status',1])
+            ->all();
 
-    if($countServicos>0) {
-        echo "<option value='NULL'>--SELECIONE O SERVI&Ccedil;O--</option>";
-        foreach($Servicos as $servico) 
-            { echo "<option value='".$servico->id."'>".$servico->name."</option>";}
-                          }else 
-                        { }  
-
+        if($countServicos>0) {
+            echo "<option value='NULL'>--SELECIONE O SERVI&Ccedil;O--</option>";
+            foreach($Servicos as $servico) { 
+                echo "<option value='".$servico->id."'>".$servico->name."</option>";
+            }
+        }
     }
 	
 	public function actionListas($id)
     {
        $countSubservicos = SubServicosDreams::find() 
-                       ->where(['servico_id'=>$id])
+            ->where(['servico_id'=>$id])
 			->andWhere(['=','status',1])
-                       ->count();
+            ->count();
         $Subservicos  = SubServicosDreams::find() 
-                       ->where(['servico_id'=>$id])
-		       ->andWhere(['=','status',1])
-                       ->all();
+            ->where(['servico_id'=>$id])
+            ->andWhere(['=','status',1])
+            ->all();
 
-    if($countSubservicos>0) {
-		 echo "<option value='NULL'>--SELECIONE--</option>";
-        foreach($Subservicos as $subservico) 
-            { echo "<option value='".$subservico->id."'>".$subservico->name."</option>";;}
-                          }else 
-                        {}  
-
+        if($countSubservicos>0) {
+            echo "<option value='NULL'>--SELECIONE--</option>";
+            foreach($Subservicos as $subservico) { 
+                echo "<option value='".$subservico->id."'>".$subservico->name."</option>";
+            }
+        }
     }
 	
-		public $enableCsrfValidation = false;
+    public $enableCsrfValidation = false;
 
     /**
      * Displays a single ServicosBeneficiados model.
@@ -157,38 +153,15 @@ class ServicosBeneficiadosController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
 
-
-
             $model->save();
-
-            if(isset($_GET['atender']) && isset($_GET['m']) && $_GET['m'] > 0 && $_GET['atender'] == sha1(1)){
-                $referencia_id = explode('.', $_GET['rfid'])[0];
-                $query = ReferenciasServicosReferidos::find()
-                    ->where(['=','referencia_id',$referencia_id])
-                    ->orderBy('id ASC')
-                    ->all();
-                $servs=ArrayHelper::getColumn($query,'servico_id');
-                $conta= ServicosBeneficiados::find()
-                    ->where(['=','beneficiario_id',$model->beneficiario_id])
-                    ->andWhere(['status' => 1])
-                    ->andWhere(['IN','servico_id', $servs])
-                    ->exists();
-                    if($conta>0) {
-                    // UPDATE
-
-                        $command = Yii::$app->db->createCommand();
-                        $command->update('app_dream_referencias', array(
-                            'status_ref'=>1,
-                        ), 'id=:id', array(':id'=>$referencia_id))->execute();
-
-                    }
-            }
+            Yii::$app->db->close();
+            Yii::$app->db->open();
 
             return $this->redirect(['beneficiarios/view', 'id' => $model->beneficiario_id]);
 
         } else {
            // return $this->renderAjax('create', [
-			return $this->render('create', [
+			      return $this->render('create', [
                 'model' => $model,
             ]);
         }

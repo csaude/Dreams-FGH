@@ -62,7 +62,7 @@ class ServicosBeneficiados extends \yii\db\ActiveRecord
             'us_id' => Yii::t('app', 'Localização'),
             'activista_id' => Yii::t('app', 'Activista'),
             'data_beneficio' => Yii::t('app', 'Data Benefício'),
-	    'provedor' => Yii::t('app', 'Provedor do Serviço'), //actualizado em 17.10.2018
+	        'provedor' => Yii::t('app', 'Provedor do Serviço'), //actualizado em 17.10.2018
             'status' => Yii::t('app', 'Status'),
             'description' => Yii::t('app', 'Outras Observações'),
             'criado_por' => Yii::t('app', 'Criado Por'),
@@ -74,60 +74,75 @@ class ServicosBeneficiados extends \yii\db\ActiveRecord
         ];
     }
 
-      public function beforeSave($insert) {
-date_default_timezone_set('Africa/Maputo');  
+    public function beforeSave($insert) {
+        date_default_timezone_set('Africa/Maputo');  
 
-    if ($this->isNewRecord) { 
-        
-     $this->criado_em=date("Y-m-d H:i:s"); 
-     $this->criado_por=Yii::$app->user->identity->id;
-     $this->user_location=Yii::$app->request->userIP;
-     $this->activista_id=Yii::$app->user->identity->id;
-    } 
-    else 
-        {
-        $this->actualizado_em=date("Y-m-d H:i:s");
-        $this->actualizado_por=Yii::$app->user->identity->id;
-        $this->user_location2=Yii::$app->request->userIP;
-        $this->activista_id=Yii::$app->user->identity->id;
+        if ($this->isNewRecord) { 
+            $this->criado_em=date("Y-m-d H:i:s"); 
+            $this->criado_por=Yii::$app->user->identity->id;
+            $this->user_location=Yii::$app->request->userIP;
+            $this->activista_id=Yii::$app->user->identity->id;
+        } 
+        else 
+            {
+            $this->actualizado_em=date("Y-m-d H:i:s");
+            $this->actualizado_por=Yii::$app->user->identity->id;
+            $this->user_location2=Yii::$app->request->userIP;
+            $this->activista_id=Yii::$app->user->identity->id;
         }
-    return parent::beforeSave($insert); 
-}
+        return parent::beforeSave($insert); 
+    }
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        $referencias = ReferenciasDreams::find()
+            ->select('app_dream_referencias.*')
+            ->innerjoin('app_dream_referencias_s', '`app_dream_referencias_s`.`referencia_id` = `app_dream_referencias`.`id`')
+            ->where(['app_dream_referencias_s.servico_id' => $this->servico_id])
+            ->andwhere(['app_dream_referencias.beneficiario_id' => $this->beneficiario_id])
+            ->andwhere(['app_dream_referencias.status_ref' => 0])
+            ->all();
+        
+        foreach ($referencias as $referencia)
+        {
+            $referencia->status_ref = 1;
+            $referencia->save();
+        }
+        parent::afterSave($insert, $changedAttributes);
+    }
 
     public function getTipoServicos()
     {
         return $this->hasOne(TipoServicos::className(), ['id' => 'tipo_servico_id']);
     }
 
-            public function getServicos()
+    public function getServicos()
     {
         return $this->hasOne(ServicosDream::className(), ['id' => 'servico_id']);
     }
 	
-	      public function getSubServicos()
+    public function getSubServicos()
     {
         return $this->hasOne(SubServicosDreams::className(), ['id' => 'sub_servico_id']);
     }
 	
-	            public function getBeneficiario()
+	public function getBeneficiario()
     {
         return $this->hasOne(Beneficiarios::className(), ['id' => 'beneficiario_id']);
     }
 
-                public function getUs()
+    public function getUs()
     {
         return $this->hasOne(Us::className(), ['id' => 'us_id']);
     }
 		//Ponto de entrada
-	  public function getPe()
+	public function getPe()
     {
         return $this->hasOne(PontosDeEntrada::className(), ['id' => 'ponto_entrada']);
     }
 
     public function getReceptor()
-  {
-     return $this->hasOne(Profile::className(), ['user_id' => 'criado_por']);
-  }
-
-
+    {
+        return $this->hasOne(Profile::className(), ['user_id' => 'criado_por']);
+    }
 }

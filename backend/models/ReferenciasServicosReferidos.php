@@ -70,21 +70,38 @@ class ReferenciasServicosReferidos extends \yii\db\ActiveRecord
         ];
     }
 
-    public function beforeSave($insert) {
-
-
+    public function beforeSave($insert) 
+    {
         if ($this->isNewRecord) {
-
-         $this->criado_em=date("Y-m-d H:m:s");
-         $this->criado_por=Yii::$app->user->identity->id;
-         $this->user_location=Yii::$app->request->userIP;
+            $this->criado_em=date("Y-m-d H:m:s");
+            $this->criado_por=Yii::$app->user->identity->id;
+            $this->user_location=Yii::$app->request->userIP;
         }
-        else
-            {
+        else{
             $this->actualizado_em=date("Y-m-d H:m:s");
             $this->actualizado_por=Yii::$app->user->identity->id;
-            $this->user_location2=Yii::$app->request->userIP; }
+            $this->user_location2=Yii::$app->request->userIP; 
+        }
         return parent::beforeSave($insert);
+    }
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        $servicos = ServicosBeneficiados::find()
+            ->select('app_dream_beneficiario_servicos.id')
+            ->innerjoin('app_dream_referencias', '`app_dream_referencias`.`beneficiario_id` = `app_dream_beneficiario_servicos`.`beneficiario_id`')
+            ->where(['app_dream_referencias.id' => $this->referencia_id])
+            ->andwhere(['app_dream_beneficiario_servicos.servico_id' => $this->servico_id])
+            ->andwhere(['app_dream_beneficiario_servicos.status' => 1])
+            ->all();
+        
+        if (count($servicos) > 0)
+        {
+            $referencia = ReferenciasDreams::findOne($this->referencia_id);
+            $referencia->status_ref = 1;
+            $referencia->save();
+        }
+        parent::afterSave($insert, $changedAttributes);
     }
 
     /**

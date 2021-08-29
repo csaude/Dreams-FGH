@@ -58,25 +58,15 @@ Yii::$app->user->identity->role==20 ?  " | ".$model->beneficiario['emp_firstname
             <td><?= $model->ref_livro; ?></td>
             <td><?= $model->tservico['name']; ?></td>
             <td>
-<?php
-$query = ReferenciasServicosReferidos::find()
-                              ->where(['=','referencia_id',$model->id])
-                              ->orderBy('id ASC')
-                              ->all();
-              $servs=ArrayHelper::getColumn($query,'servico_id');
+              <?php
+                if( $model->status_ref==1) {
+                  echo '<font color="green"><b>Atendido</b></font>'; 
+                } else {
+                  echo '<font color="red">Pendente</font>';
+                }  ?>
+              <?php $model->status==0 ?  '<font color="green"><b>Referido</b></font>': '<font color="red">Pendente</font>'; ?>
 
-
-              $conta= ServicosBeneficiados::find()
-                                  ->where(['=','beneficiario_id',$model->beneficiario_id])
-                                  ->andWhere(['status' => 1])
-                                  ->andWhere(['IN','servico_id', $servs])
-                                  ->count();
-if($conta>0) {echo '<font color="green"><b>Atendido</b></font>'; } else
-
-              {echo '<font color="red">Pendente</font>';}  ?>
-<?php $model->status==0 ?  '<font color="green"><b>Referido</b></font>': '<font color="red">Pendente</font>'; ?>
-
-</td>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -106,40 +96,39 @@ if($conta>0) {echo '<font color="green"><b>Atendido</b></font>'; } else
 
         <tbody>
 
-<?php
-$query = ReferenciasServicosReferidos::find()
-                  ->where(['=','referencia_id',$model->id])
-                  ->orderBy('id ASC')
-                  ->all();
-                  $i=0;
-foreach($query as $serv) {  $i++;  ?>
-          <tr>
-            <td> <?= $i; ?> </td>
-            <td><?= $model->ref_livro; ?> </td>
-            <td> <?= $serv->servico['name']; ?></td>
-            <td>
-<?php  $conta= ServicosBeneficiados::find()
-                                  ->where(['=','beneficiario_id',$model->beneficiario_id])
-                                  ->andWhere(['servico_id'=>$serv->servico_id])
-                                  ->andWhere(['status' => 1])
-                                  ->count();
-if($conta>0) {?>
-              <i class="fa fa-check-square-o" style="color:green;" aria-hidden="true"></i><sup>
-            <?= $conta; ?>
-              </sup>
-<?php } else { ?>
-              <i class="fa fa-times" style="color:red;" aria-hidden="true"></i>
-<?php } ?>
-            </td>
-<?php if(Yii::$app->user->identity->id==$model->criado_por) {} else{?>
-            <td>
-            <a href="<?= Url::toRoute('servicos-beneficiados/create.dreams?ts=1&m='.$model->beneficiario_id.'&atender='.sha1(1).'&rfid='.$model->id); ?>">  <i class="fa fa-edit" style="color:#faa001;" aria-hidden="true"></i>
-            </a>
-            </td>
-<?php } ?>
-
-          </tr>
-<?php } ?>
+          <?php
+          $query = ReferenciasServicosReferidos::find()
+            ->where(['=','referencia_id',$model->id])
+            ->orderBy('id ASC')
+            ->all();
+          $i=0;
+          foreach($query as $serv) {  $i++;  ?>
+            <tr>
+              <td> <?= $i; ?> </td>
+              <td><?= $model->ref_livro; ?> </td>
+              <td> <?= $serv->servico['name']; ?></td>
+              <td>
+                <?php $conta= ServicosBeneficiados::find()
+                        ->where(['=','beneficiario_id',$model->beneficiario_id])
+                        ->andWhere(['servico_id'=>$serv->servico_id])
+                        ->andWhere(['status' => 1])
+                        ->count();
+                if($conta>0) {?>
+                              <i class="fa fa-check-square-o" style="color:green;" aria-hidden="true"></i><sup>
+                            <?= $conta; ?>
+                              </sup>
+                <?php } else { ?>
+                              <i class="fa fa-times" style="color:red;" aria-hidden="true"></i>
+                <?php } ?>
+                            </td>
+                <?php if(Yii::$app->user->identity->id==$model->criado_por) {} else{?>
+                            <td>
+                              <a href="<?= Url::toRoute('servicos-beneficiados/create.dreams?ts=1&m='.$model->beneficiario_id.'&atender='.sha1(1).'&rfid='.$model->id); ?>">  <i class="fa fa-edit" style="color:#faa001;" aria-hidden="true"></i>
+                              </a>
+                            </td>
+                <?php } ?>
+            </tr>
+          <?php } ?>
           <tr>
             <td></td>
             <td></td>
@@ -159,15 +148,12 @@ if($conta>0) {?>
     </div>
   </div>
 
-
-
-
   <?php  
 $contas= ServicosBeneficiados::find()
-                     ->where(['=','beneficiario_id',$model->beneficiario_id])
-                  //   ->andWhere(['servico_id'=>$serv->servico_id])
-                      ->andWhere(['status' => 1])
-                      ->count();
+  ->where(['=','beneficiario_id',$model->beneficiario_id])
+//   ->andWhere(['servico_id'=>$serv->servico_id])
+  ->andWhere(['status' => 1])
+  ->count();
 if($contas>0) {?>
   <div class="col-lg-6">
     <div class="panel panel-success">
@@ -204,9 +190,6 @@ if($contas>0) {?>
   href="<?php echo Url::toRoute('beneficiarios/'.$query->beneficiario_id); ?>"  > <i class="glyphicon glyphicon-eye-open icon-success"></i>
     </a>
 
-
-
-
   </td>
   </tr>
 
@@ -230,11 +213,6 @@ if($contas>0) {?>
     </div>
   </div>
 <?php } ?>
-
-
-
-
-
 
 </div>
 
@@ -263,7 +241,6 @@ if($contas>0) {?>
 <?php } ?>
 
 </div>
-
 
 <!-- Modal -->
 <div class="modal modal-lg fade" id="referModal" tabindex="-1" role="dialog" aria-labelledby="referModalTitle" aria-hidden="true">
