@@ -139,7 +139,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
                 'filter'=>ArrayHelper::map(
                   Profile::find()
-                  ->where(['IN','user_id',$ids])
+                  ->where(['IN','user_id',$notify_to])
                   ->andWhere(['<>','name',''])
                   ->orderBy('name ASC')
                   ->all(), 'id', 'name'
