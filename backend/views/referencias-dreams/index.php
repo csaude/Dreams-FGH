@@ -32,20 +32,62 @@ if (isset(Yii::$app->user->identity->provin_code)&&Yii::$app->user->identity->pr
   $prov = ArrayHelper::getColumn($provs, 'id');
   $dists=Distritos::find()->where(['province_code'=>(int)Yii::$app->user->identity->provin_code])->asArray()->all();
   $dist=ArrayHelper::getColumn($dists, 'district_code');
-  $users=ReferenciasDreams::find()->where(['IN','criado_por',$prov])->andWhere(['=', 'status', 1])->asArray()->all();
-  $users2=ReferenciasDreams::find()->where(['IN','notificar_ao',$prov])->andWhere(['=', 'status', 1])->asArray()->all();
+  // $users=ReferenciasDreams::find()->where(['IN','criado_por',$prov])->andWhere(['=', 'status', 1])->asArray()->all();
+  // $users2=ReferenciasDreams::find()->where(['IN','notificar_ao',$prov])->andWhere(['=', 'status', 1])->asArray()->all();
+
+  $referido_por = Profile::find()
+  ->select('profile.*')
+  ->distinct(true)
+  ->innerjoin('user', '`profile`.`user_id` = `user`.`id`')
+  ->innerjoin('app_dream_referencias', '`app_dream_referencias`.`criado_por` = `profile`.`user_id`')
+  ->where(['user.provin_code' => Yii::$app->user->identity->provin_code])
+  ->andwhere(['app_dream_referencias.status' => 1])
+  ->andWhere(['<>','profile.name',''])
+  ->orderBy('name ASC')
+  ->all();
+$notificar_ao = Profile::find()
+  ->select('profile.*')
+  ->distinct(true)
+  ->innerjoin('user', '`profile`.`user_id` = `user`.`id`')
+  ->innerjoin('app_dream_referencias', '`app_dream_referencias`.`notificar_ao` = `profile`.`id`')
+  ->where(['user.provin_code' => Yii::$app->user->identity->provin_code])
+  ->andwhere(['app_dream_referencias.status' => 1])
+  ->andWhere(['<>','profile.name',''])
+  ->orderBy('name ASC')
+  ->all();
+
+
   //added on 05 11 2018
   $orgs=Organizacoes::find()->where(['IN','distrito_id',$dist])->where(['=', 'status', 1])->orderBy('parceria_id ASC')->asArray()->all();
 } else {
-  $users=ReferenciasDreams::find()->asArray()->where(['=', 'status', 1])->all();
-  $users2=ReferenciasDreams::find()->asArray()->where(['=', 'status', 1])->all();
+  // $users=ReferenciasDreams::find()->asArray()->where(['=', 'status', 1])->all();
+  // $users2=ReferenciasDreams::find()->asArray()->where(['=', 'status', 1])->all();
+
+
+  $referido_por = Profile::find()
+    ->select('profile.*')
+    ->distinct(true)
+    ->innerjoin('app_dream_referencias', '`app_dream_referencias`.`criado_por` = `profile`.`user_id`')
+    ->where(['app_dream_referencias.status' => 1])
+    ->andWhere(['<>','profile.name',''])
+    ->orderBy('name ASC')
+    ->all();
+  $notificar_ao = Profile::find()
+    ->select('profile.*')
+    ->distinct(true)
+    ->innerjoin('app_dream_referencias', '`app_dream_referencias`.`notificar_ao` = `profile`.`id`')
+    ->where(['app_dream_referencias.status' => 1])
+    ->andWhere(['<>','profile.name',''])
+    ->orderBy('name ASC')
+    ->all();
+
   $orgs=Organizacoes::find()->where(['=', 'status', 1])->orderBy('parceria_id ASC')->asArray()->all();
 }
 
 $orgs=Organizacoes::find()->where(['=', 'status', 1])->orderBy('parceria_id ASC')->asArray()->all();
 $org=ArrayHelper::getColumn($orgs, 'id');
-$ids = ArrayHelper::getColumn($users, 'criado_por');
-$notify_to = ArrayHelper::getColumn($users2, 'notificar_ao');
+// $ids = ArrayHelper::getColumn($users, 'criado_por');              //referente
+// $notify_to = ArrayHelper::getColumn($users2, 'notificar_ao');
 
 $this->title = Yii::t('app', 'Referências e Contra-Referências');
 $this->params['breadcrumbs'][] = $this->title;
@@ -109,13 +151,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function ($model) {
                   return  $model->beneficiario_id>0 ?  '<font color="#cd2660"><b>'.$model->nreferente['name'].'</b></font>': "-";
                 },
-                'filter'=>ArrayHelper::map(
-                  Profile::find()
-                  ->where(['IN','user_id',$ids])
-                  ->andWhere(['<>','name',''])
-                  ->orderBy('name ASC')
-                  ->all(), 'user_id', 'name'
-                ),
+                // 'filter'=>ArrayHelper::map(
+                //   Profile::find()
+                //   ->where(['IN','user_id',$ids])
+                //   ->andWhere(['<>','name',''])
+                //   ->orderBy('name ASC')
+                //   ->all(), 'user_id', 'name'
+                // ),
+                'filter'=>ArrayHelper::map($referido_por, 'user_id', 'name'),
               ],
 
               [
@@ -131,19 +174,20 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute'=>'notificar_ao',
                 'format' => 'html',
                 'value' => function ($model) {
-                  $utils=Profile::find()->where(['=','id',$model->notificar_ao])->all();
-                  foreach ($utils as $util) {
-                    return  $model->beneficiario_id>0 ?  '<font color="#cd2660"><b>'.$util->name.'</b></font>': "-";
-                  }
-                  // return  $model->beneficiario_id>0 ?  '<font color="#cd2660"><b>'.$model->notificar_ao.'</b></font>': "-";
+                  // $utils=Profile::find()->where(['=','id',$model->notificar_ao])->all();
+                  // foreach ($utils as $util) {
+                  //   return  $model->beneficiario_id>0 ?  '<font color="#cd2660"><b>'.$util->name.'</b></font>': "-";
+                  // }
+                   return  $model->beneficiario_id>0 ?  '<font color="#cd2660"><b>'.$model->nreceptor['name'].'</b></font>': "-";
                 },
-                'filter'=>ArrayHelper::map(
-                  Profile::find()
-                  ->where(['IN','user_id',$notify_to])
-                  ->andWhere(['<>','name',''])
-                  ->orderBy('name ASC')
-                  ->all(), 'id', 'name'
-                ),
+                // 'filter'=>ArrayHelper::map(
+                //   Profile::find()
+                //   ->where(['IN','user_id',$notify_to])
+                //   ->andWhere(['<>','name',''])
+                //   ->orderBy('name ASC')
+                //   ->all(), 'id', 'name'
+                // ),
+                'filter'=>ArrayHelper::map($notificar_ao, 'id', 'name'),
               ],
 
               [

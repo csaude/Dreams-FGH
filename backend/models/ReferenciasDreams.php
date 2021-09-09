@@ -134,7 +134,7 @@ public function getNreferente()
 	
 	public function getNreceptor()
 {
-   return $this->hasMany(Profile::className(), ['user_id' => 'notificar_ao']);
+   return $this->hasOne(Profile::className(), ['id' => 'notificar_ao']);
 }
 
     /**
