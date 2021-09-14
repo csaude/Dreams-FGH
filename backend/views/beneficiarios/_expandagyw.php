@@ -240,7 +240,7 @@ foreach ($comservicos as $core) {
   foreach($query as $query) {   ?>
 
     <tr>
-  <td class='data_pagamento'> <?= date('d-m-Y', strtotime($query->data_beneficio)) ?>  </td>
+  <td class='data_pagamento'> <?= $query->data_beneficio ?>   </td>
   <?php  
     $queryTipoServico = TipoServicos::findOne($query->servicos['servico_id']);
   ?>
