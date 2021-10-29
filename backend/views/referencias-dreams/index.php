@@ -54,7 +54,7 @@
       ->all();
 
     //added on 05 11 2018
-    $orgs=Organizacoes::find()->where(['IN','distrito_id',$dist])->where(['=', 'status', 1])->orderBy('parceria_id ASC')->asArray()->all();
+    $orgs=Organizacoes::find()->where(['IN','distrito_id',$dist])->orderBy('parceria_id ASC')->asArray()->all();
 
   } else {
     

@@ -116,7 +116,12 @@ function core($k){
           [
             'attribute'=>'district_code',
             'label'=>'Distrito',
-            'filter'=> ArrayHelper::map(Distritos::find()->orderBy('district_name ASC')->asArray()->all(), 'district_code', 'district_name'),
+            'filter'=> ArrayHelper::map(
+                Distritos::find()
+                ->where(['IN','district_code',$dist])
+                ->orderBy('district_name ASC')
+                ->asArray()->all(), 
+                'district_code', 'district_name'),
             'value'=>'distrito.district_name',
           ],
 
@@ -191,11 +196,12 @@ function core($k){
           ],
               
           [
-            'attribute'=>'criado_por',
+            'attribute'=>'parceiro_id',
             'label'=>'Org',
-            'format'=>'raw','value'=>'organizacoes.name',
+            'format'=>'raw','value'=>'organizacoes.name',            
             'filter'=>ArrayHelper::map(
               Organizacoes::find()
+                ->where(['IN','id',$org])
                 ->orderBy('distrito_id ASC')
                 ->all(), 'id', 'name'
             ),
