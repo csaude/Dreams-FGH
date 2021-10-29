@@ -198,9 +198,7 @@ function core($k){
           [
             'attribute'=>'parceiro_id',
             'label'=>'Org',
-            'format'=>'raw','value'=>'organizacoes.name',
-            
-            
+            'format'=>'raw','value'=>'organizacoes.name',            
             'filter'=>ArrayHelper::map(
               Organizacoes::find()
                 ->where(['IN','id',$org])
