@@ -1,10 +1,9 @@
 <?php
 
 use yii\helpers\Html;
-//use yii\grid\GridView;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
-
+use app\models\Organizacoes;
 
 use yii\helpers\ArrayHelper;
 use app\models\ComiteZonal;
@@ -20,7 +19,6 @@ use kartik\grid\EditableColumn;
 use app\models\ServicosDream;
 use app\models\Utilizadores;
 use common\models\User;
-
 
 use app\models\ReferenciasDreams;
 use app\models\Distritos;
@@ -47,44 +45,17 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-
-
-                  /* [
-                                           'class' => 'kartik\grid\ExpandRowColumn',
-                                           'expandAllTitle' => 'Expand all',
-                                           'collapseTitle' => 'Collapse all',
-                                           'expandIcon'=>'<span class="glyphicon glyphicon-expand"></span>',
-                                           'value' => function ($model, $key, $index, $column) {
-                                                   return GridView::ROW_COLLAPSED;
-                                           },
-                                           'detail'=>function ($model, $key, $index, $column) {
-                                             return Yii::$app->controller->renderPartial('/beneficiarios/_expand.php', ['model'=>$model]);
-                                           },
-
-                               'detailOptions'=>[
-                                   'class'=> 'kv-state-enable',
-                               ],
-                             ],*/         
-          
-          /*
-                            [
-                   'attribute'=> 'district_code',
-                'format' => 'html',
-                   'label'=>'Distrito',
-                    'filter'=>array(1=>'Beira',"4"=>"Xai Xai",6=>'Chokwe',"7"=>"Quelimane","8"=>"Nicoadala","13"=>"Limpopo",14=>'Chongoene',16=>'Namaacha',17=>'Matutuine'),     
-                    'value' => function ($model) {
-                 return  $model->district_code>0 ?  '<font color="#1E90FF"><b>'.$model->distrito['district_name'].''.'</b></font>': "-";
-              },
-                ],      
-          */
          [
              'attribute'=>'district_code',
           'format'=>'raw',
           'value' => function ($model) {
        return  $model->district_code==NULL ? '-': $model->distrito['district_name'];
        },
-             'filter'=> ArrayHelper::map(Distritos::find()->where(['>','province_code','0'])->orderBy('province_code,district_name ASC')->all(), 'district_code', 'district_name'),
-
+            'filter'=> ArrayHelper::map(
+               Distritos::find()
+              ->where(['IN','district_code',$dist])
+              ->orderBy('province_code,district_name ASC')->all(),
+              'district_code', 'district_name'),
            ],
           
           
@@ -114,40 +85,12 @@ $this->params['breadcrumbs'][] = $this->title;
 			'label'=>'Org',
 			'format'=>'html',
             'value'=> function ($model) { return Yii::$app->user->identity->role==20 ? '<small>'.$model->user->parceiro['name'].'</small>':'<small>'.$model->user->parceiro['name'].'</small>'; },
-            //'filter'=> ArrayHelper::map(Utilizadores::find()->where(['>','provin_code',0])->distinct()->orderBy('parceiro_id ASC')->asArray()->all(), 'parceiro_id','parceiro_id'),
-			'filter'=>array("1"=>"Jhpiego - Sofala","2"=>"FHI - 360 Sofala","3"=>"World Education Inc. - Sofala","4"=>"World Vision - Cidade de Quelimane",
-			"5"=>"FGH - Cidade de Quelimane","6"=>"NWETI - Gaza","8"=>"Associa  o Kugarissica da Munhava - OCB WEI - Beira",
-			"9"=>"NAFEZA - OCB WEI Quelimane","10"=>"ICAP - Nicoadala","12"=>"Associa  o Comussanas - OCB WEI - Beira"
-			,"13"=>"AMME - OCB WEI Quelimane"
-			,"14"=>"Kukumbi OCB WEI - Nicoadala"
-			,"15"=>"World Education Inc. - Gaza"
-			,"16"=>"World Education Inc. - Zambezia"
-			,"17"=>"EGPAF - Gaza"
-			,"18"=>"CDC"
-			,"19"=>"Udeba-Lab - OCB WEI Limpopo"
-			,"20"=>"Associação AREPACHO - OCB WEI - Chongoene"
-			,"21"=>"Associa  o KUVUMBANA - OCB WEI Cidade Xai-Xai"
-			,"23"=>"Jhpiego - Gaza"
-			,"24"=>"Associa  o VUKOXA - OCB WEI - Chokwe"
-			,"25"=>"Associação Comussanas - OCB WEI - Beira"
-			,"26"=>"Associa  o ACTIVA - OCB WEI - Cidade de Xai-Xai"
-			,"27"=>"World Vision - Nicoadala"
-			,"28"=>"Conselho Crist o de Mo ambique - OCB WEI - Beira"
-			,"29"=>"Direc  o Provincial da Educa  o e Desenvolvimento Humano de Gaza"
-			,"30"=>"Rede CAME"
-			,"31"=>"FHI360 COVIDA"
-			,"32"=>"Jhpiego - Zambezia"
-			,"33"=>"SDSMAS Namaacha"
-			,"34"=>"Peace Corps - Corpo da Paz - Chokwe"
-			,"35"=>"FGH Nicoadala"
-			,"36"=>"SOPROC - OCB WEI Beira"
-			,"37"=>"Ministerio da Educa  o Zambezia"
-			,"38"=>"Associa  o Tiyane Vavassate - OCB FHI360 CoVida - Matutuine"
-			,"39"=>"ASSEDUCO - OCB FHII360 COVDA Namaacha"
-			,"40"=>"SDSMAS Matutuine"
-			,"41"=>"Funda ao ARIEL Glaser"
-			,"43"=>"N`WETI_Zambezia"
-			,"44"=>"USAID"),
+            'filter'=>ArrayHelper::map(
+              Organizacoes::find()
+                ->where(['IN','id',$org])
+                ->orderBy('distrito_id ASC')
+                ->all(), 'id', 'name'
+            ),
           ],
           
           
