@@ -8,6 +8,7 @@ use app\models\BeneficiariosSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\helpers\ArrayHelper;
 
 
 use yii\filters\AccessControl;
@@ -19,6 +20,7 @@ use app\models\SubServicosDreams;
 use app\models\ServicosDream;
 use app\models\Bairros;
 use app\models\Provincias;
+use app\models\Organizacoes;
 use app\models\AgywPrev;
 use PHPExcel;
 use PHPExcel_IOFactory;
@@ -387,9 +389,27 @@ class BeneficiariosController extends Controller
         */
         Yii::$app->user->identity->role < 18 ? $dataProvider->pagination->pageSize = 5 : $dataProvider->pagination->pageSize = 10;
 
+        if (isset(Yii::$app->user->identity->provin_code)&&Yii::$app->user->identity->provin_code>0)
+        {
+
+            $dists=Distritos::find()->where(['province_code'=>(int)Yii::$app->user->identity->provin_code])->asArray()->all();
+            $dist=ArrayHelper::getColumn($dists, 'district_code');
+
+            $orgs=Organizacoes::find()->where(['IN','distrito_id',$dist])->orderBy('parceria_id ASC')->asArray()->all();
+
+        } else {
+
+            $orgs=Organizacoes::find()->where(['=', 'status', 1])->orderBy('parceria_id ASC')->asArray()->all();
+
+        }
+
+        $org=ArrayHelper::getColumn($orgs, 'id');
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'dist' => $dist,
+            'org' => $org,
         ]);
     }
 
