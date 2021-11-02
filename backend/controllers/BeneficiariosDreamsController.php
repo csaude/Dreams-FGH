@@ -104,15 +104,17 @@ class BeneficiariosDreamsController extends Controller
 
         if (isset(Yii::$app->user->identity->provin_code)&&Yii::$app->user->identity->provin_code>0)
         {
-        
             $dists=Distritos::find()->where(['province_code'=>(int)Yii::$app->user->identity->provin_code])->asArray()->all();
             $dist=ArrayHelper::getColumn($dists, 'district_code');
 
             $orgs=Organizacoes::find()->where(['IN','distrito_id',$dist])->orderBy('parceria_id ASC')->asArray()->all();
 
         } else {
-        
+
             $orgs=Organizacoes::find()->where(['=', 'status', 1])->orderBy('parceria_id ASC')->asArray()->all();
+
+            $dists=Distritos::find()->asArray()->all();
+            $dist=ArrayHelper::getColumn($dists, 'district_code');
 
         }
 

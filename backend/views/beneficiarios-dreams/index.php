@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
-
+use app\models\Organizacoes;
 
 use yii\helpers\ArrayHelper;
 use app\models\ComiteZonal;
@@ -14,13 +14,11 @@ use app\models\ComiteCirculos;
 use app\models\ComiteCelulas;
 use app\models\Us;
 use app\models\ServicosBeneficiados;
-use app\models\Organizacoes;
 
 use kartik\grid\EditableColumn;
 use app\models\ServicosDream;
 use app\models\Utilizadores;
 use common\models\User;
-
 
 use app\models\ReferenciasDreams;
 use app\models\Distritos;
@@ -40,20 +38,22 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-          ['class' => 'yii\grid\SerialColumn'],
+            ['class' => 'yii\grid\SerialColumn'],
 
-          [
-            'attribute'=>'district_code',
-            'format'=>'raw',
-            'value' => function ($model) {
-              return  $model->district_code==NULL ? '-': $model->distrito['district_name'];
-            },
+         [
+             'attribute'=>'district_code',
+          'format'=>'raw',
+          'value' => function ($model) {
+       return  $model->district_code==NULL ? '-': $model->distrito['district_name'];
+       },
             'filter'=> ArrayHelper::map(
-                Distritos::find()
-                ->where(['IN','district_code',$dist])
-                ->orderBy('province_code,district_name ASC')->all(),
-                 'district_code', 'district_name'),
-          ],       
+               Distritos::find()
+              ->where(['IN','district_code',$dist])
+              ->orderBy('province_code,district_name ASC')->all(),
+              'district_code', 'district_name'),
+           ],
+          
+          
           
           [
             'attribute'=>'bairro_id',

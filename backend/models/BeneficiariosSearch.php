@@ -204,15 +204,15 @@ class BeneficiariosSearch extends Beneficiarios
      */
     public function search($params)
     {
-      $query = Beneficiarios::find()->where(['emp_status'=>1]);
+        $query = Beneficiarios::find()->where(['emp_status'=>1]);
 		if (isset(Yii::$app->user->identity->role)&&(Yii::$app->user->identity->role>0)) { 
-if(isset(Yii::$app->user->identity->provin_code)&&(Yii::$app->user->identity->provin_code>0)) {
-$prov=(int)Yii::$app->user->identity->provin_code;
-$query = Beneficiarios::find()->where(['provin_code'=>$prov])->andWhere(['emp_status'=>1]);
+            if(isset(Yii::$app->user->identity->provin_code)&&(Yii::$app->user->identity->provin_code>0)) {
+            $prov=(int)Yii::$app->user->identity->provin_code;
+            $query = Beneficiarios::find()->where(['provin_code'=>$prov])->andWhere(['emp_status'=>1]);
 
-} elseif(Yii::$app->user->identity->role==20) {
+            } elseif(Yii::$app->user->identity->role==20) {
 
-/*$todos=ServicosBeneficiados::find()
+                /*$todos=ServicosBeneficiados::find()
   ->where(['=','criado_por',Yii::$app->user->identity->id])
   ->andWhere(['=','status',1])
    ->asArray()
