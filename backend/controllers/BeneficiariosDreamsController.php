@@ -106,7 +106,6 @@ class BeneficiariosDreamsController extends Controller
         {
 
             $dists=Distritos::find()->where(['province_code'=>(int)Yii::$app->user->identity->provin_code])->asArray()->all();
-            $dist=ArrayHelper::getColumn($dists, 'district_code');
 
             $orgs=Organizacoes::find()->where(['IN','distrito_id',$dist])->orderBy('parceria_id ASC')->asArray()->all();
 
@@ -114,9 +113,12 @@ class BeneficiariosDreamsController extends Controller
 
             $orgs=Organizacoes::find()->where(['=', 'status', 1])->orderBy('parceria_id ASC')->asArray()->all();
 
+            $dists=Distritos::find()->asArray()->all();
+
         }
 
         $org=ArrayHelper::getColumn($orgs, 'id');
+        $dist=ArrayHelper::getColumn($dists, 'district_code');
 
         return $this->render('index', [
             'searchModel' => $searchModel,
