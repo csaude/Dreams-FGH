@@ -1,7 +1,7 @@
 <?php
 
   use yii\helpers\Html;
-  use yii\grid\GridView;
+  use kartik\grid\GridView;
 
   use yii\widgets\Pjax;
   use yii\helpers\ArrayHelper;
@@ -191,9 +191,12 @@
 
               ],
             
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]); ?>
+              ['class' => 'yii\grid\ActionColumn'],
+          ],
+          'panel'=>[
+            'type'=>GridView::TYPE_PRIMARY,
+          ],
+      ]); ?>
 
     <p>
         <?php Html::a(Yii::t('app', 'Create Referencias Dreams'), ['create'], ['class' => 'btn btn-success']) ?>

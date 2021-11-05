@@ -271,6 +271,9 @@
           'filter'=>array("1"=>"Atendido","0"=>"Pendente"),
         ],
       ],
+      'panel'=>[
+        'type'=>GridView::TYPE_PRIMARY,
+      ],
     ]); 
   ?>
 
