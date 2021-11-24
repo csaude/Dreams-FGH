@@ -98,8 +98,8 @@ class Beneficiarios extends \yii\db\ActiveRecord
 		    [['emp_mobile'], 'integer', 'message' => 'O valor do {attribute} só pode ter números'],
             [['idade_anos'], 'integer', 'min' => 9, 'message' => 'O valor da {attribute} não pode ser menor que 9'],
             [['parceiro_id'],'integer','message'=>'O Valor {attribute} não existe'],
-            [['emp_birthday','district_code','emp_lastname','emp_firstname', 'emp_gender', 'provin_code','ponto_entrada','bairro_id','encarregado_educacao'], 'required'],
-            [['emp_dri_lice_exp_date', 'joined_date', 'criado_em', 'actualizado_em','deficiencia_tipo','estudante','estudante_classe','estudante_escola','gravida','filhos','deficiencia','house_sustainer','married_before','pregant_or_breastfeed','employed','tested_hiv','vbg_vitima_trafico','vbg_exploracao_sexual','vbg_migrante_trafico','vbg_sexual_activa','vbg_relacao_multipla','vbg_vitima','vbg_sex_worker','alcohol_drugs_use','sti_history'], 'safe'],
+            [['emp_birthday','district_code','emp_lastname','emp_firstname', 'emp_gender', 'provin_code','ponto_entrada','bairro_id','encarregado_educacao','orphan'], 'required'],
+            [['emp_dri_lice_exp_date', 'joined_date', 'criado_em', 'actualizado_em','deficiencia_tipo','estudante','estudante_classe','estudante_escola','gravida','filhos','deficiencia','house_sustainer','married_before','pregant_or_breastfeed','employed','tested_hiv','vbg_vitima_trafico','vbg_exploracao_sexual','vbg_migrante_trafico','vbg_sexual_activa','vbg_relacao_multipla','vbg_vitima','vbg_sex_worker','alcohol_drugs_use','sti_history','orphan'], 'safe'],
             [['member_id', 'membro_caratao_eleitor', 'membro_cargo_partido_id', 'emp_hm_telephone',  'emp_work_telephone', 'emp_work_email', 'emp_oth_email', 'bi_data_i', 'bi_data_f', 'nuit_data_i', 'nuit_data_f', 'user_location'], 'string', 'max' => 50],
             [['emp_lastname', 'emp_firstname', 'emp_middle_name', 'emp_nick_name', 'emp_ssn_num', 'emp_sin_num', 'emp_other_id', 'emp_dri_lice_num', 'emp_military_service', 'emp_street1', 'emp_street2', 'city_code', 'coun_code', 'provin_code', 'district_code'], 'string', 'max' => 100],
             [['emp_birthday','membro_data_admissao', 'emp_marital_status', 'emp_zipcode'], 'string', 'max' => 20],
@@ -107,30 +107,13 @@ class Beneficiarios extends \yii\db\ActiveRecord
             [['bi', 'nuit', 'passaporte', 'dire'], 'string', 'max' => 15],
             [['custom3', 'other_prof_info', 'custom7', 'custom8', 'custom9', 'custom10'], 'string', 'max' => 250],
             [['user_location2'], 'string', 'max' => 200],
-//	    [['emp_birthday'], 'validateDateOfBirth'],
-	//    [['emp_birthday'], 'date', 'format' => 'php:m/d/Y', 'message'=>'O formato da data nao esta correcta'],
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
-/*
-public function validateDateOfBirth($attribute)
-{
-    $dateTime = DateTime::createFromFormat('m/d/Y', $this->$attribute);
-    $errors = DateTime::getLastErrors();
-    if (!empty($errors['warning_count'])) {
-        $this->addError($attribute, 'Formato da Data Invalido');
+    /* Getter for person full name */
+    public function getFullName() {
+        return $this->emp_firstname . ' ' . $this->emp_lastname;
     }
-}
-*/
-
-/* Getter for person full name */
-public function getFullName() {
-    return $this->emp_firstname . ' ' . $this->emp_lastname;
-}
-
 
     public function attributeLabels()
     {
@@ -140,13 +123,13 @@ public function getFullName() {
             'member_id' => 'Código do Beneficiário',
             'fullName' => Yii::t('app', 'Nome Completo'),
             'emp_lastname' => 'Apelido',
-	    'ponto_entrada'=> 'Ponto de Entrada',
+	        'ponto_entrada'=> 'Ponto de Entrada',
             'emp_firstname' => 'Nome',
             'emp_middle_name' => 'Nome do meio',
             'emp_nick_name' => 'Alcunha',
             'parceiro_id' =>'Parceiro Dreams',
           	'parceiro_benificiario_id' => 'NUI do Parceiro do Beneficiario',
-	    'via'=>'Segunda Via',
+	        'via'=>'Segunda Via',
             'idade_anos' =>'Idade (em anos)',
             'estudante' =>'Vai a Escola',
             'estudante_classe' =>'Classe',
@@ -154,7 +137,7 @@ public function getFullName() {
             'gravida' =>'Já esteve Gravida?',
             'filhos' =>'Tem Filhos?',
             'bairro_id' =>'Onde Mora', 
-	    'us_id'=>'Ponto de Entrada',
+	        'us_id'=>'Ponto de Entrada',
             'encarregado_educacao' =>'Com quem mora?',
             'deficiencia' =>'Tem Deficiência',
             'deficiencia_tipo'=>'Tipo de Deficiência',
@@ -217,6 +200,7 @@ public function getFullName() {
             'user_location' => 'User Location',
             'user_location2' => 'User Location2',
 	        'house_sustainer' => 'Sustenta a Casa?',
+            'orphan' => 'É Orfã?',
             'married_before' => 'Já foi Casada?',
             'pregant_or_breastfeed' => 'Está Grávida ou a amamentar?',
             'employed' => 'Trabalha?',
@@ -237,137 +221,123 @@ public function getFullName() {
         ];
     }
 
-     public function beforeSave($insert) {
-  date_default_timezone_set('Africa/Maputo');
+    public function beforeSave($insert) {
+        date_default_timezone_set('Africa/Maputo');
 
-    if ($this->isNewRecord) { 
-        
-     $this->criado_em=date("Y-m-d H:i:s"); 
-     $this->criado_por=Yii::$app->user->identity->id;
-     $this->user_location=Yii::$app->request->userIP;
-     // Linha adicionada para parceiro Dreams / Gerzelio 03/03/2020
-     $this->parceiro_id = Yii::$app->user->identity->parceiro_id;
-     $this->coun_code="MZ";
+        if ($this->isNewRecord) { 
+            
+            $this->criado_em=date("Y-m-d H:i:s"); 
+            $this->criado_por=Yii::$app->user->identity->id;
+            $this->user_location=Yii::$app->request->userIP;
+            // Linha adicionada para parceiro Dreams / Gerzelio 03/03/2020
+            $this->parceiro_id = Yii::$app->user->identity->parceiro_id;
+            $this->coun_code="MZ";
 
-     $ben=Beneficiarios::find()
-    ->where(['id' => Beneficiarios::find()->max('id')])
-    ->one();
-     $emp_number = $ben->id+1;
-     $this->emp_number=$emp_number;
-		
-	 $len = strlen($emp_number);
+            $ben=Beneficiarios::find()
+            ->where(['id' => Beneficiarios::find()->max('id')])
+            ->one();
+            $emp_number = $ben->id+1;
+            $this->emp_number=$emp_number;
+                
+            $len = strlen($emp_number);
 
-switch ($len) {
-    case 2:   $this->member_id='00000'.$emp_number;
-        break;
+            switch ($len) {
+                case 2:   $this->member_id='00000'.$emp_number;
+                    break;
 
-   case 3:   $this->member_id='0000'.$emp_number;
-        break;
+                case 3:   $this->member_id='0000'.$emp_number;
+                    break;
 
-  case 4:   $this->member_id='000'.$emp_number;
-        break;
-   case 5:   $this->member_id='00'.$emp_number;
-        break;
-    case 6:   $this->member_id='0'.$emp_number;
-        break;
-      default: $this->member_id=$emp_number;
-}
+                case 4:   $this->member_id='000'.$emp_number;
+                    break;
+                case 5:   $this->member_id='00'.$emp_number;
+                    break;
+                case 6:   $this->member_id='0'.$emp_number;
+                    break;
+                default: $this->member_id=$emp_number;
+            }
+        } else{
+            $this->actualizado_em=date("Y-m-d H:i:s");
+            $this->actualizado_por=Yii::$app->user->identity->id;
+            $this->user_location2=Yii::$app->request->userIP;
+        }
+        return parent::beforeSave($insert); 
+    }
 
-
-	/*if($len==2) {
-	$this->member_id='00000'.$emp_number;
-	} else {
-	$this->member_id='00000'.$emp_number;
-	}*/
-		
-    } 
-    else 
-        {
-        $this->actualizado_em=date("Y-m-d H:i:s");
-        $this->actualizado_por=Yii::$app->user->identity->id;
-        $this->user_location2=Yii::$app->request->userIP;
-      	// Linha adicionada para parceiro Dreams / Gerzelio 03/03/2020
-     	$this->parceiro_id = Yii::$app->user->identity->parceiro_id;
-        $this->coun_code="MZ"; }
-    return parent::beforeSave($insert); 
-}
-
-
-
-public function afterSave($insert, $changedAttributes)
-{
+    public function afterSave($insert, $changedAttributes)
+    {
         parent::afterSave($insert, $changedAttributes);
         //your logic
-}
+    }
   
 
-         public function getCProvincial()
+    public function getCProvincial()
     {
         return $this->hasOne(ComiteProvincial::className(), ['id' => 'provin_code']);
     }
 
-          public function getNacionalidade()
+    public function getNacionalidade()
     {
         return $this->hasOne(Nacionalidade::className(), ['cou_code' => 'coun_code']);
     }
 
-       public function getProvincia()
+    public function getProvincia()
     {
         return $this->hasOne(Provincias::className(), ['id' => 'provin_code']);
     }
 
-           public function getDistrito()
+    public function getDistrito()
     {
         return $this->hasOne(Distritos::className(), ['district_code' => 'district_code']);
     }
 
-           public function getUs()
+    public function getUs()
     {
         return $this->hasOne(Us::className(), ['id' => 'us_id']);
     }
 
-           public function getCCidade()
+    public function getCCidade()
     {
         return $this->hasOne(ComiteCidades::className(), ['id' => 'city_code']);
     }  
 
-             public function getCZona()
+    public function getCZona()
     {
         return $this->hasOne(ComiteZonal::className(), ['id' => 'membro_zona']);
     }
 
-                 public function getCCirculo()
+    public function getCCirculo()
     {
         return $this->hasOne(ComiteCirculos::className(), ['id' => 'membro_circulo']);
     } 
 
 
-                 public function getCCelula()
+    public function getCCelula()
     {
         return $this->hasOne(ComiteCelulas::className(), ['id' => 'membro_celula']);
     }
 
-  public function getLocalidade()
+    public function getLocalidade()
     {
         return $this->hasOne(ComiteLocalidades::className(), ['id' => 'membro_localidade_id']);
     } 
 
-      public function getBairros()
+    public function getBairros()
     {
         return $this->hasOne(Bairros::className(), ['id' => 'bairro_id']);
     } 
 
-  public function getGrau()
+    public function getGrau()
     {
         return $this->hasOne(Educacao::className(), ['id' => 'sal_grd_code']);
     } 
 
-  public function getCategoria()
+    public function getCategoria()
     {
         return $this->hasOne(JobCategory::className(), ['id' => 'eeo_cat_code']);
     }
 
-  public function getTitulo()
+    public function getTitulo()
     {
         return $this->hasOne(TituloProfissional::className(), ['id' => 'job_title_code']);
     } 
@@ -377,7 +347,7 @@ public function afterSave($insert, $changedAttributes)
         return $this->hasOne(Utilizadores::className(), ['id' => 'criado_por']);
     }
 	
-	 public function getUpdate()
+    public function getUpdate()
     {
         return $this->hasOne(Utilizadores::className(), ['id' => 'actualizado_por']);
     }
@@ -387,12 +357,12 @@ public function afterSave($insert, $changedAttributes)
         return $this->hasOne(TipoCargos::className(), ['id' => 'membro_cargo_partido_id']);
     }
 	
-	 public function getParceiro()
+    public function getParceiro()
     {
         return $this->hasOne(Beneficiarios::className(), ['id' => 'parceiro_id']);
     }
 	//Ponto de entrada
-	  public function getPe()
+    public function getPe()
     {
         return $this->hasOne(PontosDeEntrada::className(), ['id' => 'ponto_entrada']);
     }
@@ -402,7 +372,4 @@ public function afterSave($insert, $changedAttributes)
     {
         return $this->hasOne(Organizacoes::className(), ['id' => 'parceiro_id']);
     }
-  
-
-
 }

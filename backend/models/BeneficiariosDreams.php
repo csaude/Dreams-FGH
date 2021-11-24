@@ -26,6 +26,7 @@ use Yii;
  * @property integer $filhos
  * @property integer $bairro_id
  * @property string $encarregado_educacao
+ * @property string $orphan
  * @property integer $deficiencia
  * @property string $deficiencia_tipo
  * @property integer $house_sustainer
@@ -120,7 +121,7 @@ class BeneficiariosDreams extends \yii\db\ActiveRecord
             [['idade_anos'], 'integer', 'min' => 9, 'message' => 'O valor da {attribute} não pode ser menor que 9'],
             [['parceiro_id'], 'integer', 'message' => 'O Valor {attribute} não existe'],
             [['emp_birthday', 'district_code', 'emp_lastname', 'emp_firstname', 'emp_gender', 'provin_code', 'ponto_entrada', 'bairro_id', 'encarregado_educacao'], 'required'],
-            [['emp_dri_lice_exp_date', 'joined_date', 'criado_em', 'actualizado_em', 'deficiencia_tipo', 'estudante', 'estudante_classe', 'estudante_escola', 'gravida', 'filhos', 'deficiencia', 'house_sustainer', 'married_before', 'pregant_or_breastfeed', 'employed', 'tested_hiv', 'vbg_vitima_trafico', 'vbg_exploracao_sexual', 'vbg_migrante_trafico', 'vbg_sexual_activa', 'vbg_relacao_multipla', 'vbg_vitima', 'vbg_sex_worker', 'alcohol_drugs_use', 'sti_history'], 'safe'],
+            [['emp_dri_lice_exp_date', 'joined_date', 'criado_em', 'actualizado_em', 'deficiencia_tipo', 'estudante', 'estudante_classe', 'estudante_escola', 'gravida', 'filhos', 'deficiencia', 'house_sustainer', 'married_before', 'pregant_or_breastfeed', 'employed', 'tested_hiv', 'vbg_vitima_trafico', 'vbg_exploracao_sexual', 'vbg_migrante_trafico', 'vbg_sexual_activa', 'vbg_relacao_multipla', 'vbg_vitima', 'vbg_sex_worker', 'alcohol_drugs_use', 'sti_history', 'orphan'], 'safe'],
             [['member_id', 'membro_caratao_eleitor', 'membro_cargo_partido_id', 'emp_hm_telephone',  'emp_work_telephone', 'emp_work_email', 'emp_oth_email', 'bi_data_i', 'bi_data_f', 'nuit_data_i', 'nuit_data_f', 'user_location'], 'string', 'max' => 50],
             [['emp_lastname', 'emp_firstname', 'emp_middle_name', 'emp_nick_name', 'emp_ssn_num', 'emp_sin_num', 'emp_other_id', 'emp_dri_lice_num', 'emp_military_service', 'emp_street1', 'emp_street2', 'city_code', 'coun_code', 'provin_code', 'district_code'], 'string', 'max' => 100],
             [['emp_birthday', 'membro_data_admissao', 'emp_marital_status', 'emp_zipcode'], 'string', 'max' => 20],
@@ -128,24 +129,8 @@ class BeneficiariosDreams extends \yii\db\ActiveRecord
             [['bi', 'nuit', 'passaporte', 'dire'], 'string', 'max' => 15],
             [['custom3', 'other_prof_info', 'custom7', 'custom8', 'custom9', 'custom10'], 'string', 'max' => 250],
             [['user_location2'], 'string', 'max' => 200],
-            //	    [['emp_birthday'], 'validateDateOfBirth'],
-            //    [['emp_birthday'], 'date', 'format' => 'php:m/d/Y', 'message'=>'O formato da data nao esta correcta'],
         ];
     }
-
-    /**
-     * @inheritdoc
-     */
-    /*
-public function validateDateOfBirth($attribute)
-{
-   $dateTime = DateTime::createFromFormat('m/d/Y', $this->$attribute);
-   $errors = DateTime::getLastErrors();
-   if (!empty($errors['warning_count'])) {
-       $this->addError($attribute, 'Formato da Data Invalido');
-   }
-}
-*/
 
     /* Getter for person full name */
     public function getFullName()
@@ -178,6 +163,7 @@ public function validateDateOfBirth($attribute)
             'bairro_id' => 'Onde Mora',
             'us_id' => 'Ponto de Entrada',
             'encarregado_educacao' => 'Com quem mora?',
+            'orphan' => 'É Orfã?',
             'deficiencia' => 'Tem Deficiência',
             'deficiencia_tipo' => 'Tipo de Deficiência',
             'membro_zona' => 'Comité de Zona',
@@ -301,32 +287,19 @@ public function validateDateOfBirth($attribute)
                 default:
                     $this->member_id = $emp_number;
             }
-
-
-            /*if($len==2) {
-  $this->member_id='00000'.$emp_number;
-  } else {
-  $this->member_id='00000'.$emp_number;
-  }*/
         } else {
             $this->actualizado_em = date("Y-m-d H:i:s");
             $this->actualizado_por = Yii::$app->user->identity->id;
             $this->user_location2 = Yii::$app->request->userIP;
-            // Linha adicionada para parceiro Dreams / Gerzelio 03/03/2020
-            $this->parceiro_id = Yii::$app->user->identity->parceiro_id;
-            $this->coun_code = "MZ";
         }
         return parent::beforeSave($insert);
     }
-
-
 
     public function afterSave($insert, $changedAttributes)
     {
         parent::afterSave($insert, $changedAttributes);
         //your logic
     }
-
 
     public function getCProvincial()
     {
@@ -418,6 +391,7 @@ public function validateDateOfBirth($attribute)
     {
         return $this->hasOne(Beneficiarios::className(), ['id' => 'parceiro_id']);
     }
+    
     //Ponto de entrada
     public function getPe()
     {

@@ -173,7 +173,7 @@ $this->params['breadcrumbs'][] = $this->title;
               'value' => function ($model) {
                 return  $model->encarregado_educacao==1 ? '<i class="fa fa-check"></i><span style="display:none !important">S</span>': '<i class="fa fa-times" color="red"></i><span style="display:none !important">N</span>';
               },
-            ],          
+            ],
           
             [
               'attribute'=>'house_sustainer',
@@ -181,6 +181,15 @@ $this->params['breadcrumbs'][] = $this->title;
               'filter'=>array("1"=>"SIM","0"=>"NÃO","NUL"=>"?"),
               'value' => function ($model) {
                 return  $model->house_sustainer==1 ? '<i class="fa fa-check"></i><span style="display:none !important">S</span>': '<i class="fa fa-times" color="red"></i><span style="display:none !important">N</span>';
+              },
+            ],
+          
+            [
+              'attribute'=>'orphan',
+              'format' => 'raw',
+              'filter'=>array("1"=>"SIM","0"=>"NÃO","NUL"=>"?"),
+              'value' => function ($model) {
+                return  $model->orphan==1 ? '<i class="fa fa-check"></i><span style="display:none !important">S</span>': '<i class="fa fa-times" color="red"></i><span style="display:none !important">N</span>';
               },
             ],
 
