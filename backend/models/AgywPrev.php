@@ -52,17 +52,6 @@ class AgywPrev extends Model {
     }
 
     /**
-     * Return beneficiaries for desagregation Bellow
-     * Number of active DREAMS beneficiaries that have fully completed the DREAMS primary package of services/interventions 
-     *  but no additional services/interventions. (Numerator, Denominator)
-     */
-    public function getFirstDesagregationBeneficiaries(){
-        $indicator = $this->desagregationCompletedOnlyFirstPackage();
-
-        return $indicator;
-    }
-
-    /**
      * Return results for desagregation Bellow
      * Number of active DREAMS beneficiaries that have fully completed the primary package of services/interventions AND
      *   at least one secondary service/intervention. (Numerator, Denominator)
@@ -71,17 +60,6 @@ class AgywPrev extends Model {
         $indicator = $this->desagregationCompletedFirstPackageAndSecondaryService();
         
         //return $indicator['results'];
-        return $indicator;
-    }
-
-    /**
-     * Return beneficiaries for desagregation Bellow
-     * Number of active DREAMS beneficiaries that have fully completed the primary package of services/interventions AND
-     *   at least one secondary service/intervention. (Numerator, Denominator)
-     */
-    public function getSecondDesagregationBeneficiaries(){
-        $indicator = $this->desagregationCompletedFirstPackageAndSecondaryService();
-
         return $indicator;
     }
 
@@ -97,17 +75,6 @@ class AgywPrev extends Model {
     }
 
     /**
-     * Return beneficiaries for desagregation Bellow
-     * Number of active DREAMS beneficiaries that have completed at least one DREAMS service/intervention but 
-     *  not the full primary package. (Denominator)
-     */
-    public function getThirdDesagregationBeneficiaries(){
-        $indicator = $this->desagregationCompletedOnlyServiceNotPackage();
-
-        return $indicator['beneficiaries'];
-    }
-
-    /**
      * Return results for desagregation Bellow
      * Number of active DREAMS beneficiaries that have completed at least one DREAMS service/intervention but 
      *  not the full primary package. (Denominator)
@@ -116,17 +83,6 @@ class AgywPrev extends Model {
         $indicator = $this->desagregationStartedServiceNotFinished();
         
         return $indicator;
-    }
-
-    /**
-     * Return beneficiaries for desagregation Bellow
-     * Number of active DREAMS beneficiaries that have completed at least one DREAMS service/intervention but 
-     *  not the full primary package. (Denominator)
-     */
-    public function getFourthDesagregationBeneficiaries(){
-        $indicator = $this->desagregationStartedServiceNotFinished();
-
-        return $indicator['beneficiaries'];
     }
 
     /**
@@ -141,17 +97,6 @@ class AgywPrev extends Model {
     }
 
     /**
-     * Return beneficiaries for desagregation Bellow
-     * Violence Prevention: Number of AGYW enrolled in DREAMS that completed an evidence-based intervention focused 
-     *  on preventing violence within the reporting period.
-     */
-    public function getFifthDesagregationBeneficiaries(){
-        $indicator = $this->desagregationCompletedViolenceService();
-
-        return $indicator['beneficiaries'];
-    }
-
-    /**
      * Return results for desagregation Bellow
      * Education Support: Number of AGYW enrolled in DREAMS that received educational support to remain in, advance, 
      *  and/or rematriculate in school within the reporting period.
@@ -160,17 +105,6 @@ class AgywPrev extends Model {
         $indicator = $this->desagregationSubsidioEscolar();
         
         return $indicator;
-    }
-
-    /**
-     * Return beneficiaries for desagregation Bellow
-     * Education Support: Number of AGYW enrolled in DREAMS that received educational support to remain in, 
-     *  advance, and/or rematriculate in school within the reporting period.
-     */
-    public function getSixthDesagregationBeneficiaries(){
-        $indicator = $this->desagregationSubsidioEscolar();
-
-        return $indicator['beneficiaries'];
     }
 
     /**
@@ -184,15 +118,57 @@ class AgywPrev extends Model {
         return $indicator;
     }
 
-    /**
-     * Return beneficiaries for desagregation Bellow
-     * Comprehensive Economic Strengthening: Number of AGYW ages 15-24 years enrolled in DREAMS that completed 
-     * a comprehensive economic strengthening intervention within the reporting period
-     */
-    public function getSeventhDesagregationBeneficiaries(){
-        $indicator = $this->desagregationAbordagensSocioEconomicas();
+    public function getAllDisaggregationsResults(){
+        $ageBands = ['9-14','15-19','20-24','25-29'];
+        $enrollmentTimes = ['0_6','7_12','13_24','25+'];
+        
+        $results = 0;
+        $beneficiaries = array();
+        $finalResult = array();
 
-        return $indicator['beneficiaries'];
+
+        foreach($this->districts as $district){
+
+            $results = 0;
+            $beneficiaries = array();
+
+            $firstdisaggragationResults = $this->getFirstDesagregationResults();
+            $seconddisaggragationResults = $this->getSecondDesagregationResults();
+            $thirddisaggragationResults = $this->getThirdDesagregationResults();
+            $fourthdisaggragationResults = $this->getFourthDesagregationResults();
+
+            foreach($ageBands as $index1){
+                foreach($enrollmentTimes as $index2){
+                    $firstResults = $firstdisaggragationResults[$district]['results'][$index1][$index2];
+                    $firstBeneficiaries = array_values($firstdisaggragationResults[$district]['beneficiaries'][$index1][$index2]);
+                    $secondResults = $seconddisaggragationResults[$district]['results'][$index1][$index2];
+                    $secondBeneficiaries = array_values($seconddisaggragationResults[$district]['beneficiaries'][$index1][$index2]);
+                    $thirdResults = $thirddisaggragationResults[$district]['results'][$index1][$index2];
+                    $thirdBeneficiaries = array_values($thirddisaggragationResults[$district]['beneficiaries'][$index1][$index2]);
+                    $fourthResults = $fourthdisaggragationResults[$district]['results'][$index1][$index2];
+                    $fourthBeneficiaries = ($fourthdisaggragationResults[$district]['beneficiaries'][$index1][$index2]);
+
+                    $results = $results + $firstResults + $secondResults + $thirdResults + $fourthResults;
+                    $this->addBeneficiaries($beneficiaries, $firstBeneficiaries);
+                    $this->addBeneficiaries($beneficiaries, $secondBeneficiaries);
+                    $this->addBeneficiaries($beneficiaries, $thirdBeneficiaries);
+                    $this->addBeneficiaries($beneficiaries, $fourthBeneficiaries);
+                }
+            }
+
+            $finalResult[$district] = array(
+                'results' => $results,
+                'beneficiaries' =>  $beneficiaries
+            );
+        }
+
+        return $finalResult;
+    }
+
+    private function addBeneficiaries(&$beneficiaries, $toAdd){
+        foreach($toAdd as $add){
+            array_push($beneficiaries, $add);
+        }
     }
     
 

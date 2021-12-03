@@ -28,6 +28,9 @@ $enrollmentTime = str_replace('_', '-',$_GET['eTime']).' meses';
 $ageBand = isset($_GET['aBand'])? str_replace('_', '-',$_GET['aBand']).' anos': "Todas";
 
 switch($indicatorID){
+  case 0: 
+          $this->title = 'Beneficiárias no Indicador AGYW_PREV';
+          break;
   case 1: 
           $this->title = 'Beneficiárias que completaram o pacote primário completo do DREAMS mas nenhum serviço/intervenção adicional';
           break;
@@ -45,6 +48,9 @@ switch($indicatorID){
           break;
   case 6: 
           $this->title = 'Beneficiárias que receberam apoio escolar para manter-se, progredir e/ou matricular-se na escola';
+          break;
+  case 7: 
+          $this->title = 'Beneficiárias com idades entre 15-24 anos que completaram uma intervenção abrangente de fortalecimento económico';
           break;        
 };
 

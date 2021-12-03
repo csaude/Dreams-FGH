@@ -458,8 +458,11 @@ class BeneficiariosController extends Controller
         $beneficiaries = null;
 
         switch($indicatorID){
+            case 0: 
+                    $desagregationResults = $model->getAllDisaggregationsResults();
+                    $beneficiaries = $desagregationResults[$district_code]['beneficiaries'];
+                    break;
             case 1: 
-                    
                     $desagregationResults = $model->getFirstDesagregationResults();
                     $firstdesagregationResults = $desagregationResults[$district_code]['beneficiaries'];
                     $beneficiaries = $this->getBeneficiaries($firstdesagregationResults, $ageBand, $enrollmentTime);
@@ -565,6 +568,7 @@ class BeneficiariosController extends Controller
             $fifthdesagregationResults = $model->getFifthDesagregationResults();
             $sixthdesagregationResults = $model->getSixthDesagregationResults();
             $seventhdesagregationResults = $model->getSeventhDesagregationResults();
+            $alldisaggragationResults = $model->getAllDisaggregationsResults();
 
             $totaisresults = $model->getSummary($districts);
             $totalAgyw = $model->getTotaisAgyW();
@@ -587,6 +591,7 @@ class BeneficiariosController extends Controller
                 'fifthdesagregation' => $fifthdesagregationResults,
                 'sixthdesagregation' => $sixthdesagregationResults,
                 'seventhdesagregation' => $seventhdesagregationResults,
+                'allbeneficiaries' => $alldisaggragationResults,
                 'totals' => $totaisresults,
                 'totalsAgyw' => $totalAgyw
             ]);
