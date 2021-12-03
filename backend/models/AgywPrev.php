@@ -173,6 +173,28 @@ class AgywPrev extends Model {
         return $indicator['beneficiaries'];
     }
     
+    /**
+     * Return results for desagregation Bellow
+     * Comprehensive Economic Strengthening: Number of AGYW ages 15-24 years enrolled in DREAMS  
+     * that completed a comprehensive economic strengthening intervention within the reporting period
+     */
+    public function getSeventhDesagregationResults(){
+        $indicator = $this->desagregationAbordagensSocioEconomicas();
+
+        return $indicator;
+    }
+
+    /**
+     * Return beneficiaries for desagregation Bellow
+     * Comprehensive Economic Strengthening: Number of AGYW ages 15-24 years enrolled in DREAMS  
+     * that completed a comprehensive economic strengthening intervention within the reporting period
+     */
+    public function getSeventhDesagregationBeneficiaries(){
+        $indicator = $this->desagregationAbordagensSocioEconomicas();
+
+        return $indicator['beneficiaries'];
+    }
+
 
     private function s_datediff( $str_interval, $dt_menor, $dt_maior, $relative=false){
 
@@ -214,6 +236,7 @@ class AgywPrev extends Model {
                     'iniciaram_servico' => array(),
                     'completaram_servico_secundario' => array(),
                     'tiveram_intervencao_subsidio_escolar' => array(),
+                    'tiveram_abordagens_socio_economicas' => array(),
                 );
         $results1519 = array(
                     'completaram_pacote_primario' => array(),
@@ -222,6 +245,7 @@ class AgywPrev extends Model {
                     'iniciaram_servico' => array(),
                     'completaram_servico_secundario' => array(),
                     'tiveram_intervencao_subsidio_escolar' => array(),
+                    'tiveram_abordagens_socio_economicas' => array(),
                 );
         $results2024 = array(
                     'completaram_pacote_primario' => array(),
@@ -230,6 +254,7 @@ class AgywPrev extends Model {
                     'iniciaram_servico' => array(),
                     'completaram_servico_secundario' => array(),
                     'tiveram_intervencao_subsidio_escolar' => array(),
+                    'tiveram_abordagens_socio_economicas' => array(),
                 );
         $results2529 = array(
                     'completaram_pacote_primario' => array(),
@@ -238,6 +263,7 @@ class AgywPrev extends Model {
                     'iniciaram_servico' => array(),
                     'completaram_servico_secundario' => array(),
                     'tiveram_intervencao_subsidio_escolar' => array(),
+                    'tiveram_abordagens_socio_economicas' => array(),
                 );
 
         return array(
@@ -364,7 +390,7 @@ class AgywPrev extends Model {
             $agyw_prev[$district] = array();
         }
         $distritos = implode(',', $districts);
-        $query = "select beneficiario_id, distrito_id, vai_escola, sexualmente_activa, data_registo, 
+        $query = "select beneficiario_id, idade_actual, distrito_id, vai_escola, sexualmente_activa, data_registo, 
                     if(idade_actual = 15  and datediff(min(data_servico),coalesce(STR_TO_DATE(data_nascimento,'%d/%m/%Y'),STR_TO_DATE(data_nascimento,'%m/%d/%Y')))/30 between 120 and 177,'9-14',if(idade_actual = 20  and datediff(min(data_servico),coalesce(STR_TO_DATE(data_nascimento,'%d/%m/%Y'),STR_TO_DATE(data_nascimento,'%m/%d/%Y')))/30 between 180 and 237,'15-19',faixa_actual)) faixa_actual,
                     if(idade_actual < 20 and sustenta_casa=1,1,0) +
                     if(idade_actual < 18 and vai_escola=0,1,0) +
@@ -503,6 +529,8 @@ class AgywPrev extends Model {
         foreach ($result as $row){
             
             $beneficiary_id = $row['beneficiario_id'];
+            $idade_actual = $row['idade_actual'];
+
             $faixa_etaria = $row['faixa_actual'];
             $vai_escola = $row['vai_escola'];
             $sexualmente_activa = $row['sexualmente_activa'];
@@ -619,6 +647,26 @@ class AgywPrev extends Model {
                 if($sessoes_hiv > 0 || 0 && $sessoes_vbg > 0){
                     $this->addCompletude($desagregationMap, $districtId, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_servico_primario');
                     array_push($agyw_prev[$districtId], $beneficiary_id);
+                }
+                if($abordagens_socio_economicas > 0 && $idade_actual <= 25){
+                    if ($idade_actual == 25){
+                        // calcular idade quando recebeu o serviço; se for 25 descartar
+                        $query1 = "select max(data_servico) data_servico from app_dream_vw_agyw_prev
+                                    where beneficiario_id = :beneficiario_id
+                                    and sub_servico_id in (40,82,83,84,85,86,87,214)";
+
+                        $preparedQuery1 = Yii::$app->db->createCommand($query1);
+                        $preparedQuery1->bindParam(":beneficiario_id", $beneficiary_id);
+                        $result1 = $preparedQuery1->queryAll();
+
+                        $idade_servico = date_diff(date_create($data_nascimento), date_create($result1[0]['data_servico']));
+
+                        if($idade_servico->y == 25){
+                            continue;
+                        }
+                    }
+                    $this->addCompletude($desagregationMap, $districtId, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'tiveram_abordagens_socio_economicas');
+                    //array_push($agyw_prev[$districtId], $beneficiary_id);
                 }
             }
             if($subsidio_escolar > 0){
@@ -859,6 +907,42 @@ class AgywPrev extends Model {
                     $results[$district][$index1][$index2] = count($completaramServicoEscolar);
                 }
             }
+
+            $finalResult[$district] = array(
+                'results' => $results[$district],
+                'beneficiaries' =>  $beneficiaries[$district]
+            );
+        }
+
+
+        return $finalResult;
+    }
+
+    /**
+     * Comprehensive Economic Strengthening: Number of AGYW ages 15-24 years enrolled in DREAMS that completed 
+     * a comprehensive economic strengthening intervention within the reporting period
+     */
+    private function desagregationAbordagensSocioEconomicas(){
+        $ageBands = ['9-14','15-19','20-24','25-29'];
+        $enrollmentTimes = ['0_6','7_12','13_24','25+'];
+
+        $completudes = $this->completudeness;
+        $results = array();
+        $beneficiaries = array();
+        $finalResult = array();
+
+        foreach($this->districts as $district){
+            $results[$district] = $this->generateTotalDesagregationMatrix();
+            $beneficiaries[$district] = $this->beneficiaryIdsMatrix();
+
+            foreach($ageBands as $index1){
+                foreach($enrollmentTimes as $index2){
+                    $tiveramAbrodagensSocioEconomicas =  $completudes[$district][$index1][$index2]['tiveram_abordagens_socio_economicas'];
+                    $beneficiaries[$district][$index1][$index2] = $tiveramAbrodagensSocioEconomicas;
+                    $results[$district][$index1][$index2] = count($tiveramAbrodagensSocioEconomicas);
+                }
+            }
+            
 
             $finalResult[$district] = array(
                 'results' => $results[$district],
