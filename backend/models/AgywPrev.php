@@ -121,14 +121,8 @@ class AgywPrev extends Model {
     public function getAllDisaggregationsResults(){
         $ageBands = ['9-14','15-19','20-24','25-29'];
         $enrollmentTimes = ['0_6','7_12','13_24','25+'];
-        
-        $results = 0;
-        $beneficiaries = array();
-        $finalResult = array();
-
 
         foreach($this->districts as $district){
-
             $results = 0;
             $beneficiaries = array();
 
@@ -157,6 +151,68 @@ class AgywPrev extends Model {
             }
 
             $finalResult[$district] = array(
+                'results' => $results,
+                'beneficiaries' =>  $beneficiaries
+            );
+        }
+
+        return $finalResult;
+    }
+
+    public function getAllDisaggregationsBeneficiaries(){
+        $ageBands = ['9-14','15-19','20-24','25-29'];
+        $enrollmentTimes = ['0_6','7_12','13_24','25+'];
+        
+        $results = 0;
+        $beneficiaries = array(
+                'first_disaggregation' => array(),
+                'second_disaggregation' => array(),
+                'third_disaggregation' => array(),
+                'fourth_disaggregation' => array(),
+                'fifth_disaggregation' => array(),
+                'sixth_disaggregation' => array(),
+                'seventh_disaggregation' => array(),
+            );
+
+        foreach($this->districts as $district){
+
+            $firstdisaggragationResults = $this->getFirstDesagregationResults();
+            $seconddisaggragationResults = $this->getSecondDesagregationResults();
+            $thirddisaggragationResults = $this->getThirdDesagregationResults();
+            $fourthdisaggragationResults = $this->getFourthDesagregationResults();
+            $fifthdisaggragationResults = $this->getFifthDesagregationResults();
+            $sixthdisaggragationResults = $this->getSixthDesagregationResults();
+            $seventhdisaggragationResults = $this->getSeventhDesagregationResults();
+
+            foreach($ageBands as $index1){
+                foreach($enrollmentTimes as $index2){
+                    $firstResults = $firstdisaggragationResults[$district]['results'][$index1][$index2];
+                    $firstBeneficiaries = array_values($firstdisaggragationResults[$district]['beneficiaries'][$index1][$index2]);
+                    $secondResults = $seconddisaggragationResults[$district]['results'][$index1][$index2];
+                    $secondBeneficiaries = array_values($seconddisaggragationResults[$district]['beneficiaries'][$index1][$index2]);
+                    $thirdResults = $thirddisaggragationResults[$district]['results'][$index1][$index2];
+                    $thirdBeneficiaries = array_values($thirddisaggragationResults[$district]['beneficiaries'][$index1][$index2]);
+                    $fourthResults = $fourthdisaggragationResults[$district]['results'][$index1][$index2];
+                    $fourthBeneficiaries = ($fourthdisaggragationResults[$district]['beneficiaries'][$index1][$index2]);
+                    $fifthResults = $fifthdisaggragationResults[$district]['results'][$index1][$index2];
+                    $fifthBeneficiaries = ($fifthdisaggragationResults[$district]['beneficiaries'][$index1][$index2]);
+                    $sixthResults = $sixthdisaggragationResults[$district]['results'][$index1][$index2];
+                    $sixthBeneficiaries = ($sixthdisaggragationResults[$district]['beneficiaries'][$index1][$index2]);
+                    $seventhResults = $seventhdisaggragationResults[$district]['results'][$index1][$index2];
+                    $seventhBeneficiaries = ($seventhdisaggragationResults[$district]['beneficiaries'][$index1][$index2]);
+
+                    $results = $results + $firstResults + $secondResults + $thirdResults + $fourthResults + $fifthResults + $sixthResults + $seventhResults;
+                    $this->addBeneficiaries($beneficiaries['first_disaggregation'], $firstBeneficiaries);
+                    $this->addBeneficiaries($beneficiaries['second_disaggregation'], $secondBeneficiaries);
+                    $this->addBeneficiaries($beneficiaries['third_disaggregation'], $thirdBeneficiaries);
+                    $this->addBeneficiaries($beneficiaries['fourth_disaggregation'], $fourthBeneficiaries);
+                    $this->addBeneficiaries($beneficiaries['fifth_disaggregation'], $fifthBeneficiaries);
+                    $this->addBeneficiaries($beneficiaries['sixth_disaggregation'], $sixthBeneficiaries);
+                    $this->addBeneficiaries($beneficiaries['seventh_disaggregation'], $seventhBeneficiaries);
+                }
+            }
+
+            $finalResult = array(
                 'results' => $results,
                 'beneficiaries' =>  $beneficiaries
             );
@@ -376,7 +432,7 @@ class AgywPrev extends Model {
                     if(idade_actual < 20 and esteve_gravida=1,1,0) +
                     if(idade_actual < 20 and tem_filhos=1,1,0) +
                     if(idade_actual < 20 and gravida_amamentar=1,1,0) +
-                    if(teste_hiv < 2 and coalesce(STR_TO_DATE(data_nascimento,'%d/%m/%Y'),STR_TO_DATE(data_nascimento,'%m/%d/%Y')) < '2022-01-01',1,0) +
+                    if(teste_hiv < 2 and data_registo < '2022-01-01',1,0) +
                     if(vitima_exploracao_sexual=1,1,0) +
                     if(idade_actual < 20 and migrante=1,1,0) +
                     if(idade_actual < 20 and vitima_trafico=1,1,0) +
