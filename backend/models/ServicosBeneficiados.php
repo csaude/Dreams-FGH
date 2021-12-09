@@ -111,6 +111,30 @@ class ServicosBeneficiados extends \yii\db\ActiveRecord
         parent::afterSave($insert, $changedAttributes);
     }
 
+    public function afterDelete()
+    {
+      
+        $query = "select distinct app_dream_referencias.id
+                from app_dream_referencias inner join app_dream_referencias_s on (app_dream_referencias.id = app_dream_referencias_s.referencia_id)
+                where app_dream_referencias_s.servico_id not in (select app_dream_beneficiario_servicos.servico_id 
+                                                                    from app_dream_beneficiario_servicos
+                                                                    where app_dream_beneficiario_servicos.beneficiario_id =". $this->beneficiario_id .")
+                and app_dream_referencias.beneficiario_id = ". $this->beneficiario_id ."
+                and app_dream_referencias.status_ref = 1;";
+        
+        $preparedQuery = Yii::$app->db->createCommand($query);
+        $result = $preparedQuery->queryAll();
+        
+        
+        foreach ($result as $refid)
+        {
+            $referencia = ReferenciasDreams::find()->where(['id' => $refid])->one();
+            $referencia->status_ref = 0;
+            $referencia->save();
+        }
+        parent::afterDelete();
+    }
+
     public function getTipoServicos()
     {
         return $this->hasOne(TipoServicos::className(), ['id' => 'tipo_servico_id']);
