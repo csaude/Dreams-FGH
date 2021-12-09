@@ -44,42 +44,43 @@ class BeneficiariosSearch extends Beneficiarios
     public function fetchAGYW($listBeneficiaries){
         $query = "
             select hs_hr_province.province_name as provincia, hs_hr_district.district_name as distrito, app_dream_bairros.name as bairro, 
-                                if(app_dream_vw_agyw_prev.ponto_entrada=1,'US',if(app_dream_vw_agyw_prev.ponto_entrada=2,'CM','ES')) as ponto_entrada,
-                                app_dream_parceiros.name as organizacao,
-                                data_registo, nui, faixa_registo, faixa_actual, idade_registo, idade_actual, data_nascimento,
-                                if(idade_actual < 20 and sustenta_casa=1,1,0) +
-                                if(idade_actual < 18 and vai_escola=0,1,0) +
-                                if(tem_deficiencia=1,1,0) +
-                                if(idade_actual < 20 and foi_casada=1,1,0) +
-                                if(idade_actual < 20 and esteve_gravida=1,1,0) +
-                                if(idade_actual < 20 and tem_filhos=1,1,0) +
-                                if(idade_actual < 20 and gravida_amamentar=1,1,0) +   
-                                if(teste_hiv < 2,1,0) +
-                                if(idade_actual < 18 and vitima_exploracao_sexual=1,1,0) +
-                                if(idade_actual < 20 and migrante=1,1,0) +
-                                if(idade_actual < 20 and vitima_trafico=1,1,0) +
-                                if(idade_actual < 18 and sexualmente_activa=1,1,0) +
-                                if(relacoes_multiplas_cocorrentes=1,1,0) +
-                                if(vitima_vbg=1,1,0) +
-                                if(idade_actual > 17 and trabalhadora_sexo=1,1,0) +
-                                if(abuso_alcool_drogas=1,1,0) +
-                                if(historico_its=1,1,0) as vulnerabilidades,
-                    app_dream_tipo_servicos.name as tipo_servico,
-                    app_dream_servicos.name as servico,
-                    app_dream_servicos_sub.name as subservico,
-                    app_dream_nivel_intervensao.name as pacote,
-                    if(app_dream_vw_agyw_prev.ponto_entrada_id=1,'US',if(app_dream_vw_agyw_prev.ponto_entrada_id=2,'CM','ES')) as ponto_entrada_servico,
-                    app_dream_us.name as localizacao, DATE_FORMAT(data_servico,'%d/%m/%Y') data_servico, provedor, observacoes
+                if(app_dream_vw_agyw_prev.ponto_entrada=1,'US',if(app_dream_vw_agyw_prev.ponto_entrada=2,'CM','ES')) as ponto_entrada,
+                app_dream_parceiros.name as organizacao,
+                data_registo, nui, faixa_registo, faixa_actual, idade_registo, idade_actual, data_nascimento,
+                if(idade_actual < 20 and sustenta_casa=1,1,0) +
+                if(idade_actual < 18 and e_orfa=1,1,0) +
+                if(idade_actual < 18 and vai_escola=0,1,0) +
+                if(tem_deficiencia=1,1,0) +
+                if(idade_actual < 20 and foi_casada=1,1,0) +
+                if(idade_actual < 20 and esteve_gravida=1,1,0) +
+                if(idade_actual < 20 and tem_filhos=1,1,0) +
+                if(idade_actual < 20 and gravida_amamentar=1,1,0) +
+                if(teste_hiv < 2 and data_registo < '2022-01-01',1,0) +
+                if(vitima_exploracao_sexual=1,1,0) +
+                if(idade_actual < 20 and migrante=1,1,0) +
+                if(idade_actual < 20 and vitima_trafico=1,1,0) +
+                if(idade_actual < 18 and sexualmente_activa=1,1,0) +
+                if(relacoes_multiplas_cocorrentes=1,1,0) +
+                if(vitima_vbg=1,1,0) +
+                if(idade_actual > 17 and trabalhadora_sexo=1,1,0) +
+                if(abuso_alcool_drogas=1,1,0) +
+                if(historico_its=1,1,0) as vulnerabilidades,
+                app_dream_tipo_servicos.name as tipo_servico,
+                app_dream_servicos.name as servico,
+                app_dream_servicos_sub.name as subservico,
+                app_dream_nivel_intervensao.name as pacote,
+                if(app_dream_vw_agyw_prev.ponto_entrada_id=1,'US',if(app_dream_vw_agyw_prev.ponto_entrada_id=2,'CM','ES')) as ponto_entrada_servico,
+                app_dream_us.name as localizacao, DATE_FORMAT(data_servico,'%d/%m/%Y') data_servico, provedor, observacoes
             from app_dream_vw_agyw_prev 
-                left join hs_hr_province on hs_hr_province.id = app_dream_vw_agyw_prev.provincia_id
-                left join hs_hr_district on hs_hr_district.district_code = app_dream_vw_agyw_prev.distrito_id
-                left join app_dream_bairros on app_dream_bairros.id = app_dream_vw_agyw_prev.bairro_id
-                left join app_dream_parceiros on app_dream_parceiros.id = app_dream_vw_agyw_prev.organizacao_id
-                left join app_dream_tipo_servicos on app_dream_tipo_servicos.id = app_dream_vw_agyw_prev.area_servico_id
-                left join app_dream_servicos on app_dream_servicos.id = app_dream_vw_agyw_prev.servico_id
-                left join app_dream_servicos_sub on app_dream_servicos_sub.id = app_dream_vw_agyw_prev.sub_servico_id
-                left join app_dream_nivel_intervensao on app_dream_nivel_intervensao.id = app_dream_vw_agyw_prev.pacote_servico_id
-                left join app_dream_us on app_dream_us.id = app_dream_vw_agyw_prev.localizacao_id
+            left join hs_hr_province on hs_hr_province.id = app_dream_vw_agyw_prev.provincia_id
+            left join hs_hr_district on hs_hr_district.district_code = app_dream_vw_agyw_prev.distrito_id
+            left join app_dream_bairros on app_dream_bairros.id = app_dream_vw_agyw_prev.bairro_id
+            left join app_dream_parceiros on app_dream_parceiros.id = app_dream_vw_agyw_prev.organizacao_id
+            left join app_dream_tipo_servicos on app_dream_tipo_servicos.id = app_dream_vw_agyw_prev.area_servico_id
+            left join app_dream_servicos on app_dream_servicos.id = app_dream_vw_agyw_prev.servico_id
+            left join app_dream_servicos_sub on app_dream_servicos_sub.id = app_dream_vw_agyw_prev.sub_servico_id
+            left join app_dream_nivel_intervensao on app_dream_nivel_intervensao.id = app_dream_vw_agyw_prev.pacote_servico_id
+            left join app_dream_us on app_dream_us.id = app_dream_vw_agyw_prev.localizacao_id
             where beneficiario_id in (".$listBeneficiaries.");";
 
         $preparedQuery = Yii::$app->db->createCommand($query);
