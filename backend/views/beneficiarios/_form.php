@@ -169,8 +169,8 @@ $this->registerJs($script);
       'singleDatePicker'=>true,
       'hideInput'=>true,
       'showDropdowns'=>true,
-      'maxYear' => 2012,
-      'minYear' => 1990,
+      'maxDate' => date("d/m/Y", strtotime( " -8 year")),
+      'minDate' => date("d/m/Y", strtotime( " -31 year")),
       'autoclose'=>true,
       'locale' => ['format' => 'DD/MM/YYYY'],
   ]
