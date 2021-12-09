@@ -26,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <h2 align="center">
             <?= Html::img('@web/img/users/bandeira.jpg',['class' => 'img-default','width' => '75px','alt' => 'DREAMS']) ?>   <br>
 
-            <br>PEPFAR MER 2.5 Indicador Semi-Annual AGYW_PREV
+            <br>PEPFAR MER 2.6 Indicador Semi-Annual AGYW_PREV
         </h2><br/>
 
         <div class="panel panel-success">
