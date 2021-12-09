@@ -148,6 +148,7 @@ if (isset($_REQUEST['ts'])&&($_REQUEST['ts']>0)) {echo Html::activeDropDownList(
           'type' => DatePicker::TYPE_COMPONENT_PREPEND,
           'pluginOptions' => [
               'autoclose'=>true,
+              'endDate' => "0d",
               'format' => 'dd/mm/yyyy'
           ]
   ]);
