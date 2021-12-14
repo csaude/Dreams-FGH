@@ -85,7 +85,7 @@ class BeneficiariosController extends Controller
                     ],
 
                     [
-                        'actions' => ['relatorioagyw', 'relatorioagywprev', 'exportlist', 'exportreport'],
+                        'actions' => ['relatorioagyw', 'relatorioagywprev', 'exportlist', 'exportreport', 'exportallbeneficiarieslist'],
                         'allow' => true,
                         'roles' => [
                             User::ROLE_ADMIN
@@ -288,7 +288,7 @@ class BeneficiariosController extends Controller
                 $excelObj->getActiveSheet()
                             ->setCellValue('CH'.$row, $educationSupportCount);
 
-                // report sixth desagregation
+                // report senventh desagregation
                 $economicStrengtheningCount = 0;
                 $seventhdesagregationResults = $seventhdesagregation[$districtId]['results'];
                 foreach(['0_6','7_12', '13_24', '25+'] as $index2){
@@ -341,8 +341,80 @@ class BeneficiariosController extends Controller
         $excelObj->setActiveSheetIndex(0);
         $worksheet = $excelObj->getActiveSheet();
 
-        $row = 1;
+        $this->fillWorksheet($worksheet, $dataProvider);
 
+        // generate report 
+        $objWriter = PHPExcel_IOFactory::createWriter($excelObj, 'Excel2007');
+        $filename = 'PEPFAR_MER_2.6_AGYW_PREV_Beneficiaries_' .  date('Ymd_his') . '.xls';
+        $objWriter->save($filename);   
+
+        ob_end_clean();  
+        header('Content-type: application/xlsx');
+        header('Content-Disposition: attachment; ');
+        header("Pragma: no-cache");
+        header("Expires: 0");
+
+        return Yii::$app->response->sendFile($filename)->on(\yii\web\Response::EVENT_AFTER_SEND, function($event) {
+            unlink($event->data);
+        }, $filename);
+
+    }
+
+    public function actionExportallbeneficiarieslist(){
+        $districts = isset($_POST['districts'])? $_POST['districts'] : null;
+        $provinces = isset($_POST['provinces'])? $_POST['provinces'] : null;
+        $start_date = isset($_POST['start_date'])? $_POST['start_date'] : null;
+        $end_date = isset($_POST['end_date'])? $_POST['end_date'] : null;
+
+        $model = new AgywPrev();
+        $model->provinces = explode(',', $provinces);
+        $model->districts = explode(',', $districts);
+        $model->start_date = $start_date;
+        $model->end_date = $end_date;
+
+        $model->execute();
+
+        $beneficiaries = $model->getAllDisaggregationsBeneficiaries()['beneficiaries'];
+
+        $sheet = -1;
+    
+        $tmpfname = 'template_all_beneficiaries.xls';
+        $excelReader = PHPExcel_IOFactory::createReaderForFile($tmpfname);
+        $excelObj = $excelReader->load($tmpfname);
+        
+        foreach($beneficiaries as $bens){
+            $sheet++;
+            if(empty($bens))
+                continue;
+            $searchModel = new BeneficiariosSearch();
+            $dataProvider = $searchModel->fetchAGYW(implode(',', $bens));
+
+            $excelObj->setActiveSheetIndex($sheet);
+            $worksheet = $excelObj->getActiveSheet();
+
+            $this->fillWorksheet($worksheet, $dataProvider);
+        }
+
+        $excelObj->setActiveSheetIndex(0);
+        // generate report 
+        $objWriter = PHPExcel_IOFactory::createWriter($excelObj, 'Excel2007');
+        $filename = 'PEPFAR_MER_2.6_AGYW_PREV_Beneficiaries_' .  date('Ymd_his') . '.xls';
+        $objWriter->save($filename);   
+
+        ob_end_clean();  
+        header('Content-type: application/xlsx');
+        header('Content-Disposition: attachment; ');
+        header("Pragma: no-cache");
+        header("Expires: 0");
+
+        return Yii::$app->response->sendFile($filename)->on(\yii\web\Response::EVENT_AFTER_SEND, function($event) {
+            unlink($event->data);
+        }, $filename);
+
+    }
+
+    private function fillWorksheet($worksheet, $dataProvider){
+        $row = 1;
         foreach($dataProvider as $data){
             $row++;
                 
@@ -368,24 +440,7 @@ class BeneficiariosController extends Controller
             $worksheet->setCellValue('T'.$row, $data['data_servico']);
             $worksheet->setCellValue('U'.$row, $data['provedor']);
             $worksheet->setCellValue('V'.$row, $data['observacoes']);
-
         }
-
-        // generate report 
-        $objWriter = PHPExcel_IOFactory::createWriter($excelObj, 'Excel2007');
-        $filename = 'PEPFAR_MER_2.6_AGYW_PREV_Beneficiaries_' .  date('Ymd_his') . '.xls';
-        $objWriter->save($filename);   
-
-        ob_end_clean();  
-        header('Content-type: application/xlsx');
-        header('Content-Disposition: attachment; ');
-        header("Pragma: no-cache");
-        header("Expires: 0");
-
-        return Yii::$app->response->sendFile($filename)->on(\yii\web\Response::EVENT_AFTER_SEND, function($event) {
-            unlink($event->data);
-        }, $filename);
-
     }
 
     /**
@@ -568,7 +623,7 @@ class BeneficiariosController extends Controller
             $fifthdesagregationResults = $model->getFifthDesagregationResults();
             $sixthdesagregationResults = $model->getSixthDesagregationResults();
             $seventhdesagregationResults = $model->getSeventhDesagregationResults();
-            $alldisaggragationResults = $model->getAllDisaggregationsResults();
+            $alldisaggragationsResults = $model->getAllDisaggregationsResults();
 
             $totaisresults = $model->getSummary($districts);
             $totalAgyw = $model->getTotaisAgyW();
@@ -591,7 +646,7 @@ class BeneficiariosController extends Controller
                 'fifthdesagregation' => $fifthdesagregationResults,
                 'sixthdesagregation' => $sixthdesagregationResults,
                 'seventhdesagregation' => $seventhdesagregationResults,
-                'allbeneficiaries' => $alldisaggragationResults,
+                'allbeneficiaries' => $alldisaggragationsResults,
                 'totals' => $totaisresults,
                 'totalsAgyw' => $totalAgyw
             ]);

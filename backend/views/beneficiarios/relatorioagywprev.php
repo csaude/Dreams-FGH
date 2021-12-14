@@ -431,10 +431,29 @@ $i=0;
 
                                     </table>
                                 </div>
+                                
                             <?php  } ?> 
                         <?php  } ?> 
                     </div>
-                <?php  } ?>                                        
+                <?php  } ?> 
+                <br />
+                <div class="form-group" align="center">
+                    <?= Html::a('<i class="glyphicon glyphicon-export"></i> Exportar Todos', ['exportallbeneficiarieslist'], [
+                                                        'data'=>[
+                                                            'method' => 'post',
+                                                            'params'=>[
+                                                                    'province_code' => $model->province_code,
+                                                                    'district_code' => $model->district_code,
+                                                                    'start_date' => $model->start_date,
+                                                                    'end_date' => $model->end_date,
+                                                                    'provinces' => implode(',', ArrayHelper::getColumn($provinces, 'province_code')),
+                                                                    'districts' => implode(',', ArrayHelper::getColumn($districts, 'district_code'))
+                                                                ],
+                                                            'confirm' => 'The EXCEL export file will be generated for download!'
+                                                        ],
+                                                        'class'=>'btn btn-default'        
+                                                    ]) ?>
+                </div>                                     
             </div>
         </div>
     </div>
