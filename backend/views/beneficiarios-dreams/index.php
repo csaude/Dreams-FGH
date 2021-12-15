@@ -178,7 +178,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
               'attribute'=>'house_sustainer',
               'format' => 'raw',
-              'filter'=>array("1"=>"SIM","0"=>"NÃO","NUL"=>"?"),
+              'filter'=>array("1"=>"SIM","0"=>"NÃO","NULL"=>"?"),
               'value' => function ($model) {
                 return  $model->house_sustainer==1 ? '<i class="fa fa-check"></i><span style="display:none !important">S</span>': '<i class="fa fa-times" color="red"></i><span style="display:none !important">N</span>';
               },
@@ -187,7 +187,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
               'attribute'=>'orphan',
               'format' => 'raw',
-              'filter'=>array("1"=>"SIM","0"=>"NÃO","NUL"=>"?"),
+              'filter'=>array("1"=>"SIM","0"=>"NÃO","NULL"=>"?"),
               'value' => function ($model) {
                 return  $model->orphan==1 ? '<i class="fa fa-check"></i><span style="display:none !important">S</span>': '<i class="fa fa-times" color="red"></i><span style="display:none !important">N</span>';
               },
@@ -196,7 +196,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
               'attribute'=>'estudante',
               'format' => 'raw',
-              'filter'=>array("1"=>"SIM","0"=>"NÃO","NUL"=>"?"),
+              'filter'=>array("1"=>"SIM","0"=>"NÃO","NULL"=>"?"),
               'value' => function ($model) {
                 return  $model->estudante==1 ? '<i class="fa fa-check"></i><span style="display:none !important">S</span>': '<i class="fa fa-times" color="red"></i><span style="display:none !important">N</span>';
               },
@@ -205,7 +205,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
               'attribute'=>'deficiencia',
               'format' => 'raw',
-              'filter'=>array("1"=>"SIM","0"=>"NÃO","NUL"=>"?"),
+              'filter'=>array("1"=>"SIM","0"=>"NÃO","NULL"=>"?"),
               'value' => function ($model) {
                 return  $model->deficiencia==1 ? '<i class="fa fa-check"></i><span style="display:none !important">S</span>': '<i class="fa fa-times" color="red"></i><span style="display:none !important">N</span>';
               },
@@ -216,7 +216,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
               'attribute'=>'gravida',
               'format' => 'raw',
-              'filter'=>array("1"=>"SIM","0"=>"NÃO","NUL"=>"?"),
+              'filter'=>array("1"=>"SIM","0"=>"NÃO","NULL"=>"?"),
               'value' => function ($model) {
                 return  $model->gravida==1 ? '<i class="fa fa-check"></i><span style="display:none !important">S</span>': '<i class="fa fa-times" color="red"></i><span style="display:none !important">N</span>';
               },
@@ -227,7 +227,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
               'attribute'=>'married_before',
               'format' => 'raw',
-                'filter'=>array("1"=>"SIM","0"=>"NÃO","NUL"=>"?"),
+                'filter'=>array("1"=>"SIM","0"=>"NÃO","NULL"=>"?"),
                 'value' => function ($model) {
                   return  $model->married_before==1 ? '<i class="fa fa-check"></i><span style="display:none !important">S</span>': '<i class="fa fa-times" color="red"></i><span style="display:none !important">N</span>';
                 },
@@ -236,7 +236,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
               'attribute'=>'pregant_or_breastfeed',
               'format' => 'raw',
-              'filter'=>array("1"=>"SIM","0"=>"NÃO","NUL"=>"?"),
+              'filter'=>array("1"=>"SIM","0"=>"NÃO","NULL"=>"?"),
               'value' => function ($model) {
                 return  $model->pregant_or_breastfeed==1 ? '<i class="fa fa-check"></i><span style="display:none !important">S</span>': '<i class="fa fa-times" color="red"></i><span style="display:none !important">N</span>';
               },
@@ -263,7 +263,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
               'attribute'=>'vbg_exploracao_sexual',
               'format' => 'raw',
-              'filter'=>array("1"=>"SIM","0"=>"NÃO","NUL"=>"?"),
+              'filter'=>array("1"=>"SIM","0"=>"NÃO","NULL"=>"?"),
               'value' => function ($model) {
                 return  $model->vbg_exploracao_sexual==1 ? '<i class="fa fa-check"></i><span style="display:none !important">S</span>': '<i class="fa fa-times" color="red"></i><span style="display:none !important">N</span>';
               },
@@ -272,7 +272,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
               'attribute'=>'vbg_migrante_trafico',
               'format' => 'raw',
-              'filter'=>array("1"=>"SIM","0"=>"NÃO","NUL"=>"?"),
+              'filter'=>array("1"=>"SIM","0"=>"NÃO","NULL"=>"?"),
               'value' => function ($model) {
                 return  $model->vbg_migrante_trafico==1 ? '<i class="fa fa-check"></i><span style="display:none !important">S</span>': '<i class="fa fa-times" color="red"></i><span style="display:none !important">N</span>';
               },
@@ -281,7 +281,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
               'attribute'=>'vbg_vitima_trafico',
               'format' => 'raw',
-              'filter'=>array("1"=>"SIM","0"=>"NÃO","NUL"=>"?"),
+              'filter'=>array("1"=>"SIM","0"=>"NÃO","NULL"=>"?"),
               'value' => function ($model) {
                 return  $model->vbg_vitima_trafico==1 ? '<i class="fa fa-check"></i><span style="display:none !important">S</span>': '<i class="fa fa-times" color="red"></i><span style="display:none !important">N</span>';
               },
@@ -290,7 +290,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
               'attribute'=>'vbg_sexual_activa',
               'format' => 'raw',
-              'filter'=>array("1"=>"SIM","0"=>"NÃO","NUL"=>"?"),
+              'filter'=>array("1"=>"SIM","0"=>"NÃO","NULL"=>"?"),
               'value' => function ($model) {
                 return  $model->vbg_sexual_activa==1 ? '<i class="fa fa-check"></i><span style="display:none !important">S</span>': '<i class="fa fa-times" color="red"></i><span style="display:none !important">N</span>';
               },
@@ -299,7 +299,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
               'attribute'=>'vbg_relacao_multipla',
               'format' => 'raw',
-              'filter'=>array("1"=>"SIM","0"=>"NÃO","NUL"=>"?"),
+              'filter'=>array("1"=>"SIM","0"=>"NÃO","NULL"=>"?"),
               'value' => function ($model) {
                 return  $model->vbg_relacao_multipla==1 ? '<i class="fa fa-check"></i><span style="display:none !important">S</span>': '<i class="fa fa-times" color="red"></i><span style="display:none !important">N</span>';
               },
@@ -309,7 +309,7 @@ $this->params['breadcrumbs'][] = $this->title;
               'attribute'=>'vbg_vitima',
               'label'=>'Vítima de VBG?',
               'format' => 'raw',
-              'filter'=>array("1"=>"SIM","0"=>"NÃO",""=>"?"),
+              'filter'=>array("1"=>"SIM","0"=>"NÃO","NULL"=>"?"),
               'value' => function ($model) {
                 return  $model->vbg_vitima==1 ? '<i class="fa fa-check"></i><span style="display:none !important">S</span>': '<i class="fa fa-times" color="red"></i><span style="display:none !important">N</span>';
               }, 
@@ -319,7 +319,7 @@ $this->params['breadcrumbs'][] = $this->title;
               'attribute'=>'alcohol_drugs_use',
               'label'=>'Uso de Álcool e Drogas?',
               'format' => 'raw',
-              'filter'=>array("1"=>"SIM","0"=>"NÃO",""=>"?"),
+              'filter'=>array("1"=>"SIM","0"=>"NÃO","NULL"=>"?"),
               'value' => function ($model) {
                   return  $model->alcohol_drugs_use==1 ? '<i class="fa fa-check"></i><span style="display:none !important">S</span>': '<i class="fa fa-times" color="red"></i><span style="display:none !important">N</span>';
                 }, 
@@ -329,7 +329,7 @@ $this->params['breadcrumbs'][] = $this->title;
               'attribute'=>'sti_history',
               'label'=>'Histórico de ITS?',
               'format' => 'raw',
-              'filter'=>array("1"=>"SIM","0"=>"NÃO",""=>"?"),
+              'filter'=>array("1"=>"SIM","0"=>"NÃO","NULL"=>"?"),
               'value' => function ($model) {
                 return  $model->sti_history==1 ? '<i class="fa fa-check"></i><span style="display:none !important">S</span>': '<i class="fa fa-times" color="red"></i><span style="display:none !important">N</span>';
               }, 
