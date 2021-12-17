@@ -336,11 +336,11 @@ isset(Yii::$app->user->identity->localidade_id)&&(Yii::$app->user->identity->loc
   </div>
 <?php } ?>
 
-<?php if(!$model->isNewRecord&&$model->emp_gender==2) { ?>
+
   <div class="col-lg-3">
-  <?= $form->field($model, 'orphan')->widget(Select2::classname(),['data' => ['0' => 'NÃO','1' => 'SIM'],'options' => ['placeholder' => '--Selecione Aqui--'],]); ?>
+    <?= $form->field($model, 'orphan')->widget(Select2::classname(),['data' => ['0' => 'NÃO','1' => 'SIM'],'options' => ['placeholder' => '--Selecione Aqui--'],]); ?>
   </div>
-<?php } ?>
+
 
   </div>
 

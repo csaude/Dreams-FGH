@@ -87,7 +87,7 @@ $personMap, ['prompt'=>'[--selecione o Beneficiario --]',
 
 if(!$model->isNewRecord) { 
 
-echo Html::activeDropDownList($model, 'servico_id', ArrayHelper::map(ServicosDream::find()->all(), 'id', 'name'),
+echo Html::activeDropDownList($model, 'servico_id', ArrayHelper::map(ServicosDream::find()->where(['servico_id'=>$model->tipo_servico_id])->all(), 'id', 'name'),
 ['class' => 'form-control',
  'onchange'=>'$.post("listas.dreams?id='.'"+$(this).val(), function(data) {
     $("select#servicosbeneficiados-sub_servico_id").html(data);
@@ -117,7 +117,7 @@ if (isset($_REQUEST['ts'])&&($_REQUEST['ts']>0)) {echo Html::activeDropDownList(
 </div>
 
 <div class="col-lg-4">        <?= $form->field($model, 'sub_servico_id')->widget(Select2::classname(), [
-    'data' => ArrayHelper::map(SubServicosDreams::find()->orderBy('name ASC')->where(['=','status',1])->asArray()->all(), 'id', 'name')
+    'data' => ArrayHelper::map(SubServicosDreams::find()->orderBy('name ASC')->where(['=','status',1])->andwhere(['=','servico_id',$model->servico_id])->asArray()->all(), 'id', 'name')
 ]);
 ?>
 </div>	
