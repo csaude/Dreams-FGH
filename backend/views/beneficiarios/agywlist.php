@@ -28,6 +28,9 @@ $enrollmentTime = str_replace('_', '-',$_GET['eTime']).' meses';
 $ageBand = isset($_GET['aBand'])? str_replace('_', '-',$_GET['aBand']).' anos': "Todas";
 
 switch($indicatorID){
+  case 0: 
+          $this->title = 'Beneficiárias no Indicador AGYW_PREV';
+          break;
   case 1: 
           $this->title = 'Beneficiárias que completaram o pacote primário completo do DREAMS mas nenhum serviço/intervenção adicional';
           break;
@@ -145,7 +148,7 @@ Pjax::begin(['enablePushState'=>false]); ?>
 
           [
             'attribute'=>'emp_birthday',
-            'label'=>'Data de Nascimento',
+            'label'=>'Idade',
             'value' => function ($model) {
               if(!$model->emp_birthday==NULL) {
                 $newDate = substr(date($model->emp_birthday, strtotime($model->emp_birthday)),-4);
