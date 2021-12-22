@@ -192,6 +192,13 @@ Pjax::begin(['enablePushState'=>false]); ?>
               return Yii::$app->formatter->asDate($data['criado_em'], "php:Y-m-d");
             }
           ],
+          [
+            'label'=>'#',
+            'format'=>'raw',
+            'content'=>function($data){
+              return '<a href="'.$data['member_id'].'.dreams"  > <i class="glyphicon glyphicon-eye-open icon-success"></i> </a>';
+            }
+          ],
         ],
         'pjax'=>Yii::$app->user->identity->role==20 ? true:false, // pjax is set to always true for this demo
         // set your toolbar
