@@ -227,7 +227,7 @@ foreach ($comservicos as $core) {
 
            <table class="table table-bordered table-responsive">
      <thead>
-    <tr> <th> Data</th> <th>Tipo de Serviço</th> <th>Serviço</th><th>  Interven&ccedil;&otilde;es</th><th>Ponto de Entrada</th>  <th> #  </th> </tr>
+    <tr> <th> Data</th> <th>Tipo de Serviço</th> <th>Serviço</th><th>  Interven&ccedil;&otilde;es</th><th>Ponto de Entrada</th>  </tr>
     </thead>
       <tbody>
     <?php $queryC = ServicosBeneficiados::find()->where(['=','beneficiario_id',$model->member_id])->count();
@@ -255,23 +255,7 @@ elseif(($query->servicos['oculto']==0)&&($query->subServicos['oculto']==0)) {ech
 
 </td>
   <td  class='quota_id'> <?= $query->us['name']; ?> </td>
-  <td class='status'>
-    <a  <?php if( $query->servicos['core_service'] == 1) { ?> class="label label-success" <?php } else {?>
-     class="label label-danger"  <?php } ?>
-
-    href="<?php echo Url::toRoute('servicos-beneficiados/'.$query->id); ?>"  > <i class="glyphicon glyphicon-eye-open icon-success"></i>
-             </a>&nbsp;
-
-
-   <a  <?php if( $query->status == 1) { ?> class="label label-success" <?php } else {?>
-     class="label label-danger"  <?php } ?>
-
-    href="<?php echo Url::toRoute('servicos-beneficiados/update.dreams?id='.$query->id); ?>"  > <i class="glyphicon glyphicon-pencil icon-primary"></i>
-             </a>
-
-  <?php /* Html::a('<i class="fa fa-edit"></i>', ['servicos-beneficiados/update.dreams?id='.$model->id.'&ts=1'], ['data-toggle'=>'modal', 'data-target'=>'#myModal', 'class' => 'label label-primary']) */?>
-
-  </td>
+  
   </tr>
 
   <?php } //fim FOR
