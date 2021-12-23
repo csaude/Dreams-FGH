@@ -38,9 +38,9 @@ class ServicosBeneficiados extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['tipo_servico_id', 'servico_id','ponto_entrada','sub_servico_id','us_id','beneficiario_id', 'activista_id', 'status', 'criado_por', 'actualizado_por'], 'integer'],
-            [['servico_id','beneficiario_id','ponto_entrada','data_beneficio','status'], 'required'],
-            [['data_beneficio', 'criado_em','sub_servico_id', 'actualizado_em','resultado','provedor'], 'safe'],
+            [['tipo_servico_id','ponto_entrada','us_id','beneficiario_id', 'activista_id', 'status', 'criado_por', 'actualizado_por'], 'integer'],
+            [['tipo_servico_id','servico_id','sub_servico_id','us_id','beneficiario_id','ponto_entrada','data_beneficio','status'], 'required'],
+            [['data_beneficio', 'servico_id','sub_servico_id', 'criado_em', 'actualizado_em','resultado','provedor'], 'safe'],
             [['beneficiario_id', 'description'], 'string', 'max' => 250],
             [['user_location', 'user_location2'], 'string', 'max' => 100],
         ];
