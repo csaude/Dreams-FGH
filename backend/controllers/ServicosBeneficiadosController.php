@@ -42,7 +42,7 @@ class ServicosBeneficiadosController extends Controller
                 ],
                 'rules' => [
                     [
-                        'actions' => ['index','create','listas','servicos'],
+                        'actions' => ['index','create','listas','servicos','listaservicos','listasubservicos'],
 
                         'allow' => true,
                         'roles' => [
@@ -217,5 +217,63 @@ class ServicosBeneficiadosController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+    public function actionListaservicos()
+    {
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $out = [];
+
+        if (isset($_POST['depdrop_parents'])) {
+            $parents = $_POST['depdrop_parents'];
+            if ($parents != null) {
+                $tipoServicoId = $parents[0];
+
+                $servicos  = ServicosDream::find() 
+                ->where(['servico_id'=>$tipoServicoId])
+                ->andWhere(['=','status',1])
+                ->all();
+
+                $map = array();
+                foreach ($servicos as $servico){
+                    array_push($map,['id'=>$servico['id'],'name'=>$servico['name']]);
+                }
+
+                return ['output'=>$map, 'selected'=>''];
+            }
+        }
+        return ['output'=>'', 'selected'=>''];
+
+    }
+
+    public function actionListasubservicos()
+    {
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $out = [];
+
+        if (isset($_POST['depdrop_parents'])) {
+
+            $ids = $_POST['depdrop_parents'];
+            $tipoServicoId = empty($ids[0]) ? null : $ids[0];
+            $servicoId = empty($ids[1]) ? null : $ids[1];
+
+            if ($servicoId != null) {
+
+                $subServicos  = SubServicosDreams::find()
+                ->where(['servico_id'=>$servicoId])
+                ->andWhere(['=','status',1])
+                ->all();
+
+                $map = array();
+
+                foreach ($subServicos as $subServico){
+                    array_push($map,['id'=>$subServico['id'],'name'=>$subServico['name']]);
+                }
+
+                return ['output'=>$map, 'selected'=>''];
+            }
+        }
+        return ['output'=>'', 'selected'=>''];
+
     }
 }
