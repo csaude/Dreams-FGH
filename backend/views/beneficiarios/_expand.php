@@ -266,7 +266,7 @@ elseif(($query->servicos['oculto']==0)&&($query->subServicos['oculto']==0)) {ech
    <a  <?php if( $query->status == 1) { ?> class="label label-success" <?php } else {?>
      class="label label-danger"  <?php } ?>
 
-    href="<?php echo Url::toRoute('servicos-beneficiados/update.dreams?id='.$query->id); ?>"  > <i class="glyphicon glyphicon-pencil icon-primary"></i>
+    href="<?php echo Url::toRoute('servicos-beneficiados/'.$query->id); ?>"  > <i class="glyphicon glyphicon-pencil icon-primary"></i>
              </a>
 
   <?php /* Html::a('<i class="fa fa-edit"></i>', ['servicos-beneficiados/update.dreams?id='.$model->id.'&ts=1'], ['data-toggle'=>'modal', 'data-target'=>'#myModal', 'class' => 'label label-primary']) */?>
