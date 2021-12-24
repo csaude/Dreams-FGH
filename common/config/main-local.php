@@ -3,9 +3,9 @@ return [
     'components' => [
         'db' => [
             'class' => 'yii\db\Connection',
-            'dsn' => 'mysql:host=localhost;dbname=dreamsco_app',
-            'username' => 'root',
-            'password' => 'Maputo123#',
+            'dsn' => 'mysql:host=localhost;dbname=dreamsco_app20211130',
+            'username' => 'dlt',
+            'password' => '1234',
             'charset' => 'utf8',
         ],
         'mailer' => [

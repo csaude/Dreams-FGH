@@ -364,15 +364,6 @@ return array (
       '@yii/faker' => $vendorDir . '/yiisoft/yii2-faker',
     ),
   ),
-  'kartik-v/yii2-date-range' => 
-  array (
-    'name' => 'kartik-v/yii2-date-range',
-    'version' => '1.7.1.0',
-    'alias' => 
-    array (
-      '@kartik/daterange' => $vendorDir . '/kartik-v/yii2-date-range/src',
-    ),
-  ),
   'yiisoft/yii2-bootstrap' => 
   array (
     'name' => 'yiisoft/yii2-bootstrap',
@@ -389,6 +380,15 @@ return array (
     'alias' => 
     array (
       '@yii/bootstrap4' => $vendorDir . '/yiisoft/yii2-bootstrap4/src',
+    ),
+  ),
+  'kartik-v/yii2-date-range' => 
+  array (
+    'name' => 'kartik-v/yii2-date-range',
+    'version' => '1.7.2.0',
+    'alias' => 
+    array (
+      '@kartik/daterange' => $vendorDir . '/kartik-v/yii2-date-range/src',
     ),
   ),
 );

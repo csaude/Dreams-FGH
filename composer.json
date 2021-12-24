@@ -17,7 +17,7 @@
         "php": ">=5.4.0",
         "yiisoft/yii2": "*",
         "yiisoft/yii2-bootstrap4": "^2.0.6",
-        "kartik-v/yii2-date-range": "*",
+        "kartik-v/yii2-date-range": "^1.7",
         "yiisoft/yii2-swiftmailer": "*",
         "2amigos/yii2-google-maps-library": "*",
         "2amigos/yii2-table-export-widget": "*",
@@ -33,9 +33,7 @@
         "kartik-v/yii2-field-range": "*",
         "jenssegers/mongodb": "^3.1",
         "kalyabin/yii2-select-google-map-location": "*",
-        "friendsofsymfony/user-bundle": "~2.0@dev",
-        "kylekatarnls/laravel-carbon-2": "^1.0.0",
-        "nesbot/carbon": "2.0.0-beta.2 as 1.25.0"
+        "friendsofsymfony/user-bundle": "~2.0@dev"
         
     },
     "require-dev": {

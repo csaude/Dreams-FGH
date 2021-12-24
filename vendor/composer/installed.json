@@ -979,7 +979,8 @@
             "data",
             "faker",
             "fixtures"
-        ]
+        ],
+        "abandoned": true
     },
     {
         "name": "goodby/csv",
@@ -1773,23 +1774,23 @@
     },
     {
         "name": "kartik-v/yii2-date-range",
-        "version": "v1.7.1",
-        "version_normalized": "1.7.1.0",
+        "version": "v1.7.2",
+        "version_normalized": "1.7.2.0",
         "source": {
             "type": "git",
             "url": "https://github.com/kartik-v/yii2-date-range.git",
-            "reference": "c8ed362fb201d17a1b84d4de3a4c7b0be8e0d7c1"
+            "reference": "fbc192c685c3c529a399d9a388036d08985401a6"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/kartik-v/yii2-date-range/zipball/c8ed362fb201d17a1b84d4de3a4c7b0be8e0d7c1",
-            "reference": "c8ed362fb201d17a1b84d4de3a4c7b0be8e0d7c1",
+            "url": "https://api.github.com/repos/kartik-v/yii2-date-range/zipball/fbc192c685c3c529a399d9a388036d08985401a6",
+            "reference": "fbc192c685c3c529a399d9a388036d08985401a6",
             "shasum": ""
         },
         "require": {
             "kartik-v/yii2-krajee-base": ">=2.0.0"
         },
-        "time": "2019-05-17T12:35:38+00:00",
+        "time": "2020-02-09T12:41:06+00:00",
         "type": "yii2-extension",
         "extra": {
             "branch-alias": {
@@ -4383,7 +4384,8 @@
             "email",
             "mail",
             "mailer"
-        ]
+        ],
+        "abandoned": "symfony/mailer"
     },
     {
         "name": "symfony/cache",
@@ -5286,7 +5288,8 @@
             "string",
             "symfony",
             "words"
-        ]
+        ],
+        "abandoned": "use `EnglishInflector` from the String component instead"
     },
     {
         "name": "symfony/intl",
@@ -6985,7 +6988,7 @@
                 "dev-master": "2.0.x-dev"
             }
         },
-        "installation-source": "source",
+        "installation-source": "dist",
         "autoload": {
             "psr-4": {
                 "yii\\bootstrap\\": "src"
