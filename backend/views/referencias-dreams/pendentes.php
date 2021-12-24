@@ -3,6 +3,7 @@
   use yii\helpers\Html;
   use kartik\grid\GridView;
   use kartik\form\ActiveForm;
+  use yii\bootstrap\Modal;
 
   use yii\widgets\Pjax;
   use yii\helpers\ArrayHelper;
@@ -19,7 +20,7 @@
   use common\models\User;
   use dektrium\user\models\Profile;
   use kartik\widgets\DepDrop;
-
+  
   use yii\helpers\Url;
   /* @var $this yii\web\View */
   /* @var $searchModel app\models\ReferenciasDreamsSearch */
@@ -116,7 +117,10 @@
     </div>
     <div class="col-lg-6">
 
-      <?php $form = ActiveForm::begin(); ?>
+      <?php $form = ActiveForm::begin([
+        'options' => [
+          'class' => 'referencias-pendentes-form'
+      ]]); ?>
 
       <div class="panel panel-success">
         <div class="panel-heading"> 
@@ -130,6 +134,7 @@
               <div class="form-group required">
 
                 <?=  
+                
                   $form->field($model, 'cancel_reason')->widget(Select2::classname(),['data' => ['1' => 'Serviço não provido nos últimos 6 meses','2' => 'Beneficiária não encontrada','3' => 'Abandono','4' => 'Beneficiária recusou o serviço','5' => 'Outro Motivo'],
                     'options' => ['onchange' => 'var valor2 = this.value; 
                       if(valor2==5){
@@ -160,14 +165,24 @@
           </div>              
           <div class="form-group pull-right">
 
-            <?= Html::submitButton('SALVAR' , ['class' => 'btn btn-success','id'=>'SALVAR', 'disabled'=>true]) ?>
+            <?= Html::submitButton('SALVAR' , ['value'=>Url::to('pendentes'),'class' => 'btn btn-success','id'=>'SALVAR', 'disabled'=>true]) ?>
             <?= Html::a('Cancelar', ['index'], ['class' => 'btn btn-warning']) ?>
-
+          
           </div>
         </div>
       </div>
     </div>
   </div>
+
+  <?php 
+        Modal::begin([
+            'header' => '<h4>Confirma o Cancelamento das Seguintes Referências?</h4>',
+            'id' => 'modal',
+            'size' => 'modal-lg',
+        ]);
+        echo "<div id='modalContent'></div>";
+        Modal::end();
+  ?>
           
   <table width="100%"   class="table table-bordered  table-condensed">
     <tr>
@@ -287,9 +302,30 @@
       $("#cancel_reason").value = "";
       $("#other_reason").value = "";
       $("#other_reason").hide(1000);
-    });
-  }
 
+      $('.referencias-pendentes-form').on('beforeSubmit', function(e) {
+        e.preventDefault();
+        var form = $(this);
+        var formData = form.serialize();
+        $.ajax({
+            url: form.attr("action"),
+            type: form.attr("method"),
+            data: formData,
+            success: function(data) {
+              $("#modal").modal('show');
+              $('#modalContent').html(data);
+            },
+            error: function() {
+              console.log("Something went wrong");
+            }
+        });
+      }).on('submit', function(e) {
+        e.preventDefault();
+      });
+    });
+
+  }
+            
   function validacao(){
     var reason = document.getElementById("referenciasdreams-other_reason").value;
     if(reason===""){  

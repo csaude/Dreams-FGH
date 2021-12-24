@@ -92,4 +92,17 @@ class ReferenciasDreamsPendentesSearch extends ReferenciasDreams
 
         return $dataProvider;
     }
+
+    public function searchPendentes($ids){
+
+        $query = ReferenciasDreams::find()->where(['in', 'id', $ids])->orderBy(['criado_em' => SORT_DESC]);
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        $query->andWhere(['status_ref'=>0]);
+
+        return $dataProvider;
+    }
 }

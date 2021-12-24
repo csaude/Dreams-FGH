@@ -195,6 +195,52 @@ class AgywPrev extends Model {
         return $indicator['beneficiaries'];
     }
 
+    public function getAllDisaggregationsResults(){
+        $ageBands = ['9-14','15-19','20-24','25-29'];
+        $enrollmentTimes = ['0_6','7_12','13_24','25+'];
+
+        foreach($this->districts as $district){
+            $results = 0;
+            $beneficiaries = array();
+
+            $firstdisaggragationResults = $this->getFirstDesagregationResults();
+            $seconddisaggragationResults = $this->getSecondDesagregationResults();
+            $thirddisaggragationResults = $this->getThirdDesagregationResults();
+            $fourthdisaggragationResults = $this->getFourthDesagregationResults();
+
+            foreach($ageBands as $index1){
+                foreach($enrollmentTimes as $index2){
+                    $firstResults = $firstdisaggragationResults[$district]['results'][$index1][$index2];
+                    $firstBeneficiaries = array_values($firstdisaggragationResults[$district]['beneficiaries'][$index1][$index2]);
+                    $secondResults = $seconddisaggragationResults[$district]['results'][$index1][$index2];
+                    $secondBeneficiaries = array_values($seconddisaggragationResults[$district]['beneficiaries'][$index1][$index2]);
+                    $thirdResults = $thirddisaggragationResults[$district]['results'][$index1][$index2];
+                    $thirdBeneficiaries = array_values($thirddisaggragationResults[$district]['beneficiaries'][$index1][$index2]);
+                    $fourthResults = $fourthdisaggragationResults[$district]['results'][$index1][$index2];
+                    $fourthBeneficiaries = ($fourthdisaggragationResults[$district]['beneficiaries'][$index1][$index2]);
+
+                    $results = $results + $firstResults + $secondResults + $thirdResults + $fourthResults;
+                    $this->addBeneficiaries($beneficiaries, $firstBeneficiaries);
+                    $this->addBeneficiaries($beneficiaries, $secondBeneficiaries);
+                    $this->addBeneficiaries($beneficiaries, $thirdBeneficiaries);
+                    $this->addBeneficiaries($beneficiaries, $fourthBeneficiaries);
+                }
+            }
+
+            $finalResult[$district] = array(
+                'results' => $results,
+                'beneficiaries' =>  $beneficiaries
+            );
+        }
+
+        return $finalResult;
+    }
+
+    private function addBeneficiaries(&$beneficiaries, $toAdd){
+        foreach($toAdd as $add){
+            array_push($beneficiaries, $add);
+        }
+    }
 
     private function s_datediff( $str_interval, $dt_menor, $dt_maior, $relative=false){
 

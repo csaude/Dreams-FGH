@@ -89,10 +89,17 @@ $i=0;
                                         
                                         <tr>
                                             <td colspan="6" bgcolor="#FFFFFF"><b>Total de Adolescentes e Jovens do Sexo Masculino: <?php echo $totals[$district->district_code]['total_masculinos'] ?></b></td>
-                                        </tr> 
+                                        </tr>
                                         <tr>
-                                            <td colspan="6" bgcolor="#FFFFFF"><b> Total de Beneficiárias no Indicador AGYW_PREV: <?php echo $totalsAgyw[$district->district_code] ?></b></td>
-                                        </tr> 
+                                            <td colspan="6" bgcolor="#FFFFFF"><b> Total de Beneficiárias no Indicador AGYW_PREV: <?= Html::a('<span style="color:#0549a3;"> '.($totalsAgyw[$district->district_code]).'</span>', ['relatorioagywprev', 
+                                                                                                                                                        'aBand' => 'Todos',
+                                                                                                                                                        'eTime' => 'Todos',
+                                                                                                                                                        'pcode' => $district->province_code,
+                                                                                                                                                        'dcode' => $district->district_code,
+                                                                                                                                                        'sdate' => $model->start_date,
+                                                                                                                                                        'edate' => $model->end_date,
+                                                                                                                                                        'iID' => 0], []) ?></b></td>
+                                        </tr>
                                         <tr>
                                             <td colspan="6" height="40" bgcolor="#FFFFFF"><b> </b></td>
                                         </tr>
