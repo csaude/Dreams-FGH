@@ -54,8 +54,9 @@ use dektrium\user\models\Profile;
         </div>      
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
+            'toolbar'=> false,
             'columns' => [
-
+                ['headerOptions' => ['class' => 'kartik-sheet-style']],
                 ['attribute'=> 'criado_em',
                     'format' => 'html',
                     'value' => function ($model) {
