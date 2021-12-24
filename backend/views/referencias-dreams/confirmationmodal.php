@@ -56,7 +56,6 @@ use dektrium\user\models\Profile;
             'dataProvider' => $dataProvider,
             'toolbar'=> false,
             'columns' => [
-                ['headerOptions' => ['class' => 'kartik-sheet-style']],
                 ['attribute'=> 'criado_em',
                     'format' => 'html',
                     'value' => function ($model) {
