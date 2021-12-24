@@ -267,7 +267,14 @@ class ServicosBeneficiadosController extends Controller
                 $map = array();
 
                 foreach ($subServicos as $subServico){
-                    array_push($map,['id'=>$subServico['id'],'name'=>$subServico['name']]);
+                    if($subServico['mandatory']==1){
+
+                        array_push($map,['id'=>$subServico['id'],'name'=>($subServico['name']." *")]);
+
+                    }else{
+
+                        array_push($map,['id'=>$subServico['id'],'name'=>$subServico['name']]);
+                    }
                 }
 
                 return ['output'=>$map, 'selected'=>''];
