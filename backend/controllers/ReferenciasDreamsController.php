@@ -22,6 +22,7 @@ use app\models\Distritos;
 use app\models\ServicosDream;  //para seleccao de intervensoes
 use app\models\Utilizadores;
 use app\models\Profile;
+
 /**
  * ReferenciasDreamsController implements the CRUD actions for ReferenciasDreams model.
  */
@@ -78,7 +79,7 @@ class ReferenciasDreamsController extends Controller
                     ],
 
                     [
-                        'actions' => ['pendentes'],
+                        'actions' => ['pendentes', 'confirmationmodal'],
                         'allow' => true,
                         'roles' => [
                             User::ROLE_ADMIN
@@ -295,44 +296,54 @@ class ReferenciasDreamsController extends Controller
 
         /// update - Cancelamento em massa.
 
-        if ($model->load(Yii::$app->request->post())){
+        if ($model->load(Yii::$app->request->post()) && $_POST['selection']){
+
+            $myIds = $_POST['selection'];
+            $dataProvider = $searchModel->searchPendentes($myIds);
+            return $this->renderAjax('confirmationmodal', [
+                    'dataProvider' => $dataProvider,
+                    'model' => $model,
+            ]);
+    
+        }
+        
+        return $this->render('pendentes', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'model' => $model,
+            'cancel_reason'=>'',
+        ]);
+
+    }
+
+    public function actionConfirmationmodal(){
+        
+
+        $model = new ReferenciasDreams();
+        if (isset($_POST['model']) && isset($_POST['dataProvider'])){
+
+            $model->load(Yii::$app->request->post('model'));
+            $dataProvider = unserialize(Yii::$app->request->post('dataProvider'));
+
             $cancelReason = $model->cancel_reason;
             $otherReason = $model->other_reason;
+            $provider = $dataProvider->query->all();
 
-            if((isset($_POST['selection'])) && ($cancelReason <> '')){
-
-                if($cancelReason <> 5 || ($cancelReason == 5 && $otherReason <> '')){
-
-                    $myIds = $_POST['selection'];
-                    
-                    foreach ($myIds as $id){
-                        $model = $this->findModel($id);
-                        $model->status = 0;
-                        $model->cancel_reason = $cancelReason;
-                        $model->other_reason = $otherReason;
-                        $model->save();
-                    }
-
-                }
-
+            foreach($provider as $reference){
+                $reference->status = 0;
+                $reference->cancel_reason = $cancelReason;
+                $reference->other_reason = $otherReason;
+                $reference->save();
             }
-            
-            return $this->render('pendentes', [
-                'searchModel' => $searchModel,
-                'dataProvider' => $dataProvider,
-                $model->cancel_reason = '',
-                $model->other_reason = '',
-                'model' => $model,
-            ]);
-
-        }else {
-            return $this->render('pendentes', [
-                'searchModel' => $searchModel,
-                'dataProvider' => $dataProvider,
-                'model' => $model,
-                'cancel_reason'=>'',
-            ]);
         }
-
+        
+        $searchModel = new ReferenciasDreamsPendentesSearch();
+        $dataProvider = $searchModel->search([Yii::$app->request->queryParams]);
+        $dataProvider->query->andFilterWhere(['status_ref'=>0]); 
+        $model = new ReferenciasDreams();
+        
+        return $this->redirect(['pendentes']);
+    
+        
     }
 }
