@@ -200,7 +200,7 @@ use kartik\daterange\DateRangePicker;
                 } else{
                   echo  $form->field($model, 'us_id')->widget(Select2::classname(), [
                     'name' => 'kv-state-250',
-                    'data' =>(ArrayHelper::map(Us::find()->where('status IS NOT NULL')->all(), 'id', 'name')),
+                    'data' =>(ArrayHelper::map(Us::find()->orderBy('name ASC')->where('status IS NOT NULL')->all(), 'id', 'name')),
                     'options' => [
                                     'placeholder' => '--Selecione o Tipo de Serviço--',
                                     'id' => 'us_id'],
