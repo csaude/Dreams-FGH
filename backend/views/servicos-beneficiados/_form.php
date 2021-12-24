@@ -155,7 +155,7 @@ use kartik\daterange\DateRangePicker;
 
 
     <?=  $form->field($model, 'sub_servico_id')->widget(DepDrop::classname(), [
-              'data' =>(ArrayHelper::map(SubServicosDreams::find()->where(['=','status',1])->all(), 'id', 'name')),
+              'data' =>(ArrayHelper::map(SubServicosDreams::find()->where(['=','status',1])->andwhere(['=','servico_id',$model->servico_id])->all(), 'id', 'name')),
                                           
               'options' => [
                 'id' =>'sub_servico_id',
