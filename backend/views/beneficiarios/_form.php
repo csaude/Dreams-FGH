@@ -173,10 +173,18 @@ $this->registerJs($script);
       'minDate' => date("d/m/Y", strtotime( " -31 year")),
       'autoclose'=>true,
       'locale' => ['format' => 'DD/MM/YYYY'],
-  ]
+
+  ],
+  'pluginEvents' => [
+    "apply.daterangepicker" => "function(e, v) { 
+                                  var years = new Date(new Date() - new Date(v.startDate)).getFullYear() - 1970;
+                                  updateIdade(years);
+                                }",
+  ],
 ])
 
 ?>
+
 
 <!--  <div class="form-group field-beneficiarios-emp_birthday">
 <label class="control-label" for="beneficiarios-emp_birthday">Data Nascimento</label>
@@ -756,3 +764,15 @@ pattern="(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2])/(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!0
 ]);
 
 ?>
+
+<script type="text/javascript">
+  window.onload = function () {
+    $(document).ready(function() {
+      $("#beneficiarios-idade_anos").attr("disabled", "disabled");      
+    });
+  }
+
+  function updateIdade($value){
+    $('#beneficiarios-idade_anos').val($value).change();
+  }
+</script>

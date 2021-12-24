@@ -88,7 +88,6 @@ use kartik\daterange\DateRangePicker;
     <div class="col-lg-4">
       <?php  
 
-
         if(!$model->isNewRecord) { 
 
           
@@ -279,6 +278,4 @@ use kartik\daterange\DateRangePicker;
   </div>
 		
   <?php ActiveForm::end(); ?>
-
 </div>
-
