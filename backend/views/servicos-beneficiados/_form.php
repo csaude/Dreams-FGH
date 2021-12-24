@@ -67,71 +67,82 @@ use kartik\daterange\DateRangePicker;
   <div class="row"> 
 
     <div class="col-lg-4">
-      
-      <?= $form->field($model, 'tipo_servico_id')->widget(Select2::classname(), [
-        'data' => ArrayHelper::map(TipoServicos::find()->where(['=','status',1])->all(), 'id', 'name'),
-        'options' => ['onchange'=>'$.post("servicos.dreams?id='.'"+$(this).val(), function(data) {
-            $("select#servicosbeneficiados-servico_id").html(data);
-        });',
-      'placeholder' => '--Selecione o Tipo de Serviço--'],
-        'pluginOptions' => [
-            'allowClear' => true
-        ],
-            
-      ])->label('Área de Serviços');
-      ?>
 
-      <div class="help-block"></div>
+    <?= 
+                 $form->field($model, 'tipo_servico_id')->widget(Select2::classname(), [
+                                                            'name' => 'kv-state-250',
+                                                            'data' =>(ArrayHelper::map(TipoServicos::find()->where(['=','status',1])->all(), 'id', 'name')),
+                                                            'options' => [
+                                                                            'placeholder' => '--Selecione o Tipo de Serviço--',
+                                                                            'id' => 'tipo_servico_id'],
+                                                            'pluginOptions' => [
+                                                                            'allowClear' => true
+                                                                            ],
+                                                        ])->label('Área de Serviços');
+                          
+                ?>
+      
+           <div class="help-block"></div>
     </div>
     
     <div class="col-lg-4">
       <?php  
 
-
         if(!$model->isNewRecord) { 
 
-        echo $form->field($model, 'servico_id')->widget(Select2::classname(), [
-          'data' => ArrayHelper::map(ServicosDream::find()->where(['servico_id'=>$model->tipo_servico_id])->all(), 'id', 'name'),
-          'options' => ['onchange'=>'$.post("listas.dreams?id='.'"+$(this).val(), function(data) {
-            $("select#servicosbeneficiados-sub_servico_id").html(data);
-        });',
-        'placeholder' => '--Selecione o Serviço--'],
-          'pluginOptions' => [
-              'allowClear' => true
-          ],
-              
-        ])->label('Serviço');
+          
+         echo $form->field($model, 'servico_id')->widget(DepDrop::classname(), [
+                              'data' =>(ArrayHelper::map(ServicosDream::find()->where(['=','status',1])->all(), 'id', 'name')),
+                                          'options' => [
+                                            'id' =>'servico_id',
+                                            'multiple'=>false,
+                                            'placeholder' => '--Selecione o Serviço--'],
+                                            'type' => DepDrop::TYPE_SELECT2,
+                                            'select2Options' => ['pluginOptions' => ['allowClear' => true]],
+                                            'pluginOptions' => [
+                                                            'depends' => ['tipo_servico_id'],
+                                                            'url' => Url::to(['listaservicos']),
+                                                            'loadingText' => 'Lendo Area de Servicos ...',
+                                                        ]
+                                          ])->label('Serviço');     
+
+    
 
         } else {
 
 
         if (isset($_REQUEST['ts'])&&($_REQUEST['ts']>0)) {
 
-            echo $form->field($model, 'servico_id')->widget(Select2::classname(), [
-              'data' => ArrayHelper::map(ServicosDream::find()->where(['=','servico_id',$_REQUEST['ts']])->andWhere(['=','status',1])->all(), 'id', 'name'),
-              'options' => ['onchange'=>'$.post("listas.dreams?id='.'"+$(this).val(), function(data) {
-                $("select#servicosbeneficiados-sub_servico_id").html(data);
-            });',
-            'placeholder' => '--Selecione o Serviço--'],
+          echo $form->field($model, 'servico_id')->widget(DepDrop::classname(), [
+            'options' => [
+              'id' =>'servico_id',
+              'multiple'=>false,
+              'placeholder' => '--Selecione o Serviço--'],
+              'type' => DepDrop::TYPE_SELECT2,
+              'select2Options' => ['pluginOptions' => ['allowClear' => true]],
               'pluginOptions' => [
-                  'allowClear' => true
-              ],
-                  
-            ])->label('Serviço');
+                              'depends' => ['tipo_servico_id'],
+                              'url' => Url::to(['listaservicos']),
+                              'loadingText' => 'Lendo Area de Servicos ...',
+                          ]
+            ])->label('Serviço'); 
 
         } else {
           
-          echo $form->field($model, 'servico_id')->widget(Select2::classname(), [
-            'data' => ArrayHelper::map(ServicosDream::find()->where(['=','servico_id',$_REQUEST['ts']])->andWhere(['=','status',1])->all(), 'id', 'name'),
-            'options' => ['onchange'=>'$.post("listas.dreams?id='.'"+$(this).val(), function(data) {
-              $("select#servicosbeneficiados-sub_servico_id").html(data);
-          });',
-          'placeholder' => '--Selecione o Serviço--'],
-            'pluginOptions' => [
-                'allowClear' => true
-            ],
-                
-          ])->label('Serviço');
+           echo $form->field($model, 'servico_id')->widget(DepDrop::classname(), [
+              'options' => [
+                'id' =>'servico_id',
+                'multiple'=>false,
+                'placeholder' => '--Selecione o Serviço--'],
+                'type' => DepDrop::TYPE_SELECT2,
+                'select2Options' => ['pluginOptions' => ['allowClear' => true]],
+                'pluginOptions' => [
+                                'depends' => ['tipo_servico_id'],
+                                'url' => Url::to(['listaservicos']),
+                                'loadingText' => 'Lendo Area de Servicos ...',
+                            ]
+              ])->label('Serviço'); 
+
         }
         }//is New
       ?>
@@ -139,15 +150,30 @@ use kartik\daterange\DateRangePicker;
       <div class="help-block"></div>
     </div>    
 
-    <div class="col-lg-4">        
-      <?= $form->field($model, 'sub_servico_id')->widget(Select2::classname(), [
-            'data' => ArrayHelper::map(SubServicosDreams::find()->orderBy('name ASC')->where(['=','status',1])->andwhere(['=','servico_id',$model->servico_id])->asArray()->all(), 'id', 'name'),
-            'options' => ['placeholder' => '--Selecione o Sub-Serviço/Intervenção--'],
-            'pluginOptions' => [
-                'allowClear' => true
-            ],
-          ]);
-      ?>
+    <div class="col-lg-4">   
+
+
+    <?=  $form->field($model, 'sub_servico_id')->widget(DepDrop::classname(), [
+              'data' =>(ArrayHelper::map(SubServicosDreams::find()->where(['=','status',1])->andwhere(['=','servico_id',$model->servico_id])->all(), 'id', 'name')),
+                                          
+              'options' => [
+                'id' =>'sub_servico_id',
+                'multiple'=>false,
+                'placeholder' => '--Selecione o Sub-Serviço/Intervenção--'],
+                'type' => DepDrop::TYPE_SELECT2,
+                'select2Options' => ['pluginOptions' => ['allowClear' => true]],
+                'pluginOptions' => [
+                                'depends' => ['tipo_servico_id','servico_id'],
+                                'url' => Url::to(['listasubservicos']),
+                                'loadingText' => 'Lendo Area de Sub-Servicos ...',
+                            ]
+              ])->label('Sub-Serviço/Intervenção'); 
+
+              ?>
+
+
+               
+                
     </div>	
   </div>
 
@@ -158,14 +184,33 @@ use kartik\daterange\DateRangePicker;
     </div> 
 
     <div class="col-lg-4"> 	
-      <?= $form->field($model, 'us_id')->widget(Select2::classname(), [
-            'data' => ArrayHelper::map(Us::find()->orderBy('name ASC')->where(['provincia_id'=>(int)Yii::$app->user->identity->provin_code])->andWhere('status IS NOT NULL')->all(),'id','name'),
-            'options' => ['placeholder' => '--Selecione o Ponto de Entrada (Localização)--'],
-            'pluginOptions' => [
-                'allowClear' => true
-            ],
-          ]);
-      ?>
+
+
+<?php
+
+                if (isset(Yii::$app->user->identity->provin_code)){
+
+                  echo $form->field($model, 'us_id')->widget(Select2::classname(), [
+                    'data' => ArrayHelper::map(Us::find()->orderBy('name ASC')->where(['provincia_id'=>(int)Yii::$app->user->identity->provin_code])->andWhere('status IS NOT NULL')->all(),'id','name'),
+                    'options' => ['placeholder' => '--Selecione o Ponto de Entrada (Localização)--'],
+                    'pluginOptions' => [
+                        'allowClear' => true
+                    ],
+                  ]);
+                } else{
+                  echo  $form->field($model, 'us_id')->widget(Select2::classname(), [
+                    'name' => 'kv-state-250',
+                    'data' =>(ArrayHelper::map(Us::find()->orderBy('name ASC')->where('status IS NOT NULL')->all(), 'id', 'name')),
+                    'options' => [
+                                    'placeholder' => '--Selecione o Tipo de Serviço--',
+                                    'id' => 'us_id'],
+                    'pluginOptions' => [
+                                    'allowClear' => true
+                                    ],
+                  ]);
+                };
+                ?>
+
     </div> 
 	
 	  <div class="col-lg-4"> 
@@ -233,6 +278,4 @@ use kartik\daterange\DateRangePicker;
   </div>
 		
   <?php ActiveForm::end(); ?>
-
 </div>
-
