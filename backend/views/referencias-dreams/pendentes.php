@@ -204,7 +204,6 @@
   <?= GridView::widget([
       'dataProvider' => $dataProvider,
       'filterModel' => $searchModel,
-      'toolbar'=> false,
       'columns' => [
           ['class' => 'yii\grid\SerialColumn'],
           [
