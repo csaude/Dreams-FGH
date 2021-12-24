@@ -177,9 +177,8 @@ $this->registerJs($script);
   ],
   'pluginEvents' => [
     "apply.daterangepicker" => "function(e, v) { 
-                                  var timeNow = new Date();
-                                  var idade = timeNow.getFullYear() - v.startDate.format('YYYY');
-                                  updateIdade(idade);
+                                  var years = new Date(new Date() - new Date(v.startDate)).getFullYear() - 1970;
+                                  updateIdade(years);
                                 }",
   ],
 ])
