@@ -151,37 +151,60 @@ $this->registerJs($script);
    <div class="col-lg-6">
 <button class="btn btn-success" data-toggle="collapse" data-target="#data" disabled> Data de Nascimento <span class="glyphicon glyphicon-calendar"></span></button>
 
-<?= 
+<?php 
 
-// $form->field($model, 'emp_birthday')->widget(\yii\widgets\MaskedInput::className(), [
-//     'mask' => '99/99/9999',
-// ]) ;
-
-
- $form->field($model, 'emp_birthday', [
-  'addon'=>['prepend'=>['content'=>'<i class="glyphicon glyphicon-calendar"></i>']],
-  'options'=>['class'=>'input-group drp-container']
-])->widget(DateRangePicker::classname(), [
-  'useWithAddon'=>true,
-  'readonly' => true,
-  'pluginOptions'=>[
-      'language'=>'pt',
-      'singleDatePicker'=>true,
-      'hideInput'=>true,
-      'showDropdowns'=>true,
-      'maxDate' => date("d/m/Y", strtotime( " -9 year")),
-      'minDate' => date("d/m/Y", strtotime( " -25 year")),
-      'autoclose'=>true,
-      'locale' => ['format' => 'DD/MM/YYYY'],
-
-  ],
-  'pluginEvents' => [
-    "apply.daterangepicker" => "function(e, v) { 
-                                  var years = new Date(new Date() - new Date(v.startDate)).getFullYear() - 1970;
-                                  updateIdade(years);
-                                }",
-  ],
-])
+if($model->isNewRecord){
+  echo $form->field($model, 'emp_birthday', [
+    'addon'=>['prepend'=>['content'=>'<i class="glyphicon glyphicon-calendar"></i>']],
+    'options'=>['class'=>'input-group drp-container']
+  ])->widget(DateRangePicker::classname(), [
+    'useWithAddon'=>true,
+    'readonly' => true,
+    'pluginOptions'=>[
+        'language'=>'pt',
+        'singleDatePicker'=>true,
+        'hideInput'=>true,
+        'showDropdowns'=>true,
+        'maxDate' => date("d/m/Y", strtotime( " -9 year")),
+        'minDate' => date("d/m/Y", strtotime( " -25 year")),
+        'autoclose'=>true,
+        'locale' => ['format' => 'DD/MM/YYYY'],
+  
+    ],
+    'pluginEvents' => [
+      "apply.daterangepicker" => "function(e, v) { 
+                                    var years = new Date(new Date() - new Date(v.startDate)).getFullYear() - 1970;
+                                    updateIdade(years);
+                                  }",
+    ],
+  ]);
+}else{
+  echo $form->field($model, 'emp_birthday', [
+    'addon'=>['prepend'=>['content'=>'<i class="glyphicon glyphicon-calendar"></i>']],
+    'options'=>['class'=>'input-group drp-container']
+  ])->widget(DateRangePicker::classname(), [
+    'useWithAddon'=>true,
+    'readonly' => true,
+    'pluginOptions'=>[
+        'language'=>'pt',
+        'singleDatePicker'=>true,
+        'hideInput'=>true,
+        'showDropdowns'=>true,
+        'maxDate' => date("d/m/Y", strtotime( " -9 year")),
+        'minDate' => '01/01/1993',
+        'autoclose'=>true,
+        'locale' => ['format' => 'DD/MM/YYYY'],
+  
+    ],
+    'pluginEvents' => [
+      "apply.daterangepicker" => "function(e, v) { 
+                                    var years = new Date(new Date() - new Date(v.startDate)).getFullYear() - 1970;
+                                    updateIdade(years);
+                                  }",
+    ],
+  ]);
+}
+ 
 
 ?>
 
@@ -210,7 +233,7 @@ k*******************************************************************************
 <button class="btn btn-warning" data-toggle="collapse" data-target="#idade" disabled>Não Conhece a Data de Nascimento </button>
       <div id="idade" class="">
 	<?= $form->field($model, 'idade_anos')->dropDownList(array_combine(range(9, 24), range(9, 24)),
-	array('prompt'=>'Idade (em anos)','class' => 'form-control')); ?>
+	array('prompt'=>'Idade (em anos)', 'disabled'=>true, 'class' => 'form-control')); ?>
 </div>
 	</div>
 </div>
