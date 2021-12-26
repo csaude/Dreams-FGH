@@ -204,6 +204,7 @@
   <?= GridView::widget([
       'dataProvider' => $dataProvider,
       'filterModel' => $searchModel,
+      'toggleData'=>false,
       'columns' => [
           ['class' => 'yii\grid\SerialColumn'],
           [
@@ -307,6 +308,7 @@
         e.preventDefault();
         var form = $(this);
         var formData = form.serialize();
+
         $.ajax({
             url: form.attr("action"),
             type: form.attr("method"),

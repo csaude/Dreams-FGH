@@ -291,7 +291,7 @@ class ReferenciasDreamsController extends Controller
         $searchModel = new ReferenciasDreamsPendentesSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->andFilterWhere(['status_ref'=>0]); 
-
+        $dataProvider->pagination->pageSize = 500;
         $model = new ReferenciasDreams();
 
         /// update - Cancelamento em massa.
@@ -300,6 +300,7 @@ class ReferenciasDreamsController extends Controller
 
             $myIds = $_POST['selection'];
             $dataProvider = $searchModel->searchPendentes($myIds);
+            $dataProvider->pagination->pageSize = 500;
             return $this->renderAjax('confirmationmodal', [
                     'dataProvider' => $dataProvider,
                     'model' => $model,
@@ -340,6 +341,8 @@ class ReferenciasDreamsController extends Controller
         $searchModel = new ReferenciasDreamsPendentesSearch();
         $dataProvider = $searchModel->search([Yii::$app->request->queryParams]);
         $dataProvider->query->andFilterWhere(['status_ref'=>0]); 
+        
+
         $model = new ReferenciasDreams();
         
         return $this->redirect(['pendentes']);
