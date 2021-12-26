@@ -169,8 +169,8 @@ $this->registerJs($script);
       'singleDatePicker'=>true,
       'hideInput'=>true,
       'showDropdowns'=>true,
-      'maxDate' => date("d/m/Y", strtotime( " -8 year")),
-      'minDate' => date("d/m/Y", strtotime( " -31 year")),
+      'maxDate' => date("d/m/Y", strtotime( " -9 year")),
+      'minDate' => date("d/m/Y", strtotime( " -25 year")),
       'autoclose'=>true,
       'locale' => ['format' => 'DD/MM/YYYY'],
 
@@ -244,35 +244,61 @@ isset(Yii::$app->user->identity->localidade_id)&&(Yii::$app->user->identity->loc
 
 
     <div class="col-lg-4">
-<label class="control-label" for="beneficiarios-provin_code">Província</label>
-<?= Html::activeDropDownList($model, 'provin_code', ArrayHelper::map(Provincias::find()->where(['status'=>1])->all(), 'id', 'province_name'),
-['class' => 'form-control','prompt'=>'--Província--',
- 'onchange'=>'$.post("lists.dreams?id='.'"+$(this).val(), function(data) {
-    $("select#beneficiarios-district_code").html(data);
- });',
-]); ?>
+                <?= 
+                 $form->field($model, 'provin_code')->widget(Select2::classname(), [
+                                                            'name' => 'kv-state-250',
+                                                            'data' =>(ArrayHelper::map(Provincias::find()->where(['status'=>1])->all(), 'id', 'province_name')),
+                                                            'options' => [
+                                                                            'placeholder' => '--Província--',
+                                                                            'id' => 'provin_code'],
+                                                            'pluginOptions' => [
+                                                                            'allowClear' => true
+                                                                            ],
+                                                        ])->label('Província');
+                          
+                ?>
 
 </div>
 
     <div class="col-lg-4"> 
 
-    <label class="control-label" for="beneficiarios-district_code">Distrito</label>
-<?= Html::activeDropDownList($model, 'district_code', ArrayHelper::map(Distritos::find()->all(), 'district_code', 'district_name'),
-['class' => 'form-control','prompt'=>'--Distrito--',
-  'onchange'=>'$.post("localidades.dreams?id='.'"+$(this).val(), function(data) {
-    $("select#beneficiarios-membro_localidade_id").html(data);
- });',
-]);  ?> 
+    <?= 
+      $form->field($model, 'district_code')->widget(DepDrop::classname(), [
+      'data' =>(ArrayHelper::map(Distritos::find()->all(), 'district_code', 'district_name')),
+                  'options' => [
+                    'id' =>'district_code',
+                    'multiple'=>false,
+                    'placeholder' => '--Distrito--'],
+                    'type' => DepDrop::TYPE_SELECT2,
+                    'select2Options' => ['pluginOptions' => ['allowClear' => true]],
+                    'pluginOptions' => [
+                                    'depends' => ['provin_code'],
+                                    'url' => Url::to(['listasdistritos']),
+                                    'loadingText' => 'Lendo Distrito ...',
+                                ]
+                  ])->label('Distrito');     
+    ?> 
 
 </div>
 	    <div class="col-lg-4"> 
-	   <label class="control-label" for="beneficiarios-membro_localidade_id">Posto Administrativo</label>
-  <?= Html::activeDropDownList($model, 'membro_localidade_id', ArrayHelper::map(ComiteLocalidades::find()->all(), 'id', 'name'),
-  ['class' => 'form-control','prompt'=>'--Posto Administrativo--',
-  'onchange'=>'$.post("bairros.dreams?id='.'"+$(this).val(), function(data) {
-    $("select#beneficiarios-bairro_id").html(data);
-  });',
-  ]);  ?> 
+
+      <?= 
+       $form->field($model, 'membro_localidade_id')->widget(DepDrop::classname(), [
+        'data' =>(ArrayHelper::map(ComiteLocalidades::find()->all(), 'id', 'name')),
+                                    
+        'options' => [
+          'id' =>'membro_localidade_id',
+          'multiple'=>false,
+          'placeholder' => '--Posto Administrativo--'],
+          'type' => DepDrop::TYPE_SELECT2,
+          'select2Options' => ['pluginOptions' => ['allowClear' => true]],
+          'pluginOptions' => [
+                          'depends' => ['provin_code','district_code'],
+                          'url' => Url::to(['listaspostos']),
+                          'loadingText' => 'Lendo Posto Administrativos ...',
+                      ]
+        ])->label('Posto Administrativo');      
+      ?> 
 </div>
 	<?php } ?>
 </div>

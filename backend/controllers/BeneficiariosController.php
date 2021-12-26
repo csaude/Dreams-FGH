@@ -52,7 +52,7 @@ class BeneficiariosController extends Controller
                 ],
                 'rules' => [
                     [
-                        'actions' => ['index', 'view', 'create', 'lists', 'listas', 'servicos', 'localidades', 'bairros', 'todos', 'filtros', 'relatorio', 'relatoriofy19', 'relatoriofy20q1', 'relatoriofy20q2', 'listdistricts'],
+                        'actions' => ['index', 'view', 'create', 'lists','listasdistritos','listaspostos', 'listas', 'servicos', 'localidades', 'bairros', 'todos', 'filtros', 'relatorio', 'relatoriofy19', 'relatoriofy20q1', 'relatoriofy20q2', 'listdistricts'],
 
                         'allow' => true,
                         'roles' => [
@@ -840,6 +840,63 @@ class BeneficiariosController extends Controller
         } else {
             echo "<option>-</option>";
         }
+    }
+
+    public function actionListasdistritos()
+    {
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $out = [];
+
+        if (isset($_POST['depdrop_parents'])) {
+            $parents = $_POST['depdrop_parents'];
+            if ($parents != null) {
+                $provinciaId = $parents[0];
+
+                $distritos  = Distritos::find() 
+                ->where(['province_code'=>$provinciaId])
+                ->all();
+
+                $map = array();
+                foreach ($distritos as $distrito){
+                    array_push($map,['id'=>$distrito['district_code'],'name'=>$distrito['district_name']]);
+                }
+
+                return ['output'=>$map, 'selected'=>''];
+            }
+        }
+        return ['output'=>'', 'selected'=>''];
+
+    }
+
+    public function actionListaspostos()
+    {
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $out = [];
+
+        if (isset($_POST['depdrop_parents'])) {
+
+            $ids = $_POST['depdrop_parents'];
+            $provinciaId = empty($ids[0]) ? null : $ids[0];
+            $distritoId = empty($ids[1]) ? null : $ids[1];
+
+            if ($distritoId != null) {
+
+                $bairros  = Bairros::find()
+                ->where(['distrito_id' => $distritoId])
+                ->all();
+
+                $map = array();
+
+                foreach ($bairros as $bairro){
+
+                    array_push($map,['id'=>$bairro['id'],'name'=>$bairro['name']]);
+                }
+
+                return ['output'=>$map, 'selected'=>''];
+            }
+        }
+        return ['output'=>'', 'selected'=>''];
+
     }
 
     public function actionTodos($id)

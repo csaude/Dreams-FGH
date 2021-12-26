@@ -98,7 +98,7 @@ class Beneficiarios extends \yii\db\ActiveRecord
 		    [['emp_mobile'], 'integer', 'message' => 'O valor do {attribute} só pode ter números'],
             [['idade_anos'], 'integer', 'min' => 9, 'message' => 'O valor da {attribute} não pode ser menor que 9'],
             [['parceiro_id'],'integer','message'=>'O Valor {attribute} não existe'],
-            [['emp_birthday','district_code','emp_lastname','emp_firstname', 'emp_gender', 'provin_code','ponto_entrada','bairro_id','encarregado_educacao'], 'required'],
+            [['emp_birthday','district_code','emp_lastname','emp_firstname', 'emp_gender', 'provin_code','ponto_entrada','bairro_id','encarregado_educacao','membro_localidade_id'], 'required'],
             [['emp_dri_lice_exp_date', 'joined_date', 'criado_em', 'actualizado_em','deficiencia_tipo','estudante','estudante_classe','estudante_escola','gravida','filhos','deficiencia','house_sustainer','married_before','pregant_or_breastfeed','employed','tested_hiv','vbg_vitima_trafico','vbg_exploracao_sexual','vbg_migrante_trafico','vbg_sexual_activa','vbg_relacao_multipla','vbg_vitima','vbg_sex_worker','alcohol_drugs_use','sti_history','orphan'], 'safe'],
             [['member_id', 'membro_caratao_eleitor', 'membro_cargo_partido_id', 'emp_hm_telephone',  'emp_work_telephone', 'emp_work_email', 'emp_oth_email', 'bi_data_i', 'bi_data_f', 'nuit_data_i', 'nuit_data_f', 'user_location'], 'string', 'max' => 50],
             [['emp_lastname', 'emp_firstname', 'emp_middle_name', 'emp_nick_name', 'emp_ssn_num', 'emp_sin_num', 'emp_other_id', 'emp_dri_lice_num', 'emp_military_service', 'emp_street1', 'emp_street2', 'city_code', 'coun_code', 'provin_code', 'district_code'], 'string', 'max' => 100],
