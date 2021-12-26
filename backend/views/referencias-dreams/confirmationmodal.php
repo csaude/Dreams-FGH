@@ -54,8 +54,8 @@ use dektrium\user\models\Profile;
         </div>      
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
+            'toolbar'=> false,
             'columns' => [
-
                 ['attribute'=> 'criado_em',
                     'format' => 'html',
                     'value' => function ($model) {
