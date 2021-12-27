@@ -225,7 +225,6 @@ use kartik\daterange\DateRangePicker;
                 'type' => DatePicker::TYPE_COMPONENT_PREPEND,
                 'pluginOptions' => [
                     'autoclose'=>true,
-                    'startDate' => '01/01/2017',
                     'endDate' => "0d",
                     'format' => 'dd/mm/yyyy'
                 ]
