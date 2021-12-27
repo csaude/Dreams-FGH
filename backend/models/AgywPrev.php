@@ -431,7 +431,7 @@ class AgywPrev extends Model {
                     if(idade_actual < 20 and foi_casada=1,1,0) +
                     if(idade_actual < 20 and esteve_gravida=1,1,0) +
                     if(idade_actual < 20 and tem_filhos=1,1,0) +
-                    if(idade_actual < 20 and gravida_amamentar=1,1,0) +
+                    if(idade_actual < 18 and gravida_amamentar=1,1,0) +
                     if(teste_hiv < 2 and data_registo < '2022-01-01',1,0) +
                     if(vitima_exploracao_sexual=1,1,0) +
                     if(idade_actual < 20 and migrante=1,1,0) +
