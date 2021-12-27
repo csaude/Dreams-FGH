@@ -48,6 +48,10 @@ switch($indicatorID){
           break;
   case 6: 
           $this->title = 'Beneficiárias que receberam apoio escolar para manter-se, progredir e/ou matricular-se na escola';
+          break;
+          break;
+  case 7: 
+          $this->title = 'Beneficiárias que receberam intervenções sobre abordagens sócio-económicas combinadas';
           break;        
 };
 
