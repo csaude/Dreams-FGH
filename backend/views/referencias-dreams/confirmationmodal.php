@@ -21,8 +21,9 @@ use dektrium\user\models\Profile;
     <?php $form = ActiveForm::begin(
         [
             'options' => [
-              'class' => 'referencias-pendentes-form',
-              'action' => 'referencias-dreams/confirmationmodal'
+              'class' => 'referencias-pendentes-modal-form',
+              'action' => ['confirmationmodal'],
+              'method' => 'post'
           ]]
     ); ?>
 
@@ -113,21 +114,15 @@ use dektrium\user\models\Profile;
             ]); 
         ?>        
         <div class="form-group pull-right">
-            
         <?= Html::a(Yii::t('app', 'Confirmar & Registar'), ['confirmationmodal'], ['data'=>[  'method' => 'post',
-                                                                                                    'params'=>['dataProvider' => serialize($dataProvider),
+                                                                                                    'params'=>['ids' => serialize($ids),
                                                                                                                 'model'=>$model]],
-                                                                                                    'data-pjax'=>0, 'class'=>'btn btn-success', 'title'=>'Confirmar & Registar'])  ?>  
-               
+                                                                                                    'data-pjax'=>0, 'class'=>'btn btn-success', 'id'=>'save', 'title'=>'Confirmar & Registar'])  ?>  
+        
         <?= Html::a('Cancelar', ['pendentes'], ['class' => 'btn btn-warning']) ?>
 
         </div>
     </div>
 
-
-
-    
-
     <?php ActiveForm::end(); ?>
 </div>
-
