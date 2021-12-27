@@ -91,7 +91,7 @@
 
   $this->title = Yii::t('app', 'Referências e Contra-Referências Pendentes');
   $this->params['breadcrumbs'][] = $this->title;
-
+  
 ?>
 
 <div class="referencias-dreams-index">
@@ -303,9 +303,10 @@
       $("#cancel_reason").value = "";
       $("#other_reason").value = "";
       $("#other_reason").hide(1000);
-
+    
       $('.referencias-pendentes-form').on('beforeSubmit', function(e) {
         e.preventDefault();
+        
         var form = $(this);
         var formData = form.serialize();
 
@@ -323,7 +324,11 @@
         });
       }).on('submit', function(e) {
         e.preventDefault();
+        $('#SALVAR').attr('disabled', 'disabled');
       });
+
+
+      
     });
 
   }

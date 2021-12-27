@@ -232,7 +232,7 @@ k*******************************************************************************
 		   <?php $form->field($model, 'idade_anos')->input('number', ['placeholder'=>'Idade (em anos)', 'min' => 10, 'max' => 24])->label(false) ?>
 <button class="btn btn-warning" data-toggle="collapse" data-target="#idade" disabled>Não Conhece a Data de Nascimento </button>
       <div id="idade" class="">
-	<?= $form->field($model, 'idade_anos')->dropDownList(array_combine(range(9, 24), range(9, 24)),
+	<?= $form->field($model, 'idade_anos')->dropDownList(array_combine(range(9, 50), range(9, 50)),
 	array('prompt'=>'Idade (em anos)', 'disabled'=>true, 'class' => 'form-control')); ?>
 </div>
 	</div>
@@ -267,35 +267,60 @@ isset(Yii::$app->user->identity->localidade_id)&&(Yii::$app->user->identity->loc
 
 
     <div class="col-lg-4">
-<label class="control-label" for="beneficiarios-provin_code">Província</label>
-<?= Html::activeDropDownList($model, 'provin_code', ArrayHelper::map(Provincias::find()->where(['status'=>1])->all(), 'id', 'province_name'),
-['class' => 'form-control','prompt'=>'--Província--',
- 'onchange'=>'$.post("lists.dreams?id='.'"+$(this).val(), function(data) {
-    $("select#beneficiarios-district_code").html(data);
- });',
-]); ?>
 
+    <?= 
+                 $form->field($model, 'provin_code')->widget(Select2::classname(), [
+                                                            'name' => 'kv-state-250',
+                                                            'data' =>(ArrayHelper::map(Provincias::find()->where(['status'=>1])->all(), 'id', 'province_name')),
+                                                            'options' => [
+                                                                            'placeholder' => '--Província--',
+                                                                            'id' => 'provin_code'],
+                                                            'pluginOptions' => [
+                                                                            'allowClear' => true
+                                                                            ],
+                                                        ])->label('Província');
+
+                ?>
 </div>
 
     <div class="col-lg-4"> 
 
-    <label class="control-label" for="beneficiarios-district_code">Distrito</label>
-<?= Html::activeDropDownList($model, 'district_code', ArrayHelper::map(Distritos::find()->all(), 'district_code', 'district_name'),
-['class' => 'form-control','prompt'=>'--Distrito--',
-  'onchange'=>'$.post("localidades.dreams?id='.'"+$(this).val(), function(data) {
-    $("select#beneficiarios-membro_localidade_id").html(data);
- });',
-]);  ?> 
+    <?= 
+      $form->field($model, 'district_code')->widget(DepDrop::classname(), [
+      'data' =>(ArrayHelper::map(Distritos::find()->andwhere(['=','province_code',$model->provin_code])->all(), 'district_code', 'district_name')),
+                  'options' => [
+                    'id' =>'district_code',
+                    'multiple'=>false,
+                    'placeholder' => '--Distrito--'],
+                    'type' => DepDrop::TYPE_SELECT2,
+                    'select2Options' => ['pluginOptions' => ['allowClear' => true]],
+                    'pluginOptions' => [
+                                    'depends' => ['provin_code'],
+                                    'url' => Url::to(['listasdistritos']),
+                                    'loadingText' => 'Lendo Distrito ...',
+                                ]
+                  ])->label('Distrito');     
+    ?> 
 
 </div>
 	    <div class="col-lg-4"> 
-	   <label class="control-label" for="beneficiarios-membro_localidade_id">Posto Administrativo</label>
-  <?= Html::activeDropDownList($model, 'membro_localidade_id', ArrayHelper::map(ComiteLocalidades::find()->all(), 'id', 'name'),
-  ['class' => 'form-control','prompt'=>'--Posto Administrativo--',
-  'onchange'=>'$.post("bairros.dreams?id='.'"+$(this).val(), function(data) {
-    $("select#beneficiarios-bairro_id").html(data);
-  });',
-  ]);  ?> 
+	    <?= 
+       $form->field($model, 'membro_localidade_id')->widget(DepDrop::classname(), [
+        'data' =>(ArrayHelper::map(ComiteLocalidades::find()->andwhere(['=','c_distrito_id',$model->district_code])->all(), 'id', 'name')),
+
+        'options' => [
+          'id' =>'membro_localidade_id',
+          'multiple'=>false,
+          'placeholder' => '--Posto Administrativo--'],
+          'type' => DepDrop::TYPE_SELECT2,
+          'select2Options' => ['pluginOptions' => ['allowClear' => true]],
+          'pluginOptions' => [
+                          'depends' => ['provin_code','district_code'],
+                          'url' => Url::to(['listaspostos']),
+                          'loadingText' => 'Lendo Posto Administrativos ...',
+                      ]
+        ])->label('Posto Administrativo');      
+      ?>  
 </div>
 	<?php } ?>
 </div>
@@ -797,5 +822,6 @@ pattern="(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2])/(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!0
 
   function updateIdade($value){
     $('#beneficiarios-idade_anos').val($value).change();
+    $('#beneficiariosdreams-idade_anos').val($value).change();
   }
 </script>

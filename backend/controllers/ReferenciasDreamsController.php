@@ -287,25 +287,24 @@ class ReferenciasDreamsController extends Controller
      */
     public function actionPendentes()
     {
-
         $searchModel = new ReferenciasDreamsPendentesSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->andFilterWhere(['status_ref'=>0]); 
         $dataProvider->pagination->pageSize = 500;
         $model = new ReferenciasDreams();
 
-        /// update - Cancelamento em massa.
-
+        // update - Cancelamento em massa.
         if ($model->load(Yii::$app->request->post()) && $_POST['selection']){
-
+            
             $myIds = $_POST['selection'];
             $dataProvider = $searchModel->searchPendentes($myIds);
             $dataProvider->pagination->pageSize = 500;
+
             return $this->renderAjax('confirmationmodal', [
                     'dataProvider' => $dataProvider,
                     'model' => $model,
+                    'ids' => $myIds
             ]);
-    
         }
         
         return $this->render('pendentes', [
@@ -314,23 +313,21 @@ class ReferenciasDreamsController extends Controller
             'model' => $model,
             'cancel_reason'=>'',
         ]);
-
     }
 
     public function actionConfirmationmodal(){
         
-
         $model = new ReferenciasDreams();
-        if (isset($_POST['model']) && isset($_POST['dataProvider'])){
+        if (isset($_POST['model']) && isset($_POST['ids'])){
 
             $model->load(Yii::$app->request->post('model'));
-            $dataProvider = unserialize(Yii::$app->request->post('dataProvider'));
+            $provider = unserialize(Yii::$app->request->post('ids'));
 
             $cancelReason = $model->cancel_reason;
             $otherReason = $model->other_reason;
-            $provider = $dataProvider->query->all();
 
-            foreach($provider as $reference){
+            foreach($provider as $id){
+                $reference = $model->findOne($id);
                 $reference->status = 0;
                 $reference->cancel_reason = $cancelReason;
                 $reference->other_reason = $otherReason;
@@ -342,11 +339,6 @@ class ReferenciasDreamsController extends Controller
         $dataProvider = $searchModel->search([Yii::$app->request->queryParams]);
         $dataProvider->query->andFilterWhere(['status_ref'=>0]); 
         
-
-        $model = new ReferenciasDreams();
-        
         return $this->redirect(['pendentes']);
-    
-        
     }
 }
