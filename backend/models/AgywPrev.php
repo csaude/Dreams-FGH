@@ -425,7 +425,7 @@ class AgywPrev extends Model {
         $query = "select beneficiario_id, distrito_id, coalesce(STR_TO_DATE(data_nascimento,'%d/%m/%Y'),STR_TO_DATE(data_nascimento,'%m/%d/%Y')) data_nascimento, idade_actual, vai_escola, sexualmente_activa, data_registo, 
                     if(idade_actual = 15  and datediff(min(data_servico),coalesce(STR_TO_DATE(data_nascimento,'%d/%m/%Y'),STR_TO_DATE(data_nascimento,'%m/%d/%Y')))/30 between 120 and 177,'9-14',if(idade_actual = 20  and datediff(min(data_servico),coalesce(STR_TO_DATE(data_nascimento,'%d/%m/%Y'),STR_TO_DATE(data_nascimento,'%m/%d/%Y')))/30 between 180 and 237,'15-19',faixa_actual)) faixa_actual,
                     if(idade_actual < 20 and sustenta_casa=1,1,0) +
-                    if(idade_actual < 18 and e_orfa=1,1,0) +
+                    if(idade_actual < 18 and data_registo >= '2022-01-01' and e_orfa=1,1,0) +
                     if(idade_actual < 18 and vai_escola=0,1,0) +
                     if(tem_deficiencia=1,1,0) +
                     if(idade_actual < 20 and foi_casada=1,1,0) +
