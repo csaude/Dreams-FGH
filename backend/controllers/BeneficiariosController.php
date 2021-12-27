@@ -403,6 +403,7 @@ class BeneficiariosController extends Controller
 
         if (isset(Yii::$app->user->identity->provin_code)&&Yii::$app->user->identity->provin_code>0)
         {
+
             $dists=Distritos::find()->where(['province_code'=>(int)Yii::$app->user->identity->provin_code])->asArray()->all();
             $dist=ArrayHelper::getColumn($dists, 'district_code');
 
