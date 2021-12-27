@@ -287,7 +287,7 @@ isset(Yii::$app->user->identity->localidade_id)&&(Yii::$app->user->identity->loc
 
     <?= 
       $form->field($model, 'district_code')->widget(DepDrop::classname(), [
-      'data' =>(ArrayHelper::map(Distritos::find()->all(), 'district_code', 'district_name')),
+      'data' =>(ArrayHelper::map(Distritos::find()->andwhere(['=','province_code',$model->provin_code])->all(), 'district_code', 'district_name')),
                   'options' => [
                     'id' =>'district_code',
                     'multiple'=>false,
@@ -306,7 +306,7 @@ isset(Yii::$app->user->identity->localidade_id)&&(Yii::$app->user->identity->loc
 	    <div class="col-lg-4"> 
 	    <?= 
        $form->field($model, 'membro_localidade_id')->widget(DepDrop::classname(), [
-        'data' =>(ArrayHelper::map(ComiteLocalidades::find()->all(), 'id', 'name')),
+        'data' =>(ArrayHelper::map(ComiteLocalidades::find()->andwhere(['=','c_distrito_id',$model->district_code])->all(), 'id', 'name')),
 
         'options' => [
           'id' =>'membro_localidade_id',
