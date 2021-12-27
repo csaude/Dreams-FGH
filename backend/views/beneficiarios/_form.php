@@ -822,5 +822,6 @@ pattern="(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2])/(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!0
 
   function updateIdade($value){
     $('#beneficiarios-idade_anos').val($value).change();
+    $('#beneficiariosdreams-idade_anos').val($value).change();
   }
 </script>
