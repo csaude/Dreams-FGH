@@ -89,17 +89,23 @@ $i=0;
                                         
                                         <tr>
                                             <td colspan="6" bgcolor="#FFFFFF"><b>Total de Adolescentes e Jovens do Sexo Masculino: <?php echo $totals[$district->district_code]['total_masculinos'] ?></b></td>
-                                        </tr> 
+                                        </tr>
                                         <tr>
-                                            <td colspan="6" bgcolor="#FFFFFF"><b> Total de Beneficiárias no Indicador AGYW_PREV: <?= Html::a('<span style="color:#0549a3;"> '.($totalsAgyw[$district->district_code]).'</span>', ['relatorioagywprev', 
+                                            <td colspan="6" bgcolor="#FFFFFF"><b> Total de Beneficiárias no Indicador AGYW_PREV: 
+                                            <?php if($totalsAgyw[$district->district_code] > 0){ ?>
+                                                    <?= Html::a('<span style="color:#0549a3;"> '.($totalsAgyw[$district->district_code]).'</span>', ['relatorioagywprev', 
                                                                                                                                                         'aBand' => 'Todos',
                                                                                                                                                         'eTime' => 'Todos',
                                                                                                                                                         'pcode' => $district->province_code,
                                                                                                                                                         'dcode' => $district->district_code,
                                                                                                                                                         'sdate' => $model->start_date,
                                                                                                                                                         'edate' => $model->end_date,
-                                                                                                                                                        'iID' => 0], []) ?></b></td>
-                                        </tr> 
+                                                                                                                                                        'iID' => 0], []) ?>
+                                                    <?php  } else { ?>
+                                                        <span style="color:#0549a3;"> <?= $totalsAgyw[$district->district_code]?> </span>
+                                                    <?php  } ?>
+                                            </b></td>
+                                        </tr>
                                         <tr>
                                             <td colspan="6" height="40" bgcolor="#FFFFFF"><b> </b></td>
                                         </tr>
@@ -136,7 +142,8 @@ $i=0;
                                                         
                                                         </td>
                                                     <?php  } ?>
-                                                        <td bgcolor="#FAEBD7"><b>
+                                                    <td bgcolor="#FAEBD7"><b>
+                                                        <?php if($firstdesagregationResults['9-14'][$index2] + $firstdesagregationResults['15-19'][$index2] + $firstdesagregationResults['20-24'][$index2] + $firstdesagregationResults['25-29'][$index2] > 0 ){ ?>
                                                             <?= Html::a('<span style="color:#0549a3;"> '.($firstdesagregationResults['9-14'][$index2] + $firstdesagregationResults['15-19'][$index2] + $firstdesagregationResults['20-24'][$index2] + $firstdesagregationResults['25-29'][$index2]).'</span>', ['relatorioagywprev', 
                                                                                                                                                                     'eTime' => $index2,
                                                                                                                                                                     'pcode' => $district->province_code,
@@ -144,8 +151,10 @@ $i=0;
                                                                                                                                                                     'sdate' => $model->start_date,
                                                                                                                                                                     'edate' => $model->end_date,
                                                                                                                                                                     'iID' => 1], []) ?>
+                                                            <?php  } else { ?>
+                                                                <span style="color:#0549a3;"> <?= $firstdesagregationResults['9-14'][$index2] + $firstdesagregationResults['15-19'][$index2] + $firstdesagregationResults['20-24'][$index2] + $firstdesagregationResults['25-29'][$index2] ?> </span>
+                                                            <?php  } ?>
                                                     </b></td>
-                                                    <!-- <td bgcolor="#FAEBD7"><b><?php echo $firstdesagregationResults['9-14'][$index2] + $firstdesagregationResults['15-19'][$index2] + $firstdesagregationResults['20-24'][$index2] + $firstdesagregationResults['25-29'][$index2] ?></b></td> -->
                                                 </tr>
                                         <?php  } ?>
                                         <tr>
@@ -183,7 +192,8 @@ $i=0;
                                                         
                                                         </td>
                                                     <?php  } ?>
-                                                        <td bgcolor="#FAEBD7"><b>
+                                                    <td bgcolor="#FAEBD7"><b>
+                                                        <?php if($seconddesagregationResults['9-14'][$index2] + $seconddesagregationResults['15-19'][$index2] + $seconddesagregationResults['20-24'][$index2] + $seconddesagregationResults['25-29'][$index2] > 0 ){ ?>
                                                             <?= Html::a('<span style="color:#0549a3;"> '.($seconddesagregationResults['9-14'][$index2] + $seconddesagregationResults['15-19'][$index2] + $seconddesagregationResults['20-24'][$index2] + $seconddesagregationResults['25-29'][$index2]).'</span>', ['relatorioagywprev', 
                                                                                                                                                                     'eTime' => $index2,
                                                                                                                                                                     'pcode' => $district->province_code,
@@ -191,8 +201,10 @@ $i=0;
                                                                                                                                                                     'sdate' => $model->start_date,
                                                                                                                                                                     'edate' => $model->end_date,
                                                                                                                                                                     'iID' => 2], []) ?>
-                                                        </b></td>
-                                                    <!-- <td bgcolor="#FAEBD7"><b><?php echo $seconddesagregationResults['9-14'][$index2] + $seconddesagregationResults['15-19'][$index2] + $seconddesagregationResults['20-24'][$index2] + $seconddesagregationResults['25-29'][$index2] ?></b></td> -->
+                                                            <?php  } else { ?>
+                                                                <span style="color:#0549a3;"> <?= $seconddesagregationResults['9-14'][$index2] + $seconddesagregationResults['15-19'][$index2] + $seconddesagregationResults['20-24'][$index2] + $seconddesagregationResults['25-29'][$index2] ?> </span>
+                                                            <?php  } ?>
+                                                    </b></td>
                                                 </tr>
                                         <?php  } ?>
                                         <tr>
@@ -229,7 +241,8 @@ $i=0;
                                                                 
                                                         </td>
                                                     <?php  } ?>
-                                                        <td bgcolor="#FAEBD7"><b>
+                                                    <td bgcolor="#FAEBD7"><b>
+                                                        <?php if($thirddesagregationResults['9-14'][$index2] + $thirddesagregationResults['15-19'][$index2] + $thirddesagregationResults['20-24'][$index2] + $thirddesagregationResults['25-29'][$index2] > 0 ){ ?>
                                                             <?= Html::a('<span style="color:#0549a3;"> '.($thirddesagregationResults['9-14'][$index2] + $thirddesagregationResults['15-19'][$index2] + $thirddesagregationResults['20-24'][$index2] + $thirddesagregationResults['25-29'][$index2]).'</span>', ['relatorioagywprev', 
                                                                                                                                                                     'eTime' => $index2,
                                                                                                                                                                     'pcode' => $district->province_code,
@@ -237,8 +250,10 @@ $i=0;
                                                                                                                                                                     'sdate' => $model->start_date,
                                                                                                                                                                     'edate' => $model->end_date,
                                                                                                                                                                     'iID' => 3], []) ?>
-                                                        </b></td>
-                                                    <!-- <td bgcolor="#FAEBD7"><b><?php echo $thirddesagregationResults['9-14'][$index2] + $thirddesagregationResults['15-19'][$index2] + $thirddesagregationResults['20-24'][$index2] + $thirddesagregationResults['25-29'][$index2] ?></b></td> -->
+                                                            <?php  } else { ?>
+                                                                <span style="color:#0549a3;"> <?= $thirddesagregationResults['9-14'][$index2] + $thirddesagregationResults['15-19'][$index2] + $thirddesagregationResults['20-24'][$index2] + $thirddesagregationResults['25-29'][$index2] ?> </span>
+                                                            <?php  } ?>
+                                                    </b></td>
                                                 </tr>
                                         <?php  } ?>
                                         <tr>
@@ -275,7 +290,8 @@ $i=0;
                                                         
                                                         </td>
                                                     <?php  } ?>
-                                                        <td bgcolor="#FAEBD7"><b>
+                                                    <td bgcolor="#FAEBD7"><b>
+                                                        <?php if($fourthdesagregationResults['9-14'][$index2] + $fourthdesagregationResults['15-19'][$index2] + $fourthdesagregationResults['20-24'][$index2] + $fourthdesagregationResults['25-29'][$index2] > 0 ){ ?>
                                                             <?= Html::a('<span style="color:#0549a3;"> '.($fourthdesagregationResults['9-14'][$index2] + $fourthdesagregationResults['15-19'][$index2] + $fourthdesagregationResults['20-24'][$index2] + $fourthdesagregationResults['25-29'][$index2]).'</span>', ['relatorioagywprev', 
                                                                                                                                                                     'eTime' => $index2,
                                                                                                                                                                     'pcode' => $district->province_code,
@@ -283,8 +299,10 @@ $i=0;
                                                                                                                                                                     'sdate' => $model->start_date,
                                                                                                                                                                     'edate' => $model->end_date,
                                                                                                                                                                     'iID' => 4], []) ?>
-                                                        </b></td>
-                                                    <!-- <td bgcolor="#FAEBD7"><b><?php echo $fourthdesagregationResults['9-14'][$index2] + $fourthdesagregationResults['15-19'][$index2] + $fourthdesagregationResults['20-24'][$index2] + $fourthdesagregationResults['25-29'][$index2] ?></b></td> -->
+                                                            <?php  } else { ?>
+                                                                <span style="color:#0549a3;"> <?= $fourthdesagregationResults['9-14'][$index2] + $fourthdesagregationResults['15-19'][$index2] + $fourthdesagregationResults['20-24'][$index2] + $fourthdesagregationResults['25-29'][$index2] ?> </span>
+                                                            <?php  } ?>
+                                                    </b></td>
                                                 </tr>
                                         <?php  } ?>
                                         <tr>
@@ -321,7 +339,8 @@ $i=0;
                                                         
                                                         </td>
                                                     <?php  } ?>
-                                                        <td bgcolor="#FAEBD7"><b>
+                                                    <td bgcolor="#FAEBD7"><b>
+                                                        <?php if($fifthdesagregationResults['9-14'][$index2] + $fifthdesagregationResults['15-19'][$index2] + $fifthdesagregationResults['20-24'][$index2] + $fifthdesagregationResults['25-29'][$index2] > 0 ){ ?>
                                                             <?= Html::a('<span style="color:#0549a3;"> '.($fifthdesagregationResults['9-14'][$index2] + $fifthdesagregationResults['15-19'][$index2] + $fifthdesagregationResults['20-24'][$index2] + $fifthdesagregationResults['25-29'][$index2]).'</span>', ['relatorioagywprev', 
                                                                                                                                                                     'eTime' => $index2,
                                                                                                                                                                     'pcode' => $district->province_code,
@@ -329,8 +348,10 @@ $i=0;
                                                                                                                                                                     'sdate' => $model->start_date,
                                                                                                                                                                     'edate' => $model->end_date,
                                                                                                                                                                     'iID' => 5], []) ?>
-                                                        </b></td>
-                                                    <!-- <td bgcolor="#FAEBD7"><b><?php echo $fifthdesagregationResults['9-14'][$index2] + $fifthdesagregationResults['15-19'][$index2] + $fifthdesagregationResults['20-24'][$index2] + $fifthdesagregationResults['25-29'][$index2] ?></b></td> -->
+                                                            <?php  } else { ?>
+                                                                <span style="color:#0549a3;"> <?= $fifthdesagregationResults['9-14'][$index2] + $fifthdesagregationResults['15-19'][$index2] + $fifthdesagregationResults['20-24'][$index2] + $fifthdesagregationResults['25-29'][$index2] ?> </span>
+                                                            <?php  } ?>
+                                                    </b></td>
                                                 </tr>
                                         <?php  } ?>
                                         <tr>
@@ -367,7 +388,8 @@ $i=0;
                                                             <?php  } ?>
                                                         </td>
                                                     <?php  } ?>
-                                                        <td bgcolor="#FAEBD7"><b>
+                                                    <td bgcolor="#FAEBD7"><b>
+                                                        <?php if($sixthdesagregationResults['9-14'][$index2] + $sixthdesagregationResults['15-19'][$index2] + $sixthdesagregationResults['20-24'][$index2] + $sixthdesagregationResults['25-29'][$index2] > 0 ){ ?>
                                                             <?= Html::a('<span style="color:#0549a3;"> '.($sixthdesagregationResults['9-14'][$index2] + $sixthdesagregationResults['15-19'][$index2] + $sixthdesagregationResults['20-24'][$index2] + $sixthdesagregationResults['25-29'][$index2]).'</span>', ['relatorioagywprev', 
                                                                                                                                                                     'eTime' => $index2,
                                                                                                                                                                     'pcode' => $district->province_code,
@@ -375,18 +397,20 @@ $i=0;
                                                                                                                                                                     'sdate' => $model->start_date,
                                                                                                                                                                     'edate' => $model->end_date,
                                                                                                                                                                     'iID' => 6], []) ?>
-                                                        </b></td>
-                                                    <!-- <td bgcolor="#FAEBD7"><b><?php echo $sixthdesagregationResults['9-14'][$index2] + $sixthdesagregationResults['15-19'][$index2] + $sixthdesagregationResults['20-24'][$index2] + $sixthdesagregationResults['25-29'][$index2] ?></b></td> -->
+                                                            <?php  } else { ?>
+                                                                <span style="color:#0549a3;"> <?= $sixthdesagregationResults['9-14'][$index2] + $sixthdesagregationResults['15-19'][$index2] + $sixthdesagregationResults['20-24'][$index2] + $sixthdesagregationResults['25-29'][$index2] ?> </span>
+                                                            <?php  } ?>
+                                                    </b></td>
                                                 </tr>
                                         <?php  } ?>
                                         <tr>
                                             <td colspan="5" height="40" bgcolor="#FFFFFF"><b> </b></td>
                                         </tr>
                                         <tr>
-                                            <td width="706" colspan="6" bgcolor="#F4A460"><b>Number of AGYW ages 15-24 years enrolled in DREAMS that completed a comprehensive economic strengthening intervention within the reporting period</b> </td>
+                                            <td width="706" colspan="6" bgcolor="#F4A460"><b>Number of AGYW ages 15-24 years enrolled in DREAMS that completed a comprehensive economic strengthening intervention within the reporting period</b> </td>
                                         </tr>
                                         <tr>
-                                            <td width="174" bgcolor="#FFDEAD">Tempo de registo como beneficiário DREAMS </td>
+                                            <td width="174" bgcolor="#FFDEAD">Tempo de registo como beneficiário DREAMS </td>
                                             <td bgcolor="#FFDEAD">10-14</td>
                                             <td bgcolor="#FFDEAD">15-19</td>
                                             <td bgcolor="#FFDEAD">20-24</td>
@@ -395,11 +419,11 @@ $i=0;
                                         </tr>
                                         <?php foreach(['0_6','7_12', '13_24', '25+'] as $index2){ ?>
                                                 <tr>
-                                                    <td bgcolor="#FAEBD7"><?php echo $index2 ?> meses </td>
+                                                    <td bgcolor="#FAEBD7"><?php echo $index2 ?> meses </td>
                                                     <?php foreach(['9-14','15-19', '20-24', '25-29'] as $index1){ ?>
                                                         <td bgcolor="#FAEBD7"> 
                                                             <?php if( $seventhdesagregationResults[$index1][$index2] > 0 ){ ?>
-                                                            
+
                                                                 <?= Html::a('<span style="color:#0549a3;">'.$seventhdesagregationResults[$index1][$index2].'</span>', ['relatorioagywprev','aBand' => $index1,
                                                                                                                                                                     'eTime' => $index2,
                                                                                                                                                                     'pcode' => $district->province_code,
@@ -413,7 +437,8 @@ $i=0;
                                                             <?php  } ?>
                                                         </td>
                                                     <?php  } ?>
-                                                        <td bgcolor="#FAEBD7"><b>
+                                                    <td bgcolor="#FAEBD7"><b>
+                                                        <?php if($seventhdesagregationResults['9-14'][$index2] + $seventhdesagregationResults['15-19'][$index2] + $seventhdesagregationResults['20-24'][$index2] + $seventhdesagregationResults['25-29'][$index2] > 0 ){ ?>
                                                             <?= Html::a('<span style="color:#0549a3;"> '.($seventhdesagregationResults['9-14'][$index2] + $seventhdesagregationResults['15-19'][$index2] + $seventhdesagregationResults['20-24'][$index2] + $seventhdesagregationResults['25-29'][$index2]).'</span>', ['relatorioagywprev', 
                                                                                                                                                                     'eTime' => $index2,
                                                                                                                                                                     'pcode' => $district->province_code,
@@ -421,39 +446,22 @@ $i=0;
                                                                                                                                                                     'sdate' => $model->start_date,
                                                                                                                                                                     'edate' => $model->end_date,
                                                                                                                                                                     'iID' => 7], []) ?>
-                                                        </b></td>
-                                                    <!-- <td bgcolor="#FAEBD7"><b><?php echo $seventhdesagregationResults['9-14'][$index2] + $seventhdesagregationResults['15-19'][$index2] + $seventhdesagregationResults['20-24'][$index2] + $seventhdesagregationResults['25-29'][$index2] ?></b></td> -->
+                                                            <?php  } else { ?>
+                                                                <span style="color:#0549a3;"> <?= $seventhdesagregationResults['9-14'][$index2] + $seventhdesagregationResults['15-19'][$index2] + $seventhdesagregationResults['20-24'][$index2] + $seventhdesagregationResults['25-29'][$index2] ?> </span>
+                                                            <?php  } ?>
+                                                    </b></td>
                                                 </tr>
                                         <?php  } ?>
                                         <tr>
                                             <td colspan="5" height="40" bgcolor="#FFFFFF"><b> </b></td>
                                         </tr>
-
+                                        
                                     </table>
                                 </div>
-                                
                             <?php  } ?> 
                         <?php  } ?> 
                     </div>
-                <?php  } ?> 
-                <br />
-                <div class="form-group" align="center">
-                    <?= Html::a('<i class="glyphicon glyphicon-export"></i> Exportar Todos', ['exportallbeneficiarieslist'], [
-                                                        'data'=>[
-                                                            'method' => 'post',
-                                                            'params'=>[
-                                                                    'province_code' => $model->province_code,
-                                                                    'district_code' => $model->district_code,
-                                                                    'start_date' => $model->start_date,
-                                                                    'end_date' => $model->end_date,
-                                                                    'provinces' => implode(',', ArrayHelper::getColumn($provinces, 'province_code')),
-                                                                    'districts' => implode(',', ArrayHelper::getColumn($districts, 'district_code'))
-                                                                ],
-                                                            'confirm' => 'The EXCEL export file will be generated for download!'
-                                                        ],
-                                                        'class'=>'btn btn-default'        
-                                                    ]) ?>
-                </div>                                     
+                <?php  } ?>                                        
             </div>
         </div>
     </div>
