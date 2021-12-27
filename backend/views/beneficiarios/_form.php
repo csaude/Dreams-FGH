@@ -232,7 +232,7 @@ k*******************************************************************************
 		   <?php $form->field($model, 'idade_anos')->input('number', ['placeholder'=>'Idade (em anos)', 'min' => 10, 'max' => 24])->label(false) ?>
 <button class="btn btn-warning" data-toggle="collapse" data-target="#idade" disabled>Não Conhece a Data de Nascimento </button>
       <div id="idade" class="">
-	<?= $form->field($model, 'idade_anos')->dropDownList(array_combine(range(9, 24), range(9, 24)),
+	<?= $form->field($model, 'idade_anos')->dropDownList(array_combine(range(9, 50), range(9, 50)),
 	array('prompt'=>'Idade (em anos)', 'disabled'=>true, 'class' => 'form-control')); ?>
 </div>
 	</div>
@@ -822,5 +822,6 @@ pattern="(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2])/(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!0
 
   function updateIdade($value){
     $('#beneficiarios-idade_anos').val($value).change();
+    $('#beneficiariosdreams-idade_anos').val($value).change();
   }
 </script>
