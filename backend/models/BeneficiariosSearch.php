@@ -223,20 +223,22 @@ class BeneficiariosSearch extends Beneficiarios
 $query = Beneficiarios::find()->andFilterWhere(['NOT IN','id',$ids])->andWhere(['emp_status'=>1]);
 */
 
-                $query = Beneficiarios::find()->where(['provin_code' => 5])->where(['emp_status' => 1]);
-            }
-        } else {
-            $query = Beneficiarios::find()->where(['emp_status' => 1]);
-        }
+$query = Beneficiarios::find()->where(['provin_code'=>5])->where(['emp_status'=>1]);
 
+}
+
+} else {
+$query = Beneficiarios::find()->where(['emp_status'=>1]);
+}
+		
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'sort' => ['defaultOrder' => ['id' => SORT_DESC]]
+			'sort'=> ['defaultOrder' => ['id'=>SORT_DESC]]
         ]);
-
+		
 
         $this->load($params);
 
@@ -250,8 +252,8 @@ $query = Beneficiarios::find()->andFilterWhere(['NOT IN','id',$ids])->andWhere([
         $query->andFilterWhere([
             'id' => $this->id,
             'emp_number' => $this->emp_number,
-            'us_id' => $this->us_id,
-            'ponto_entrada' => $this->ponto_entrada,
+			'us_id' => $this->us_id,
+			'ponto_entrada'=>$this->ponto_entrada,
             'membro_zona' => $this->membro_zona,
             'membro_circulo' => $this->membro_circulo,
             'membro_celula' => $this->membro_celula,
@@ -268,32 +270,32 @@ $query = Beneficiarios::find()->andFilterWhere(['NOT IN','id',$ids])->andWhere([
             'termination_id' => $this->termination_id,
             'criado_por' => $this->criado_por,
             'actualizado_por' => $this->actualizado_por,
-            //   'criado_em' => $this->criado_em,
+         //   'criado_em' => $this->criado_em,
             'actualizado_em' => $this->actualizado_em,
-
-            'estudante' => $this->estudante,
-            'deficiencia' => $this->deficiencia,
-            'bairro_id' => $this->bairro_id,
-            'gravida' => $this->gravida,
-            'filhos' => $this->filhos,
-            'parceiro_id' => $this->parceiro_id,
+           
+            'estudante'=> $this->estudante,
+            'deficiencia'=> $this->deficiencia,
+            'bairro_id'=>$this->bairro_id,
+            'gravida'=>$this->gravida,
+            'filhos'=>$this->filhos,
+	    'parceiro_id'=>$this->parceiro_id,
         ]);
 
         $query->andFilterWhere(['like', 'member_id', $this->member_id])
             ->andFilterWhere(['like', 'emp_lastname', $this->emp_lastname])
             ->andFilterWhere(['like', 'emp_firstname', $this->emp_firstname])
             ->andFilterWhere(['like', 'emp_middle_name', $this->emp_middle_name])
-            //->andFilterWhere(['=', 'us_id', $this->us_id])
-            ->andFilterWhere(['like', 'us_id', $this->us_id])
-            ->andFilterWhere(['like', 'ponto_entrada', $this->ponto_entrada])
+	    //->andFilterWhere(['=', 'us_id', $this->us_id])
+          ->andFilterWhere(['like', 'us_id', $this->us_id])
+	    ->andFilterWhere(['like', 'ponto_entrada', $this->ponto_entrada])
 
             ->andFilterWhere(['like', 'estudante', $this->estudante])
             ->andFilterWhere(['like', 'deficiencia', $this->deficiencia])
             ->andFilterWhere(['=', 'bairro_id', $this->bairro_id])
             ->andFilterWhere(['like', 'gravida', $this->gravida])
             ->andFilterWhere(['like', 'filhos', $this->filhos])
-            //->andFilterWhere(['=', 'parceiro_id', $this->parceiro_id])
-            //->andFilterWhere(['like', 'parceiro_id', $this->parceiro_id])
+	    //->andFilterWhere(['=', 'parceiro_id', $this->parceiro_id])
+          //->andFilterWhere(['like', 'parceiro_id', $this->parceiro_id])
 
 
 
@@ -318,8 +320,8 @@ $query = Beneficiarios::find()->andFilterWhere(['NOT IN','id',$ids])->andWhere([
             ->andFilterWhere(['=', 'provin_code', $this->provin_code])
             ->andFilterWhere(['=', 'district_code', $this->district_code])
             ->andFilterWhere(['=', 'emp_zipcode', $this->emp_zipcode])
-
-            ->andFilterWhere(['like', 'emp_hm_telephone', $this->emp_hm_telephone])
+           
+ 	    ->andFilterWhere(['like', 'emp_hm_telephone', $this->emp_hm_telephone])
             ->andFilterWhere(['like', 'emp_mobile', $this->emp_mobile])
             ->andFilterWhere(['like', 'emp_work_telephone', $this->emp_work_telephone])
             ->andFilterWhere(['like', 'emp_work_email', $this->emp_work_email])
@@ -339,8 +341,8 @@ $query = Beneficiarios::find()->andFilterWhere(['NOT IN','id',$ids])->andWhere([
             ->andFilterWhere(['like', 'custom8', $this->custom8])
             ->andFilterWhere(['like', 'custom9', $this->custom9])
             ->andFilterWhere(['like', 'custom10', $this->custom10])
-
-            ->andFilterWhere(['like', 'criado_em', $this->criado_em])
+	   
+	    ->andFilterWhere(['like', 'criado_em', $this->criado_em])
             ->andFilterWhere(['like', 'user_location', $this->user_location])
             ->andFilterWhere(['like', 'user_location2', $this->user_location2]);
 

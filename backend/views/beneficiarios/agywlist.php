@@ -28,6 +28,9 @@ $enrollmentTime = str_replace('_', '-',$_GET['eTime']).' meses';
 $ageBand = isset($_GET['aBand'])? str_replace('_', '-',$_GET['aBand']).' anos': "Todas";
 
 switch($indicatorID){
+  case 0: 
+          $this->title = 'Beneficiárias no Indicador AGYW_PREV';
+          break;
   case 1: 
           $this->title = 'Beneficiárias que completaram o pacote primário completo do DREAMS mas nenhum serviço/intervenção adicional';
           break;
@@ -45,6 +48,10 @@ switch($indicatorID){
           break;
   case 6: 
           $this->title = 'Beneficiárias que receberam apoio escolar para manter-se, progredir e/ou matricular-se na escola';
+          break;
+          break;
+  case 7: 
+          $this->title = 'Beneficiárias que receberam intervenções sobre abordagens sócio-económicas combinadas';
           break;        
 };
 
@@ -145,7 +152,7 @@ Pjax::begin(['enablePushState'=>false]); ?>
 
           [
             'attribute'=>'emp_birthday',
-            'label'=>'Data de Nascimento',
+            'label'=>'Idade',
             'value' => function ($model) {
               if(!$model->emp_birthday==NULL) {
                 $newDate = substr(date($model->emp_birthday, strtotime($model->emp_birthday)),-4);
@@ -187,6 +194,13 @@ Pjax::begin(['enablePushState'=>false]); ?>
             'format'=>'raw',
             'content'=>function($data){
               return Yii::$app->formatter->asDate($data['criado_em'], "php:Y-m-d");
+            }
+          ],
+          [
+            'label'=>'#',
+            'format'=>'raw',
+            'content'=>function($data){
+              return '<a href="'.$data['member_id'].'.dreams"  > <i class="glyphicon glyphicon-eye-open icon-success"></i> </a>';
             }
           ],
         ],

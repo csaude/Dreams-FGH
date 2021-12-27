@@ -22,6 +22,7 @@ use app\models\Distritos;
 use app\models\ServicosDream;  //para seleccao de intervensoes
 use app\models\Utilizadores;
 use app\models\Profile;
+
 /**
  * ReferenciasDreamsController implements the CRUD actions for ReferenciasDreams model.
  */
@@ -78,7 +79,7 @@ class ReferenciasDreamsController extends Controller
                     ],
 
                     [
-                        'actions' => ['pendentes'],
+                        'actions' => ['pendentes', 'confirmationmodal'],
                         'allow' => true,
                         'roles' => [
                             User::ROLE_ADMIN
@@ -286,53 +287,58 @@ class ReferenciasDreamsController extends Controller
      */
     public function actionPendentes()
     {
-
         $searchModel = new ReferenciasDreamsPendentesSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->andFilterWhere(['status_ref'=>0]); 
-
+        $dataProvider->pagination->pageSize = 500;
         $model = new ReferenciasDreams();
 
-        /// update - Cancelamento em massa.
+        // update - Cancelamento em massa.
+        if ($model->load(Yii::$app->request->post()) && $_POST['selection']){
+            
+            $myIds = $_POST['selection'];
+            $dataProvider = $searchModel->searchPendentes($myIds);
+            $dataProvider->pagination->pageSize = 500;
 
-        if ($model->load(Yii::$app->request->post())){
+            return $this->renderAjax('confirmationmodal', [
+                    'dataProvider' => $dataProvider,
+                    'model' => $model,
+                    'ids' => $myIds
+            ]);
+        }
+        
+        return $this->render('pendentes', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'model' => $model,
+            'cancel_reason'=>'',
+        ]);
+    }
+
+    public function actionConfirmationmodal(){
+        
+        $model = new ReferenciasDreams();
+        if (isset($_POST['model']) && isset($_POST['ids'])){
+
+            $model->load(Yii::$app->request->post('model'));
+            $provider = unserialize(Yii::$app->request->post('ids'));
+
             $cancelReason = $model->cancel_reason;
             $otherReason = $model->other_reason;
 
-            if((isset($_POST['selection'])) && ($cancelReason <> '')){
-
-                if($cancelReason <> 5 || ($cancelReason == 5 && $otherReason <> '')){
-
-                    $myIds = $_POST['selection'];
-                    
-                    foreach ($myIds as $id){
-                        $model = $this->findModel($id);
-                        $model->status = 0;
-                        $model->cancel_reason = $cancelReason;
-                        $model->other_reason = $otherReason;
-                        $model->save();
-                    }
-
-                }
-
+            foreach($provider as $id){
+                $reference = $model->findOne($id);
+                $reference->status = 0;
+                $reference->cancel_reason = $cancelReason;
+                $reference->other_reason = $otherReason;
+                $reference->save();
             }
-            
-            return $this->render('pendentes', [
-                'searchModel' => $searchModel,
-                'dataProvider' => $dataProvider,
-                $model->cancel_reason = '',
-                $model->other_reason = '',
-                'model' => $model,
-            ]);
-
-        }else {
-            return $this->render('pendentes', [
-                'searchModel' => $searchModel,
-                'dataProvider' => $dataProvider,
-                'model' => $model,
-                'cancel_reason'=>'',
-            ]);
         }
-
+        
+        $searchModel = new ReferenciasDreamsPendentesSearch();
+        $dataProvider = $searchModel->search([Yii::$app->request->queryParams]);
+        $dataProvider->query->andFilterWhere(['status_ref'=>0]); 
+        
+        return $this->redirect(['pendentes']);
     }
 }

@@ -19,7 +19,7 @@ class BeneficiariosDreamsSearch extends BeneficiariosDreams
     {
         return [
           [['id', 'emp_number', 'membro_zona', 'membro_circulo','us_id', 'membro_celula', 'membro_localidade_id', 'emp_smoker', 'nation_code', 'emp_gender', 'emp_status', 'job_title_code', 'eeo_cat_code', 'work_station', 'termination_id', 'criado_por', 'actualizado_por','ponto_entrada'], 'integer'],
-          [['member_id','emp_lastname', 'emp_firstname','criado_em', 'emp_middle_name', 'emp_nick_name', 'membro_data_admissao', 'membro_caratao_eleitor', 'membro_cargo_partido_id', 'ethnic_race_code', 'emp_birthday', 'emp_marital_status', 'emp_ssn_num', 'emp_sin_num', 'emp_other_id', 'emp_dri_lice_num', 'emp_dri_lice_exp_date', 'emp_military_service', 'emp_street1', 'emp_street2', 'city_code', 'coun_code', 'provin_code', 'district_code', 'emp_zipcode', 'emp_hm_telephone', 'emp_mobile', 'emp_work_telephone', 'emp_work_email', 'sal_grd_code', 'joined_date', 'emp_oth_email', 'bi', 'nuit', 'passaporte', 'dire', 'bi_data_i', 'bi_data_f', 'custom3', 'other_prof_info', 'nuit_data_i', 'nuit_data_f', 'custom7', 'custom8', 'custom9', 'custom10', 'criado_em', 'actualizado_em', 'user_location', 'user_location2','deficiencia_tipo','idade_anos','estudante','estudante_classe','estudante_escola','gravida','filhos','bairro_id','encarregado_educacao','deficiencia','parceiro_id','house_sustainer','married_before','pregant_or_breastfeed','employed','tested_hiv','vbg_exploracao_sexual','vbg_migrante_trafico','vbg_sexual_activa','vbg_relacao_multipla','vbg_vitima','vbg_vitima_trafico','alcohol_drugs_use','sti_history'], 'safe'],
+          [['member_id','emp_lastname', 'emp_firstname','criado_em', 'emp_middle_name', 'emp_nick_name', 'membro_data_admissao', 'membro_caratao_eleitor', 'membro_cargo_partido_id', 'ethnic_race_code', 'emp_birthday', 'emp_marital_status', 'emp_ssn_num', 'emp_sin_num', 'emp_other_id', 'emp_dri_lice_num', 'emp_dri_lice_exp_date', 'emp_military_service', 'emp_street1', 'emp_street2', 'city_code', 'coun_code', 'provin_code', 'district_code', 'emp_zipcode', 'emp_hm_telephone', 'emp_mobile', 'emp_work_telephone', 'emp_work_email', 'sal_grd_code', 'joined_date', 'emp_oth_email', 'bi', 'nuit', 'passaporte', 'dire', 'bi_data_i', 'bi_data_f', 'custom3', 'other_prof_info', 'nuit_data_i', 'nuit_data_f', 'custom7', 'custom8', 'custom9', 'custom10', 'criado_em', 'actualizado_em', 'user_location', 'user_location2','deficiencia_tipo','idade_anos','estudante','estudante_classe','estudante_escola','gravida','filhos','bairro_id','encarregado_educacao','deficiencia','parceiro_id','house_sustainer','married_before','pregant_or_breastfeed','employed','tested_hiv','vbg_exploracao_sexual','vbg_migrante_trafico','vbg_sexual_activa','vbg_relacao_multipla','vbg_vitima','vbg_vitima_trafico','alcohol_drugs_use','sti_history','orphan'], 'safe'],
       ];
     }
 
@@ -85,25 +85,10 @@ class BeneficiariosDreamsSearch extends BeneficiariosDreams
             'ponto_entrada' => $this->ponto_entrada,
             'parceiro_id' => $this->parceiro_id,
             'via' => $this->via,
-            'estudante' => $this->estudante,
             'estudante_classe' => $this->estudante_classe,
-            'gravida' => $this->gravida,
             'filhos' => $this->filhos,
             'bairro_id' => $this->bairro_id,
-            'deficiencia' => $this->deficiencia,
-            'house_sustainer' => $this->house_sustainer,
-            'married_before' => $this->married_before,
-            'pregant_or_breastfeed' => $this->pregant_or_breastfeed,
-            'employed' => $this->employed,
             'tested_hiv' => $this->tested_hiv,
-            'vbg_exploracao_sexual' => $this->vbg_exploracao_sexual,
-            'vbg_migrante_trafico' => $this->vbg_migrante_trafico,
-            'vbg_sexual_activa' => $this->vbg_sexual_activa,
-            'vbg_relacao_multipla' => $this->vbg_relacao_multipla,
-            'vbg_vitima' => $this->vbg_vitima,
-            'vbg_vitima_trafico'=>$this->vbg_vitima_trafico,
-            'alcohol_drugs_use' =>$this->alcohol_drugs_use,
-            'sti_history' =>$this->sti_history,
             'membro_localidade_id' => $this->membro_localidade_id,
             'us_id' => $this->us_id,
             'membro_zona' => $this->membro_zona,
@@ -125,6 +110,90 @@ class BeneficiariosDreamsSearch extends BeneficiariosDreams
             'actualizado_em' => $this->actualizado_em,
         //  'organizacao' => $this->organizacao,
         ]);
+
+        if($this->orphan == "NULL"){
+            $query->andWhere(['is', 'orphan', null]);
+        } else{
+            $query->andFilterWhere(['orphan' =>$this->orphan]);
+        }
+
+        if($this->estudante == "NULL"){
+            $query->andWhere(['is', 'estudante', null]);
+        } else{
+            $query->andFilterWhere(['estudante' =>$this->estudante]);
+        }
+
+        if($this->gravida == "NULL"){
+            $query->andWhere(['is', 'gravida', null]);
+        } else{
+            $query->andFilterWhere(['gravida' =>$this->gravida]);
+        }
+        if($this->house_sustainer == "NULL"){
+            $query->andWhere(['is', 'house_sustainer', null]);
+        } else{
+            $query->andFilterWhere(['house_sustainer' =>$this->house_sustainer]);
+        }
+        if($this->deficiencia == "NULL"){
+            $query->andWhere(['is', 'deficiencia', null]);
+        } else{
+            $query->andFilterWhere(['deficiencia' =>$this->deficiencia]);
+        }
+        if($this->married_before == "NULL"){
+            $query->andWhere(['is', 'married_before', null]);
+        } else{
+            $query->andFilterWhere(['married_before' =>$this->married_before]);
+        }
+        if($this->pregant_or_breastfeed == "NULL"){
+            $query->andWhere(['is', 'pregant_or_breastfeed', null]);
+        } else{
+            $query->andFilterWhere(['pregant_or_breastfeed' =>$this->pregant_or_breastfeed]);
+        }
+        if($this->employed == "NULL"){
+            $query->andWhere(['is', 'employed', null]);
+        } else{
+            $query->andFilterWhere(['employed' =>$this->employed]);
+        }
+        if($this->vbg_exploracao_sexual == "NULL"){
+            $query->andWhere(['is', 'vbg_exploracao_sexual', null]);
+        } else{
+            $query->andFilterWhere(['vbg_exploracao_sexual' =>$this->vbg_exploracao_sexual]);
+        }
+        if($this->vbg_migrante_trafico == "NULL"){
+            $query->andWhere(['is', 'vbg_migrante_trafico', null]);
+        } else{
+            $query->andFilterWhere(['vbg_migrante_trafico' =>$this->vbg_migrante_trafico]);
+        }
+        if($this->vbg_sexual_activa == "NULL"){
+            $query->andWhere(['is', 'vbg_sexual_activa', null]);
+        } else{
+            $query->andFilterWhere(['vbg_sexual_activa' =>$this->vbg_sexual_activa]);
+        }
+        if($this->vbg_relacao_multipla == "NULL"){
+            $query->andWhere(['is', 'vbg_relacao_multipla', null]);
+        } else{
+            $query->andFilterWhere(['vbg_relacao_multipla' =>$this->vbg_relacao_multipla]);
+        }
+        if($this->vbg_vitima == "NULL"){
+            $query->andWhere(['is', 'vbg_vitima', null]);
+        } else{
+            $query->andFilterWhere(['vbg_vitima' =>$this->vbg_vitima]);
+        }
+        if($this->vbg_vitima_trafico == "NULL"){
+            $query->andWhere(['is', 'vbg_vitima_trafico', null]);
+        } else{
+            $query->andFilterWhere(['vbg_vitima_trafico' =>$this->vbg_vitima_trafico]);
+        }
+        if($this->alcohol_drugs_use == "NULL"){
+            $query->andWhere(['is', 'alcohol_drugs_use', null]);
+        } else{
+            $query->andFilterWhere(['alcohol_drugs_use' =>$this->alcohol_drugs_use]);
+        }
+        if($this->sti_history == "NULL"){
+            $query->andWhere(['is', 'sti_history', null]);
+        } else{
+            $query->andFilterWhere(['sti_history' =>$this->sti_history]);
+        }
+        
 
         $query->andFilterWhere(['like', 'member_id', $this->member_id])
             ->andFilterWhere(['like', 'emp_lastname', $this->emp_lastname])

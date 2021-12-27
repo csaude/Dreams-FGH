@@ -34,9 +34,14 @@ use app\models\Beneficiarios;
 use app\models\Bairros;
 use app\models\Us;
 use app\models\PontosDeEntrada;
+use kartik\daterange\DateRangePicker;
 /* @var $this yii\web\View */
 /* @var $model app\models\Beneficiarios */
 /* @var $form yii\widgets\ActiveForm */
+
+
+
+
 ?>
 
 
@@ -97,20 +102,42 @@ use app\models\PontosDeEntrada;
 <button class="btn btn-success" data-toggle="collapse" data-target="#data" disabled> Data de Nascimento <span class="glyphicon glyphicon-calendar"></span></button>
 <div id="data" class="">
 
-   <?= $form->field($model, 'emp_birthday')->widget(DatePicker::classname(), [
-    'options' => ['placeholder' => 'Data de Nascimento...', 'dateFormat' => 'dd-MM-YYYY'],
-    'pluginOptions' => [
-        'autoclose'=>true
-    ]
-]);
- ?>
+<?=
+   
+   $form->field($model, 'emp_birthday', [
+    'addon'=>['prepend'=>['content'=>'<i class="glyphicon glyphicon-calendar"></i>']],
+    'options'=>['class'=>'input-group drp-container']
+  ])->widget(DateRangePicker::classname(), [
+    'useWithAddon'=>true,
+    'readonly' => true,
+    'pluginOptions'=>[
+        'language'=>'pt',
+        'singleDatePicker'=>true,
+        'hideInput'=>true,
+        'showDropdowns'=>true,
+        'maxDate' => date("d/m/Y", strtotime( " -9 year")),
+        'minDate' => '01/01/1993',
+        'autoclose'=>true,
+        'locale' => ['format' => 'DD/MM/YYYY'],
+  
+    ],
+    'pluginEvents' => [
+      "apply.daterangepicker" => "function(e, v) { 
+                                    var years = new Date(new Date() - new Date(v.startDate)).getFullYear() - 1970;
+                                    //updateIdade(years);
+                                    alert('test');
+                                    $('#beneficiarios-idade_anos').val(years).change();
+                                  }",
+    ],
+  ]);
+?>
 </div>    </div>
 
 	   <div class="col-lg-6">
 		   <?php $form->field($model, 'idade_anos')->input('number', ['placeholder'=>'Idade (em anos)', 'min' => 10, 'max' => 24])->label(false) ?>
 <button class="btn btn-warning" data-toggle="collapse" data-target="#idade" disabled>Não Conhece a Data de Nascimento </button>
       <div id="idade" class="">
-	<?= $form->field($model, 'idade_anos')->dropDownList(array_combine(range(10, 24), range(10, 24)),
+	<?= $form->field($model, 'idade_anos')->dropDownList(array_combine(range(9, 50), range(9, 50)),
 	array('prompt'=>'Idade (em anos)','class' => 'form-control')); ?>
 </div>
 	</div>
@@ -560,3 +587,15 @@ elseif($model->ponto_entrada==2)
 
   <?php ActiveForm::end(); ?>
 </div>
+
+<script type="text/javascript">
+  window.onload = function () {
+    $(document).ready(function() {
+      $("#beneficiariosdreams-idade_anos").attr("disabled", "disabled");      
+    });
+  }
+
+  function updateIdade($value){
+    $('#beneficiariosdreams-idade_anos').val($value).change();
+  }
+</script>

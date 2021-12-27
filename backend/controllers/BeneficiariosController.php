@@ -52,7 +52,7 @@ class BeneficiariosController extends Controller
                 ],
                 'rules' => [
                     [
-                        'actions' => ['index', 'view', 'create', 'lists', 'listas', 'servicos', 'localidades', 'bairros', 'todos', 'filtros', 'relatorio', 'relatoriofy19', 'relatoriofy20q1', 'relatoriofy20q2', 'listdistricts'],
+                        'actions' => ['index', 'view', 'create', 'lists','listasdistritos','listaspostos', 'listas', 'servicos', 'localidades', 'bairros', 'todos', 'filtros', 'relatorio', 'relatoriofy19', 'relatoriofy20q1', 'relatoriofy20q2', 'listdistricts'],
 
                         'allow' => true,
                         'roles' => [
@@ -85,7 +85,7 @@ class BeneficiariosController extends Controller
                     ],
 
                     [
-                        'actions' => ['relatorioagyw', 'relatorioagywprev', 'exportlist', 'exportreport'],
+                        'actions' => ['relatorioagyw',  'relatorioagywprev', 'exportlist', 'exportreport'],
                         'allow' => true,
                         'roles' => [
                             User::ROLE_ADMIN
@@ -124,6 +124,7 @@ class BeneficiariosController extends Controller
             $fourthdesagregation = $model->getFourthDesagregationResults();
             $fifthdesagregation = $model->getFifthDesagregationResults();
             $sixthdesagregation = $model->getSixthDesagregationResults();
+            $seventhdesagregation = $model->getSeventhDesagregationResults();
 
             // load report template
             $tmpfname = 'template_agywprev.xls';
@@ -287,6 +288,17 @@ class BeneficiariosController extends Controller
                 $excelObj->getActiveSheet()
                             ->setCellValue('CH'.$row, $educationSupportCount);
 
+                // report seventh desagregation
+                $economicStrengtheningCount = 0;
+                $seventhdesagregationResults = $seventhdesagregation[$districtId]['results'];
+                foreach(['0_6','7_12', '13_24', '25+'] as $index2){
+                    foreach(['9-14','15-19', '20-24', '25-29'] as $index1){  
+                        $economicStrengtheningCount += $seventhdesagregationResults[$index1][$index2];
+                    }
+                };
+                $excelObj->getActiveSheet()
+                            ->setCellValue('CI'.$row, $economicStrengtheningCount);
+
                 //set row total
                 $excelObj->getActiveSheet()
                             ->setCellValue('D'.$row, $subtotal1+$subtotal2+$subtotal3+$subtotal4+$subtotal5+$subtotal6+$subtotal7+$subtotal8+$subtota9+
@@ -297,7 +309,7 @@ class BeneficiariosController extends Controller
 
             // generate report 
             $objWriter = PHPExcel_IOFactory::createWriter($excelObj, 'Excel2007');
-            $filename = 'PEPFAR_MER_2.5_AGYW_PREV_Semi-Annual_Indicator_' .  date('Ymd_his') . '.xls';
+            $filename = 'PEPFAR_MER_2.6_AGYW_PREV_Semi-Annual_Indicator_' .  date('Ymd_his') . '.xls';
             $objWriter->save($filename);   
            
             ob_end_clean();  
@@ -361,7 +373,7 @@ class BeneficiariosController extends Controller
 
         // generate report 
         $objWriter = PHPExcel_IOFactory::createWriter($excelObj, 'Excel2007');
-        $filename = 'PEPFAR_MER_2.5_AGYW_PREV_Beneficiaries_' .  date('Ymd_his') . '.xls';
+        $filename = 'PEPFAR_MER_2.6_AGYW_PREV_Beneficiaries_' .  date('Ymd_his') . '.xls';
         $objWriter->save($filename);   
 
         ob_end_clean();  
@@ -447,8 +459,11 @@ class BeneficiariosController extends Controller
         $beneficiaries = null;
 
         switch($indicatorID){
+            case 0: 
+                    $desagregationResults = $model->getAllDisaggregationsResults();
+                    $beneficiaries = $desagregationResults[$district_code]['beneficiaries'];
+                    break;
             case 1: 
-                    
                     $desagregationResults = $model->getFirstDesagregationResults();
                     $firstdesagregationResults = $desagregationResults[$district_code]['beneficiaries'];
                     $beneficiaries = $this->getBeneficiaries($firstdesagregationResults, $ageBand, $enrollmentTime);
@@ -482,7 +497,14 @@ class BeneficiariosController extends Controller
                     $sixthdesagregationResults = $desagregationResults[$district_code]['beneficiaries'];
                     $beneficiaries = $this->getBeneficiaries($sixthdesagregationResults, $ageBand, $enrollmentTime);
                     // $beneficiaries = $sixthdesagregationResults[$ageBand][$enrollmentTime];
-                    break;        
+                    break;
+            case 7: 
+                    $desagregationResults = $model->getSeventhDesagregationResults();
+                    $seventhdesagregationResults = $desagregationResults[$district_code]['beneficiaries'];
+                    $beneficiaries = $this->getBeneficiaries($seventhdesagregationResults, $ageBand, $enrollmentTime);
+                    // $beneficiaries = $seventhdesagregationResults[$ageBand][$enrollmentTime];
+                    break;       
+                     
         };
         
         // use session storage
@@ -547,6 +569,8 @@ class BeneficiariosController extends Controller
             $fourthdesagregationResults = $model->getFourthDesagregationResults();
             $fifthdesagregationResults = $model->getFifthDesagregationResults();
             $sixthdesagregationResults = $model->getSixthDesagregationResults();
+            $seventhdesagregationResults = $model->getSeventhDesagregationResults();
+            $alldisaggragationsResults = $model->getAllDisaggregationsResults();
 
             $totaisresults = $model->getSummary($districts);
             $totalAgyw = $model->getTotaisAgyW();
@@ -568,6 +592,8 @@ class BeneficiariosController extends Controller
                 'fourthdesagregation' => $fourthdesagregationResults,
                 'fifthdesagregation' => $fifthdesagregationResults,
                 'sixthdesagregation' => $sixthdesagregationResults,
+                'seventhdesagregation' => $seventhdesagregationResults,
+                'allbeneficiaries' => $alldisaggragationsResults,
                 'totals' => $totaisresults,
                 'totalsAgyw' => $totalAgyw
             ]);
@@ -815,6 +841,63 @@ class BeneficiariosController extends Controller
         } else {
             echo "<option>-</option>";
         }
+    }
+
+    public function actionListasdistritos()
+    {
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $out = [];
+
+        if (isset($_POST['depdrop_parents'])) {
+            $parents = $_POST['depdrop_parents'];
+            if ($parents != null) {
+                $provinciaId = $parents[0];
+
+                $distritos  = Distritos::find() 
+                ->where(['province_code'=>$provinciaId])
+                ->all();
+
+                $map = array();
+                foreach ($distritos as $distrito){
+                    array_push($map,['id'=>$distrito['district_code'],'name'=>$distrito['district_name']]);
+                }
+
+                return ['output'=>$map, 'selected'=>''];
+            }
+        }
+        return ['output'=>'', 'selected'=>''];
+
+    }
+
+    public function actionListaspostos()
+    {
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $out = [];
+
+        if (isset($_POST['depdrop_parents'])) {
+
+            $ids = $_POST['depdrop_parents'];
+            $provinciaId = empty($ids[0]) ? null : $ids[0];
+            $distritoId = empty($ids[1]) ? null : $ids[1];
+
+            if ($distritoId != null) {
+
+                $bairros  = Bairros::find()
+                ->where(['distrito_id' => $distritoId])
+                ->all();
+
+                $map = array();
+
+                foreach ($bairros as $bairro){
+
+                    array_push($map,['id'=>$bairro['id'],'name'=>$bairro['name']]);
+                }
+
+                return ['output'=>$map, 'selected'=>''];
+            }
+        }
+        return ['output'=>'', 'selected'=>''];
+
     }
 
     public function actionTodos($id)

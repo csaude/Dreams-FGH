@@ -151,32 +151,63 @@ $this->registerJs($script);
    <div class="col-lg-6">
 <button class="btn btn-success" data-toggle="collapse" data-target="#data" disabled> Data de Nascimento <span class="glyphicon glyphicon-calendar"></span></button>
 
-<?= 
+<?php 
 
-// $form->field($model, 'emp_birthday')->widget(\yii\widgets\MaskedInput::className(), [
-//     'mask' => '99/99/9999',
-// ]) ;
-
-
- $form->field($model, 'emp_birthday', [
-  'addon'=>['prepend'=>['content'=>'<i class="glyphicon glyphicon-calendar"></i>']],
-  'options'=>['class'=>'input-group drp-container']
-])->widget(DateRangePicker::classname(), [
-  'useWithAddon'=>true,
-  'readonly' => true,
-  'pluginOptions'=>[
-      'language'=>'pt',
-      'singleDatePicker'=>true,
-      'hideInput'=>true,
-      'showDropdowns'=>true,
-      'maxYear' => 2012,
-      'minYear' => 1990,
-      'autoclose'=>true,
-      'locale' => ['format' => 'DD/MM/YYYY'],
-  ]
-])
+if($model->isNewRecord){
+  echo $form->field($model, 'emp_birthday', [
+    'addon'=>['prepend'=>['content'=>'<i class="glyphicon glyphicon-calendar"></i>']],
+    'options'=>['class'=>'input-group drp-container']
+  ])->widget(DateRangePicker::classname(), [
+    'useWithAddon'=>true,
+    'readonly' => true,
+    'pluginOptions'=>[
+        'language'=>'pt',
+        'singleDatePicker'=>true,
+        'hideInput'=>true,
+        'showDropdowns'=>true,
+        'maxDate' => date("d/m/Y", strtotime( " -9 year")),
+        'minDate' => date("d/m/Y", strtotime( " -25 year")),
+        'autoclose'=>true,
+        'locale' => ['format' => 'DD/MM/YYYY'],
+  
+    ],
+    'pluginEvents' => [
+      "apply.daterangepicker" => "function(e, v) { 
+                                    var years = new Date(new Date() - new Date(v.startDate)).getFullYear() - 1970;
+                                    updateIdade(years);
+                                  }",
+    ],
+  ]);
+}else{
+  echo $form->field($model, 'emp_birthday', [
+    'addon'=>['prepend'=>['content'=>'<i class="glyphicon glyphicon-calendar"></i>']],
+    'options'=>['class'=>'input-group drp-container']
+  ])->widget(DateRangePicker::classname(), [
+    'useWithAddon'=>true,
+    'readonly' => true,
+    'pluginOptions'=>[
+        'language'=>'pt',
+        'singleDatePicker'=>true,
+        'hideInput'=>true,
+        'showDropdowns'=>true,
+        'maxDate' => date("d/m/Y", strtotime( " -9 year")),
+        'minDate' => '01/01/1993',
+        'autoclose'=>true,
+        'locale' => ['format' => 'DD/MM/YYYY'],
+  
+    ],
+    'pluginEvents' => [
+      "apply.daterangepicker" => "function(e, v) { 
+                                    var years = new Date(new Date() - new Date(v.startDate)).getFullYear() - 1970;
+                                    updateIdade(years);
+                                  }",
+    ],
+  ]);
+}
+ 
 
 ?>
+
 
 <!--  <div class="form-group field-beneficiarios-emp_birthday">
 <label class="control-label" for="beneficiarios-emp_birthday">Data Nascimento</label>
@@ -201,8 +232,8 @@ k*******************************************************************************
 		   <?php $form->field($model, 'idade_anos')->input('number', ['placeholder'=>'Idade (em anos)', 'min' => 10, 'max' => 24])->label(false) ?>
 <button class="btn btn-warning" data-toggle="collapse" data-target="#idade" disabled>Não Conhece a Data de Nascimento </button>
       <div id="idade" class="">
-	<?= $form->field($model, 'idade_anos')->dropDownList(array_combine(range(9, 24), range(9, 24)),
-	array('prompt'=>'Idade (em anos)','class' => 'form-control')); ?>
+	<?= $form->field($model, 'idade_anos')->dropDownList(array_combine(range(9, 50), range(9, 50)),
+	array('prompt'=>'Idade (em anos)', 'disabled'=>true, 'class' => 'form-control')); ?>
 </div>
 	</div>
 </div>
@@ -236,35 +267,60 @@ isset(Yii::$app->user->identity->localidade_id)&&(Yii::$app->user->identity->loc
 
 
     <div class="col-lg-4">
-<label class="control-label" for="beneficiarios-provin_code">Província</label>
-<?= Html::activeDropDownList($model, 'provin_code', ArrayHelper::map(Provincias::find()->where(['status'=>1])->all(), 'id', 'province_name'),
-['class' => 'form-control','prompt'=>'--Província--',
- 'onchange'=>'$.post("lists.dreams?id='.'"+$(this).val(), function(data) {
-    $("select#beneficiarios-district_code").html(data);
- });',
-]); ?>
 
+    <?= 
+                 $form->field($model, 'provin_code')->widget(Select2::classname(), [
+                                                            'name' => 'kv-state-250',
+                                                            'data' =>(ArrayHelper::map(Provincias::find()->where(['status'=>1])->all(), 'id', 'province_name')),
+                                                            'options' => [
+                                                                            'placeholder' => '--Província--',
+                                                                            'id' => 'provin_code'],
+                                                            'pluginOptions' => [
+                                                                            'allowClear' => true
+                                                                            ],
+                                                        ])->label('Província');
+
+                ?>
 </div>
 
     <div class="col-lg-4"> 
 
-    <label class="control-label" for="beneficiarios-district_code">Distrito</label>
-<?= Html::activeDropDownList($model, 'district_code', ArrayHelper::map(Distritos::find()->all(), 'district_code', 'district_name'),
-['class' => 'form-control','prompt'=>'--Distrito--',
-  'onchange'=>'$.post("localidades.dreams?id='.'"+$(this).val(), function(data) {
-    $("select#beneficiarios-membro_localidade_id").html(data);
- });',
-]);  ?> 
+    <?= 
+      $form->field($model, 'district_code')->widget(DepDrop::classname(), [
+      'data' =>(ArrayHelper::map(Distritos::find()->andwhere(['=','province_code',$model->provin_code])->all(), 'district_code', 'district_name')),
+                  'options' => [
+                    'id' =>'district_code',
+                    'multiple'=>false,
+                    'placeholder' => '--Distrito--'],
+                    'type' => DepDrop::TYPE_SELECT2,
+                    'select2Options' => ['pluginOptions' => ['allowClear' => true]],
+                    'pluginOptions' => [
+                                    'depends' => ['provin_code'],
+                                    'url' => Url::to(['listasdistritos']),
+                                    'loadingText' => 'Lendo Distrito ...',
+                                ]
+                  ])->label('Distrito');     
+    ?> 
 
 </div>
 	    <div class="col-lg-4"> 
-	   <label class="control-label" for="beneficiarios-membro_localidade_id">Posto Administrativo</label>
-  <?= Html::activeDropDownList($model, 'membro_localidade_id', ArrayHelper::map(ComiteLocalidades::find()->all(), 'id', 'name'),
-  ['class' => 'form-control','prompt'=>'--Posto Administrativo--',
-  'onchange'=>'$.post("bairros.dreams?id='.'"+$(this).val(), function(data) {
-    $("select#beneficiarios-bairro_id").html(data);
-  });',
-  ]);  ?> 
+	    <?= 
+       $form->field($model, 'membro_localidade_id')->widget(DepDrop::classname(), [
+        'data' =>(ArrayHelper::map(ComiteLocalidades::find()->andwhere(['=','c_distrito_id',$model->district_code])->all(), 'id', 'name')),
+
+        'options' => [
+          'id' =>'membro_localidade_id',
+          'multiple'=>false,
+          'placeholder' => '--Posto Administrativo--'],
+          'type' => DepDrop::TYPE_SELECT2,
+          'select2Options' => ['pluginOptions' => ['allowClear' => true]],
+          'pluginOptions' => [
+                          'depends' => ['provin_code','district_code'],
+                          'url' => Url::to(['listaspostos']),
+                          'loadingText' => 'Lendo Posto Administrativos ...',
+                      ]
+        ])->label('Posto Administrativo');      
+      ?>  
 </div>
 	<?php } ?>
 </div>
@@ -335,6 +391,12 @@ isset(Yii::$app->user->identity->localidade_id)&&(Yii::$app->user->identity->loc
   <?= $form->field($model, 'house_sustainer')->widget(Select2::classname(),['data' => ['0' => 'NÃO','1' => 'SIM'],'options' => ['placeholder' => '--Selecione Aqui--'],]); ?>
   </div>
 <?php } ?>
+
+
+  <div class="col-lg-3">
+    <?= $form->field($model, 'orphan')->widget(Select2::classname(),['data' => ['0' => 'NÃO','1' => 'SIM'],'options' => ['placeholder' => '--Selecione Aqui--'],]); ?>
+  </div>
+
 
   </div>
 
@@ -750,3 +812,16 @@ pattern="(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2])/(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!0
 ]);
 
 ?>
+
+<script type="text/javascript">
+  window.onload = function () {
+    $(document).ready(function() {
+      $("#beneficiarios-idade_anos").attr("disabled", "disabled");      
+    });
+  }
+
+  function updateIdade($value){
+    $('#beneficiarios-idade_anos').val($value).change();
+    $('#beneficiariosdreams-idade_anos').val($value).change();
+  }
+</script>
