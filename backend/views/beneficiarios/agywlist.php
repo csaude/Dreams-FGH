@@ -50,7 +50,7 @@ switch($indicatorID){
           $this->title = 'Beneficiárias que receberam apoio escolar para manter-se, progredir e/ou matricular-se na escola';
           break;
   case 7: 
-          $this->title = 'Beneficiárias com idades entre 15-24 anos que completaram uma intervenção abrangente de fortalecimento económico';
+          $this->title = 'Beneficiárias que receberam intervenções sobre abordagens sócio-económicas combinadas';
           break;        
 };
 
