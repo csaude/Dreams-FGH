@@ -48,14 +48,15 @@ class BeneficiariosSearch extends Beneficiarios
                                 app_dream_parceiros.name as organizacao,
                                 data_registo, nui, faixa_registo, faixa_actual, idade_registo, idade_actual, data_nascimento,
                                 if(idade_actual < 20 and sustenta_casa=1,1,0) +
+                                if(idade_actual < 18 and data_registo >= '2022-01-01' and e_orfa=1,1,0) +
                                 if(idade_actual < 18 and vai_escola=0,1,0) +
                                 if(tem_deficiencia=1,1,0) +
                                 if(idade_actual < 20 and foi_casada=1,1,0) +
                                 if(idade_actual < 20 and esteve_gravida=1,1,0) +
                                 if(idade_actual < 20 and tem_filhos=1,1,0) +
-                                if(idade_actual < 20 and gravida_amamentar=1,1,0) +   
-                                if(teste_hiv < 2,1,0) +
-                                if(idade_actual < 18 and vitima_exploracao_sexual=1,1,0) +
+                                if(idade_actual < 18 and gravida_amamentar=1,1,0) +
+                                if(teste_hiv < 2 and data_registo < '2022-01-01',1,0) +
+                                if(vitima_exploracao_sexual=1,1,0) +
                                 if(idade_actual < 20 and migrante=1,1,0) +
                                 if(idade_actual < 20 and vitima_trafico=1,1,0) +
                                 if(idade_actual < 18 and sexualmente_activa=1,1,0) +
