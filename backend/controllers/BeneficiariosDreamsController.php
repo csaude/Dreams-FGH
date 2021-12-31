@@ -110,6 +110,7 @@ class BeneficiariosDreamsController extends Controller
             $orgs=Organizacoes::find()->where(['IN','distrito_id',$dist])->orderBy('parceria_id ASC')->asArray()->all();
 
         } else {
+          
 
             $orgs=Organizacoes::find()->where(['=', 'status', 1])->orderBy('parceria_id ASC')->asArray()->all();
 

@@ -200,6 +200,7 @@ $this->params['breadcrumbs'][] = $this->title;
               'value' => function ($model) {
                 return  $model->estudante==1 ? '<i class="fa fa-check"></i><span style="display:none !important">S</span>': '<i class="fa fa-times" color="red"></i><span style="display:none !important">N</span>';
               },
+
             ],
 
             [
@@ -210,6 +211,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 return  $model->deficiencia==1 ? '<i class="fa fa-check"></i><span style="display:none !important">S</span>': '<i class="fa fa-times" color="red"></i><span style="display:none !important">N</span>';
               },
             ],
+
 
             'deficiencia_tipo',
 
