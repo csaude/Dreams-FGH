@@ -48,7 +48,7 @@ class BeneficiariosSearch extends Beneficiarios
                                 app_dream_parceiros.name as organizacao,
                                 data_registo, nui, faixa_registo, faixa_actual, idade_registo, idade_actual, data_nascimento,
                                 if(idade_actual < 20 and sustenta_casa=1,1,0) +
-                                if(idade_actual < 18 and data_registo >= '2022-01-01' and e_orfa=1,1,0) +
+                                if(idade_actual < 18 and e_orfa=1,1,0) +
                                 if(idade_actual < 18 and vai_escola=0,1,0) +
                                 if(tem_deficiencia=1,1,0) +
                                 if(idade_actual < 20 and foi_casada=1,1,0) +
