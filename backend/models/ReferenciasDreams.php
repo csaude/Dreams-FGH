@@ -93,49 +93,47 @@ class ReferenciasDreams extends \yii\db\ActiveRecord
 
     public function beforeSave($insert) {
 
-date_default_timezone_set('Africa/Maputo');
+        date_default_timezone_set('Africa/Maputo');
 
-  if ($this->isNewRecord) {
+        if ($this->isNewRecord) {
+            $this->criado_em=date("Y-m-d H:i:s");
+            $this->criado_por=Yii::$app->user->identity->id;
+            $this->user_location=Yii::$app->request->userIP;
+        }
+        else
+            {
+            $this->actualizado_em=date("Y-m-d H:i:s");
+            $this->actualizado_por=Yii::$app->user->identity->id;
+            $this->user_location2=Yii::$app->request->userIP;
 
-   $this->criado_em=date("Y-m-d H:i:s");
-   $this->criado_por=Yii::$app->user->identity->id;
-   $this->user_location=Yii::$app->request->userIP;
+        }
+        return parent::beforeSave($insert);
+    }
 
-  }
-  else
-      {
-      $this->actualizado_em=date("Y-m-d H:i:s");
-      $this->actualizado_por=Yii::$app->user->identity->id;
-      $this->user_location2=Yii::$app->request->userIP;
+    public function getBeneficiario()
+    {
+        return $this->hasOne(Beneficiarios::className(), ['emp_number' => 'beneficiario_id']);
+    }
 
-      }
-  return parent::beforeSave($insert);
-}
+    public function getReferente()
+    {
+        return $this->hasOne(User::className(), ['id' => 'referido_por']);
+    }
 
-public function getBeneficiario()
-{
-   return $this->hasOne(Beneficiarios::className(), ['emp_number' => 'beneficiario_id']);
-}
+    public function getReceptor()
+    {
+        return $this->hasOne(User::className(), ['id' => 'notificar_ao']);
+    }
 
-public function getReferente()
-{
-   return $this->hasOne(User::className(), ['id' => 'referido_por']);
-}
-
-public function getReceptor()
-{
-   return $this->hasOne(User::className(), ['id' => 'notificar_ao']);
-}
-
-public function getNreferente()
-{
-   return $this->hasOne(Profile::className(), ['user_id' => 'referido_por']);
-}
+    public function getNreferente()
+    {
+        return $this->hasOne(Profile::className(), ['user_id' => 'referido_por']);
+    }
 	
 	public function getNreceptor()
-{
-   return $this->hasOne(Profile::className(), ['id' => 'notificar_ao']);
-}
+    {
+        return $this->hasOne(Profile::className(), ['id' => 'notificar_ao']);
+    }
 
     /**
      * @return \yii\db\ActiveQuery
@@ -145,11 +143,12 @@ public function getNreferente()
         return $this->hasMany(ReferenciasPontosDreams::className(), ['referencia_id' => 'id']);
     }
 	
-	  public function getTservico()
+	public function getTservico()
     {
         return $this->hasOne(TipoServicos::className(), ['id' => 'servico_id']);
     }
-public function getOrganizacao()
+
+    public function getOrganizacao()
     {
         return $this->hasOne(Organizacoes::className(), ['id' => 'projecto']);
     }
