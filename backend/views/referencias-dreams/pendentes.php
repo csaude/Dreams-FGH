@@ -10,6 +10,7 @@
   use \kartik\widgets\Select2;
   use app\models\Utilizadores;
   use app\models\ReferenciasDreams;
+  use app\models\Us;
 
   //05 11 2018 Actualizado em Pemba
   use app\models\ReferenciasServicosReferidos;
@@ -210,7 +211,41 @@
           [
             'class' => 'kartik\grid\CheckboxColumn',
             'headerOptions' => ['class' => 'kartik-sheet-style']
-          ],  
+          ],
+
+          [
+            'attribute'=>'distrito_id',
+            'format' => 'html',
+            'value' => function ($model) {
+              return  $model->beneficiario->distrito['district_name'];
+            },
+            'filter'=>ArrayHelper::map(
+              $dists, 'district_code', 'district_name'
+            ),
+          ],
+
+          [
+            'attribute'=>'servico_id',
+            'format' => 'html',
+            'label'=>'Organização Referente',
+            'value' => function ($model) {
+              $organizacao = Organizacoes::find()
+                ->select('app_dream_parceiros.*')
+                ->innerjoin('user', '`user`.`parceiro_id` = `app_dream_parceiros`.`id`')
+                ->innerjoin('app_dream_referencias', '`app_dream_referencias`.`criado_por` = `user`.`id`')
+                ->where(['=','app_dream_referencias.id',$model->id])
+                ->one();
+                
+              return isset($organizacao)? $organizacao->name: "";
+            },
+            'filter'=>ArrayHelper::map(
+              Organizacoes::find()
+                ->where(['IN','id',$org])
+                ->andWhere(['<>','status','0'])
+                ->orderBy('distrito_id ASC')
+                ->all(), 'id', 'name'
+            ),
+          ],
 
           ['attribute'=> 'criado_em',
             'format' => 'html',
@@ -267,6 +302,7 @@
 
         ['attribute'=>'projecto',
          'format' => 'html',
+         'label'=>'Organização Referida',
          'value' => function ($model) {
             return  $model->organizacao['name'];
           },
@@ -277,6 +313,30 @@
               ->orderBy('distrito_id ASC')
               ->all(), 'id', 'name'
           ),
+        ],
+
+        [
+          'attribute'=>'status',
+          'format' => 'html',
+          'label'=>'Ponto de Entrada para Referência',
+          'value' => function ($model) {
+            $us = Us::find()
+              ->select('app_dream_us.*')
+              ->innerjoin('user', '`user`.`us_id` = `app_dream_us`.`id`')
+              ->innerjoin('profile', '`profile`.`user_id` = `user`.`id`')
+              ->innerjoin('app_dream_referencias', '`app_dream_referencias`.`notificar_ao` = `profile`.`id`')
+              ->where(['=','app_dream_referencias.id',$model->id])
+              ->all();
+            return count($us) > 0 ? $us[0]->name: "";
+          },
+          'filter'=>ArrayHelper::map(
+            Us::find()
+              ->where(['IN','distrito_id',$dist])
+              ->andWhere(['<>','status','0'])
+              ->orderBy('name ASC')
+              ->all(), 'id', 'name'
+          ),
+
         ],
 
         ['attribute'=>'status_ref',
