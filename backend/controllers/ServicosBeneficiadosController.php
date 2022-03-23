@@ -229,7 +229,8 @@ class ServicosBeneficiadosController extends Controller
             if ($parents != null) {
                 $tipoServicoId = $parents[0];
 
-                $servicos  = ServicosDream::find() 
+                $servicos  = ServicosDream::find()
+                ->orderBy('name ASC')
                 ->where(['servico_id'=>$tipoServicoId])
                 ->andWhere(['=','status',1])
                 ->all();

@@ -92,7 +92,7 @@ use kartik\daterange\DateRangePicker;
 
           
          echo $form->field($model, 'servico_id')->widget(DepDrop::classname(), [
-                              'data' =>(ArrayHelper::map(ServicosDream::find()->where(['=','status',1])->all(), 'id', 'name')),
+                              'data' =>(ArrayHelper::map(ServicosDream::find()->orderBy('name ASC')->where(['=','status',1])->all(), 'id', 'name')),
                                           'options' => [
                                             'id' =>'servico_id',
                                             'multiple'=>false,
