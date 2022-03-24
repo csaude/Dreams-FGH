@@ -643,11 +643,11 @@ class AgywPrev extends Model {
                     array_push($agyw_prev[$districtId], $beneficiary_id);
                 }
                 // Antigo curriculo
-                if($recursos_antigo > 9 && $sessoes_saaj == 4 && ($sexualmente_activa == 1 && ($preservativos > 0 || $testagem_hiv > 0))){
+                if($recursos_antigo > 9 && $sessoes_saaj >= 4 && ($sexualmente_activa == 1 && ($preservativos > 0 || $testagem_hiv > 0))){
                     $this->addCompletude($desagregationMap, $districtId, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_pacote_primario');
                     array_push($agyw_prev[$districtId], $beneficiary_id);
                 }
-                if($recursos_antigo > 9 || $sessoes_saaj == 4 || ($sexualmente_activa == 1 && ($preservativos > 0 || $testagem_hiv > 0))){
+                if($recursos_antigo > 9 || $sessoes_saaj >= 4 || ($sexualmente_activa == 1 && ($preservativos > 0 || $testagem_hiv > 0))){
                     $this->addCompletude($desagregationMap, $districtId, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_servico_primario');
                     array_push($agyw_prev[$districtId], $beneficiary_id);
                 }
@@ -664,7 +664,7 @@ class AgywPrev extends Model {
                     $this->addCompletude($desagregationMap, $districtId, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_pacote_primario');
                     array_push($agyw_prev[$districtId], $beneficiary_id);
                 }
-                if($preservativos > 0 || $sessoes_hiv_vbg > 10 || $testagem_hiv > 0 || $literacia_financeira == 1){
+                if($preservativos > 0 || $sessoes_hiv_vbg > 10 || $testagem_hiv > 0 || $literacia_financeira >= 1){
                     $this->addCompletude($desagregationMap, $districtId, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_servico_primario');
                     array_push($agyw_prev[$districtId], $beneficiary_id);
                 }
@@ -672,7 +672,7 @@ class AgywPrev extends Model {
                     $this->addCompletude($desagregationMap, $districtId, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_servico_secundario');
                     array_push($agyw_prev[$districtId], $beneficiary_id);
                 }
-                if($prevencao_violencia_15_mais == 3){
+                if($prevencao_violencia_15_mais >= 3){
                     $this->addCompletude($desagregationMap, $districtId, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_servico_violencia');
                     //array_push($agyw_prev[$districtId], $beneficiary_id);
                 }
