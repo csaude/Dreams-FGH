@@ -76,7 +76,7 @@ function core($k){
               'class'=> 'kv-state-enable',
             ],
           ],
-
+          
           [
             'attribute'=> 'member_id',
             'format' => 'html',
@@ -209,6 +209,7 @@ function core($k){
           ],
     
           [
+
             'attribute'=>'criado_por',
             'label'=>'Criado Por',
             'format'=>'raw',

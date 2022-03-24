@@ -22,8 +22,8 @@ class ReferenciasDreamsPendentesSearch extends ReferenciasDreams
     public function rules()
     {
         return [
-            [['nota_referencia', 'beneficiario_id','referido_por', 'notificar_ao','refer_to', 'projecto','start'], 'safe'],
-            [['end'], 'safe']
+            [['nota_referencia', 'distrito_id', 'servico_id', 'beneficiario_id','referido_por', 'notificar_ao','refer_to', 'projecto','start'], 'safe'],
+            [['status','end'], 'safe']
         ];
     }
 
@@ -45,16 +45,49 @@ class ReferenciasDreamsPendentesSearch extends ReferenciasDreams
      */
     public function search($params)
     {
-        if (isset(Yii::$app->user->identity->provin_code)&&(Yii::$app->user->identity->provin_code>0)) {
-            $prov=Yii::$app->user->identity->provin_code;
-            $provis = Provincias::find()->where(['id'=>$prov])->asArray()->one();
-            $dist= Distritos::find()->where(['province_code'=>$provis])->asArray()->all();
+        if (isset($params['ReferenciasDreamsPendentesSearch']) && 
+                (!empty($params['ReferenciasDreamsPendentesSearch']['distrito_id']) || 
+                 !empty($params['ReferenciasDreamsPendentesSearch']['servico_id']) || 
+                 !empty($params['ReferenciasDreamsPendentesSearch']['status']))) {
+            $district = $params['ReferenciasDreamsPendentesSearch']['distrito_id'];
+            $orgReferente = $params['ReferenciasDreamsPendentesSearch']['servico_id'];
+            $pontoEntrada = $params['ReferenciasDreamsPendentesSearch']['status'];
 
-            $bens=Beneficiarios::find()->where(['IN','district_code',$dist])->andWhere(['emp_status'=>1])->asArray()->all();
-            $ben_id=ArrayHelper::getColumn($bens, 'id');
-            $query = ReferenciasDreams::find()->where(['IN','beneficiario_id',$ben_id])->andWhere(['status'=>1])->orderBy(['criado_em' => SORT_DESC]);
-        } else {
-            $query = ReferenciasDreams::find()->where(['status'=>1])->orderBy(['criado_em' => SORT_DESC]);
+            $query = ReferenciasDreams::find()
+                ->select('app_dream_referencias.*')
+                ->distinct(true)
+                ->innerjoin('hs_hr_employee', '`app_dream_referencias`.`beneficiario_id` = `hs_hr_employee`.`id`')
+                ->innerjoin('profile p', '`app_dream_referencias`.`criado_por` = `p`.`user_id`')
+                ->innerjoin('user u', '`p`.`user_id` = `u`.`id`')
+                ->innerjoin('profile p1', '`app_dream_referencias`.`notificar_ao` = `p1`.`id`') 
+                ->innerjoin('user u1', '`p1`.`user_id` = `u1`.`id`')
+                ->where(['app_dream_referencias.status' => 1]);
+
+            if (!empty($district)) {
+                $bens=Beneficiarios::find()->where(['=','district_code',$district])->andWhere(['emp_status'=>1])->asArray()->all();
+                $ben_id=ArrayHelper::getColumn($bens, 'id');
+                $query->andwhere(['IN','beneficiario_id',$ben_id]);
+            }
+            if (!empty($orgReferente)) {
+                $query->andwhere(['u.parceiro_id' => $orgReferente]);
+            }
+            if(!empty($pontoEntrada)) {
+                $query->andwhere(['=','u1.us_id',$pontoEntrada]);
+            }
+            $query->orderBy(['app_dream_referencias.criado_em' => SORT_DESC]);
+        }
+        else {
+            if (isset(Yii::$app->user->identity->provin_code)&&(Yii::$app->user->identity->provin_code>0)) {
+                $prov=Yii::$app->user->identity->provin_code;
+                $provis = Provincias::find()->where(['id'=>$prov])->asArray()->one();
+                $dist= Distritos::find()->where(['province_code'=>$provis])->asArray()->all();
+
+                $bens=Beneficiarios::find()->where(['IN','district_code',$dist])->andWhere(['emp_status'=>1])->asArray()->all();
+                $ben_id=ArrayHelper::getColumn($bens, 'id');
+                $query = ReferenciasDreams::find()->where(['IN','beneficiario_id',$ben_id])->andWhere(['status'=>1])->orderBy(['criado_em' => SORT_DESC]);
+            } else {
+                $query = ReferenciasDreams::find()->where(['status'=>1])->orderBy(['criado_em' => SORT_DESC]);
+            }
         }
 
 
