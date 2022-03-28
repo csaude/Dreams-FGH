@@ -470,11 +470,6 @@ class AgywPrev extends Model {
                         when sub_servico_id in (130,131,132,133,134,135,136,137,138,139,140,141,142,143,144) then 1
                         else 0
                     end) recursos_sociais_antigo,
-                    // sum(case
-                    //     when (vai_escola=1 and sub_servico_id in (176,195,209)
-                    //         or vai_escola=0 and sub_servico_id in (164,183,200)) then 1
-                    //     else 0
-                    // end) modulos_ogaac,
                     sum(case
                         when sub_servico_id in (77,88,89,90) then 1
                         else 0
