@@ -622,6 +622,7 @@ class AgywPrev extends Model {
                 }
                 else{   // Fora da escola
                     if($recursos_mandatorios >= 11 && $outros_recursos >= 5 && $sessoes_saaj >= 4 && $literacia_financeira >= 1 && ($sexualmente_activa == 0 || $sexualmente_activa == 1 && $testagem_hiv > 0)){
+
                         $this->addCompletude($desagregationMap, $districtId, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_pacote_primario');
                         array_push($agyw_prev[$districtId], $beneficiary_id);
                     }
