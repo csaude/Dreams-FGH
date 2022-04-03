@@ -536,11 +536,18 @@ class BeneficiariosController extends Controller
     private function getBeneficiaries($disaggregation, $ageBand, $enrollmentTime)
     {
         $ageBands = ['9-14','15-19', '20-24', '25-29'];
+        $enrollmentTimes = ['0_6','7_12', '13_24', '25+'];
         $beneficiaries = [];
         if ($ageBand == null) {
-            foreach ($ageBands as $aBand)
-            {
-                $beneficiaries = array_merge($beneficiaries, $disaggregation[$aBand][$enrollmentTime]);
+            foreach ($ageBands as $aBand) {
+                if ($enrollmentTime == null) {
+                    foreach($enrollmentTimes as $eTime) {
+                        $beneficiaries = array_merge($beneficiaries, $disaggregation[$aBand][$eTime]);
+                    }
+                }
+                else {
+                    $beneficiaries = array_merge($beneficiaries, $disaggregation[$aBand][$enrollmentTime]);
+                }
             }
         }
         else {
