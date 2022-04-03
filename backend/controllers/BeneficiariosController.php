@@ -882,9 +882,11 @@ class BeneficiariosController extends Controller
 
             if ($distritoId != null) {
 
-                $bairros  = Bairros::find()
+                /*$bairros  = Bairros::find()
                 ->where(['distrito_id' => $distritoId])
-                ->all();
+                ->all();*/
+
+                $bairros = ComiteLocalidades::find()->where(['c_distrito_id' => $distritoId])->all();
 
                 $map = array();
 
