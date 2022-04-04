@@ -42,7 +42,7 @@ class ServicosBeneficiadosController extends Controller
                 ],
                 'rules' => [
                     [
-                        'actions' => ['index','create','listas','servicos','listaservicos','listasubservicos','subservicos'],
+                        'actions' => ['index','create','listas','servicos','listaservicos','listasubservicos'],
 
                         'allow' => true,
                         'roles' => [
