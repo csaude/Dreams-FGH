@@ -29,6 +29,23 @@ use kartik\daterange\DateRangePicker;
   <div class="row"> 
     <div class="col-lg-12"> 
       <?php 
+      
+       $subservicosLista =
+       SubServicosDreams::find()
+       ->where(['=','status',1])
+       ->andwhere(['=','servico_id',$model->servico_id])
+       ->all();
+
+       $map = array();
+
+       foreach ($subservicosLista as $subServico){
+         if($subServico['mandatory']==1){
+             array_push($map,['id'=>$subServico['id'],'name'=>($subServico['name']." *")]);
+         }else{
+             array_push($map,['id'=>$subServico['id'],'name'=>$subServico['name']]);
+         }
+       }
+
         //if(isset($_REQUEST['id'])) {$_REQUEST['m']=filter_var($_REQUEST['id'], FILTER_SANITIZE_NUMBER_INT);}
         if(isset($_REQUEST['m'])&&$_REQUEST['m']>0) {
 
@@ -171,8 +188,7 @@ use kartik\daterange\DateRangePicker;
                 ])->label('Sub-Serviço/Intervenção'); 
           } else {
             echo $form->field($model, 'sub_servico_id')->widget(DepDrop::classname(), [
-                'data' =>(ArrayHelper::map(SubServicosDreams::find()->where(['=','status',1])->andwhere(['=','servico_id',$model->servico_id])->all(), 'id', 'name')),
-                                            
+                'data' =>(ArrayHelper::map($map, ['id'], ['name'])),
                 'options' => [
                   'id' =>'sub_servico_id',
                   'multiple'=>false,
