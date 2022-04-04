@@ -42,7 +42,7 @@ class ServicosBeneficiadosController extends Controller
                 ],
                 'rules' => [
                     [
-                        'actions' => ['index','create','listas','servicos','listaservicos','listasubservicos'],
+                        'actions' => ['index','create','listas','servicos','listaservicos','listasubservicos','subservicos'],
 
                         'allow' => true,
                         'roles' => [
@@ -280,5 +280,36 @@ class ServicosBeneficiadosController extends Controller
         }
         return ['output'=>'', 'selected'=>''];
 
+    }
+
+
+    public function actionSubservicos($idServico)
+    { 
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $map = [];
+
+        if (isset($idServico)) {
+
+            $servicoId = intval($idServico);
+
+            if ($servicoId != null) {
+
+                $subServicos  = SubServicosDreams::find()
+                ->where(['servico_id'=>$servicoId])
+                ->andWhere(['=','status',1])
+                ->all();
+
+                foreach ($subServicos as $subServico){
+                    if($subServico['mandatory']==1){
+                        array_push($map,['id'=>$subServico['id'],'name'=>($subServico['name']." *")]);
+                    }else{
+                        array_push($map,['id'=>$subServico['id'],'name'=>$subServico['name']]);
+                    }
+                }
+
+                return $map;
+            }
+        }
+        return ['map'=>'', 'selected'=>''];
     }
 }
