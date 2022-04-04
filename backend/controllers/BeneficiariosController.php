@@ -52,7 +52,7 @@ class BeneficiariosController extends Controller
                 ],
                 'rules' => [
                     [
-                        'actions' => ['index', 'view', 'create', 'lists','listasdistritos','listaspostos', 'listas', 'servicos', 'localidades', 'bairros', 'todos', 'filtros', 'relatorio', 'relatoriofy19', 'relatoriofy20q1', 'relatoriofy20q2', 'listdistricts'],
+                        'actions' => ['index', 'view', 'create', 'lists','listasdistritos','listaspostos', 'listas', 'servicos', 'localidades', 'bairros', 'todos', 'filtros', 'relatorio', 'relatoriofy19', 'relatoriofy20q1', 'relatoriofy20q2'],
 
                         'allow' => true,
                         'roles' => [
@@ -85,10 +85,11 @@ class BeneficiariosController extends Controller
                     ],
 
                     [
-                        'actions' => ['relatorioagyw',  'relatorioagywprev', 'exportlist', 'exportreport'],
+                        'actions' => ['relatorioagyw',  'relatorioagywprev', 'exportlist', 'exportreport', 'listdistricts'],
                         'allow' => true,
                         'roles' => [
-                            User::ROLE_ADMIN
+                            User::ROLE_ADMIN,
+                            User::ROLE_DOADOR
                         ],
                     ],
 
