@@ -115,6 +115,27 @@ use kartik\daterange\DateRangePicker;
     <div class="col-lg-4">
       <?php  
         if(!$model->isNewRecord) { 
+         echo $form->field($model, 'servico_id')->widget(DepDrop::classname(), [
+                              'data' =>(ArrayHelper::map(ServicosDream::find()->orderBy('name ASC')->where(['=','status',1])->all(), 'id', 'name')),
+                                          'options' => [
+                                            'id' =>'servico_id',
+                                            'multiple'=>false,
+                                            'placeholder' => '--Selecione o Serviço--'],
+                                            'type' => DepDrop::TYPE_SELECT2,
+                                            'select2Options' => ['pluginOptions' => ['allowClear' => true]],
+                                            'pluginOptions' => [
+                                                            'depends' => ['tipo_servico_id'],
+                                                            'url' => Url::to(['listaservicos']),
+                                                            'loadingText' => 'Lendo Area de Servicos ...',
+                                                        ]
+                                          ])->label('Serviço');     
+
+    
+
+        } else {
+
+
+        if (isset($_REQUEST['ts'])&&($_REQUEST['ts']>0)) {
           echo $form->field($model, 'servico_id')->widget(DepDrop::classname(), [
             'data' =>(ArrayHelper::map(ServicosDream::find()->orderBy('name ASC')->where(['=','status',1])->andwhere(['=','servico_id',$model->tipo_servico_id])->all(), 'id', 'name')),
                         'options' => [
