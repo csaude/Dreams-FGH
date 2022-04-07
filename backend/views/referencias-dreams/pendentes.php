@@ -221,6 +221,7 @@
             'format' => 'html',
             'value' => function ($model) {
               return isset($model->beneficiario)? $model->beneficiario->distrito['district_name'] : '';
+
             },
             'filter'=>ArrayHelper::map(
               $dists, 'district_code', 'district_name'

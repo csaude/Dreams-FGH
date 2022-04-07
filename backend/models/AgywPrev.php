@@ -491,11 +491,15 @@ class AgywPrev extends Model {
                         else 0
                     end) contracepcao,
                     sum(case
+<<<<<<< HEAD
                         when sub_servico_id in (216) then 1
                         else 0
                     end) sessoes_hiv_vbg_prep,
                     sum(case
                         when sub_servico_id in (201,202,203,204,205,206,210,211,212) then 1
+=======
+                        when sub_servico_id in (201,202,203,204,205,206,210,211,212,216) then 1
+>>>>>>> c0b9d25a0709b89d3aa868cf99a3159d5df0033c
                         else 0
                     end) sessoes_hiv_vbg,
                     sum(case
@@ -631,13 +635,13 @@ class AgywPrev extends Model {
                         //array_push($agyw_prev[$districtId], $beneficiary_id);
                     }
                     if($recursos_mandatorios >= 1 || $outros_recursos >= 1 || $sessoes_saaj >= 1 || $prevencao_violencia_estudante >= 1 || $cuidados_pos_violencia_us_outros >= 1 || $cuidados_pos_violencia_comunidade_outros >= 1){
+
                         $this->addCompletude($desagregationMap, $districtId, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'iniciaram_servico');
                         array_push($agyw_prev[$districtId], $beneficiary_id);
                     }
                 }
                 else{   // Fora da escola
                     if($recursos_mandatorios >= 11 && $outros_recursos >= 5 && $sessoes_saaj >= 4 && $literacia_financeira >= 1 && ($sexualmente_activa == 0 || $sexualmente_activa == 1 && $testagem_hiv > 0)){
-
                         $this->addCompletude($desagregationMap, $districtId, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_pacote_primario');
                         array_push($agyw_prev[$districtId], $beneficiary_id);
                     }
@@ -650,6 +654,7 @@ class AgywPrev extends Model {
                         //array_push($agyw_prev[$districtId], $beneficiary_id);
                     }
                     if($recursos_mandatorios >= 1 || $outros_recursos >= 1 || $sessoes_saaj >= 1 || $prevencao_violencia_rapariga >= 1 || $cuidados_pos_violencia_us_outros >= 1 || $cuidados_pos_violencia_comunidade_outros >= 1){
+
                         $this->addCompletude($desagregationMap, $districtId, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'iniciaram_servico');
                         array_push($agyw_prev[$districtId], $beneficiary_id);
                     }
