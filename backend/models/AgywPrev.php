@@ -554,7 +554,10 @@ class AgywPrev extends Model {
                         when sub_servico_id in (210,211,212) then 1
                         else 0
                     end) prevencao_violencia_15_mais,
-                    min(data_servico) data_servico 
+                    min(data_servico) data_servico,
+                    max(case
+                        when sub_servico_id in (40,82,83,84,85,86,87,214) then data_servico
+                    end) data_abordagens
                 from app_dream_vw_agyw_prev
                 where   
                         distrito_id in (".$distritos.") and
@@ -615,6 +618,7 @@ class AgywPrev extends Model {
             $data_servico = $row['data_servico'];
             $enrollmentTime = $this->getEnrollmentTimeInMonths($data_servico, $dataFim);
             $districtId = $row['distrito_id'];
+            $data_abordagens = $row['data_abordagens'];
 
             if($faixa_etaria == '9-14'){
                 if($vai_escola == 1){    //Na escola
@@ -708,15 +712,7 @@ class AgywPrev extends Model {
                 if($abordagens_socio_economicas > 0 && $idade_actual <= 25){
                     if ($idade_actual == 25){
                         // calcular idade quando recebeu o serviço; se for 25 descartar
-                        $query1 = "select max(data_servico) data_servico from app_dream_vw_agyw_prev
-                                    where beneficiario_id = :beneficiario_id
-                                    and sub_servico_id in (40,82,83,84,85,86,87,214)";
-
-                        $preparedQuery1 = Yii::$app->db->createCommand($query1);
-                        $preparedQuery1->bindParam(":beneficiario_id", $beneficiary_id);
-                        $result1 = $preparedQuery1->queryAll();
-
-                        $idade_servico = date_diff(date_create($data_nascimento), date_create($result1[0]['data_servico']));
+                        $idade_servico = date_diff(date_create($data_nascimento), date_create($data_abordagens));
 
                         if($idade_servico->y == 25){
                             continue;
