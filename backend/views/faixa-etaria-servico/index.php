@@ -30,45 +30,36 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-          //  'id',
-          [
-            'attribute'=>'faixa_id',
-            'value'=>'faixaEtaria.faixa_etaria',
-            'filter'=> ArrayHelper::map(FaixaEtaria::find()->where(['=','status','1'])->orderBy('faixa_etaria ASC')->asArray()->all(), 'id', 'faixa_etaria','nivel_intervencao_id')
-          ],
+            [
+              'attribute'=>'faixa_id',
+              'value'=>'faixaEtaria.faixa_etaria',
+              'filter'=> ArrayHelper::map(FaixaEtaria::find()->where(['=','status','1'])->orderBy('faixa_etaria ASC')->asArray()->all(), 'id', 'faixa_etaria','nivel_intervencao_id')
+            ],
 
-[
-          //  'attribute'=>'faixa_id',
-            'label'=>'Nivel de Intervencao',
-        //    'value'=>'faixaEtaria.nivel_intervencao_id',
-            'filter'=> ArrayHelper::map(NivelIntervensao::find()->where(['=','status','1'])->orderBy('id ASC')->asArray()->all(), 'id', 'name'),
-    'value' => function ($model) {
-          if($model->faixaEtaria['nivel_intervencao_id']==1) {return "Primario";} elseif($model->faixaEtaria['nivel_intervencao_id']==2){return "Secundario";}elseif($model->faixaEtaria['nivel_intervencao_id']==3){return "Contextual";} else {return "N/A";}
-      },
-          ],
+            [
+              'label'=>'Nivel de Intervenção',
+              'filter'=> ArrayHelper::map(NivelIntervensao::find()->where(['=','status','1'])->orderBy('id ASC')->asArray()->all(), 'id', 'name'),
+              'value' => function ($model) {
+                    return $model->faixaEtaria->nivelIntervensao['name'];
+                },
+            ],
 
-          [
-            'attribute'=>'servico_id',
-            'value'=>'servico.name',
-            'filter'=> ArrayHelper::map(ServicosDream::find()->where(['=','status','1'])->orderBy('name ASC')->asArray()->all(), 'id', 'name'),
-	    'contentOptions' => ['style' => 'width: 25%;', 'class' => 'text-left'],
-          ],
+            [
+              'attribute'=>'servico_id',
+              'value'=>'servico.name',
+              'filter'=> ArrayHelper::map(ServicosDream::find()->where(['=','status','1'])->orderBy('name ASC')->asArray()->all(), 'id', 'name'),
+              'contentOptions' => ['style' => 'width: 25%;', 'class' => 'text-left'],
+            ],
             
             'description',
-    [
+            [
               'attribute'=>'status',
-            'format' => 'raw',
-               'filter'=>array("1"=>"Activo","0"=>"Inactivo"),
-               'value' => function ($model) {
-            return  $model->status==1 ? '<i class="fa fa-success fa-check-circle"></i>': '<i class="fa fa-female"></i>';
-            },
+              'format' => 'raw',
+              'filter'=>array("1"=>"Activo","0"=>"Inactivo"),
+              'value' => function ($model) {
+                return  $model->status==1 ? '<i class="fa fa-success fa-check-circle"></i>': '<i class="fa fa-female"></i>';
+              },
             ],
-            // 'criado_por',
-            // 'actualizado_por',
-            // 'criado_em',
-            // 'actualizado_em',
-            // 'user_location',
-            // 'user_location2',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
