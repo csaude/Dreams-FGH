@@ -622,11 +622,11 @@ class AgywPrev extends Model {
 
             if($faixa_etaria == '9-14'){
                 if($vai_escola == 1){    //Na escola
-                    if($recursos_mandatorios >= 18 && $outros_recursos >= 6 && $sessoes_saaj >= 4 && $literacia_financeira >= 1 && ($sexualmente_activa == 0 || $sexualmente_activa == 1 && $testagem_hiv > 0)){
+                    if($recursos_mandatorios >= 18 && $outros_recursos >= 6 && $sessoes_saaj >= 4 && $literacia_financeira >= 1 && ($sexualmente_activa == 0 || $sexualmente_activa == 1 && ($testagem_hiv > 0 || $preservativos > 0))){
                         $this->addCompletude($desagregationMap, $districtId, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_pacote_primario');
                         array_push($agyw_prev[$districtId], $beneficiary_id);
                     }
-                    if($recursos_mandatorios >= 18 || $outros_recursos >= 6 || $sessoes_saaj >= 4 || $literacia_financeira >= 1 || ($sexualmente_activa == 1 && $testagem_hiv > 0)){
+                    if($recursos_mandatorios >= 18 || $outros_recursos >= 6 || $sessoes_saaj >= 4 || $literacia_financeira >= 1 || ($sexualmente_activa == 1 && ($testagem_hiv > 0 || $preservativos > 0))){
                         $this->addCompletude($desagregationMap, $districtId, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_servico_primario');
                         array_push($agyw_prev[$districtId], $beneficiary_id);
                     }
@@ -640,12 +640,12 @@ class AgywPrev extends Model {
                     }
                 }
                 else{   // Fora da escola
-                    if($recursos_mandatorios >= 11 && $outros_recursos >= 5 && $sessoes_saaj >= 4 && $literacia_financeira >= 1 && ($sexualmente_activa == 0 || $sexualmente_activa == 1 && $testagem_hiv > 0)){
+                    if($recursos_mandatorios >= 11 && $outros_recursos >= 5 && $sessoes_saaj >= 4 && $literacia_financeira >= 1 && ($sexualmente_activa == 0 || $sexualmente_activa == 1 && ($testagem_hiv > 0 || $preservativos > 0))){
 
                         $this->addCompletude($desagregationMap, $districtId, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_pacote_primario');
                         array_push($agyw_prev[$districtId], $beneficiary_id);
                     }
-                    if($recursos_mandatorios >= 11 || $outros_recursos >= 5 || $sessoes_saaj >= 4 || $literacia_financeira >= 1 || ($sexualmente_activa == 1 && $testagem_hiv > 0)){
+                    if($recursos_mandatorios >= 11 || $outros_recursos >= 5 || $sessoes_saaj >= 4 || $literacia_financeira >= 1 || ($sexualmente_activa == 1 && ($testagem_hiv > 0 || $preservativos > 0))){
                         $this->addCompletude($desagregationMap, $districtId, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_servico_primario');
                         array_push($agyw_prev[$districtId], $beneficiary_id);
                     }
@@ -658,7 +658,7 @@ class AgywPrev extends Model {
                         array_push($agyw_prev[$districtId], $beneficiary_id);
                     }
                 }
-                if($subsidio_escolar > 0 || $preservativos > 0 || $contracepcao > 0 || ($sexualmente_activa == 0 && $testagem_hiv > 0) || $cuidados_pos_violencia_us > 0 || $cuidados_pos_violencia_comunidade > 0 || $outros_servicos_saaj > 0){
+                if($subsidio_escolar > 0 || $contracepcao > 0 || ($sexualmente_activa == 0 && ($testagem_hiv > 0 || $preservativos > 0)) || $cuidados_pos_violencia_us > 0 || $cuidados_pos_violencia_comunidade > 0 || $outros_servicos_saaj > 0){
                     $this->addCompletude($desagregationMap, $districtId, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_servico_secundario');
                     array_push($agyw_prev[$districtId], $beneficiary_id);
                 }
@@ -688,7 +688,7 @@ class AgywPrev extends Model {
                     $this->addCompletude($desagregationMap, $districtId, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_servico_primario');
                     array_push($agyw_prev[$districtId], $beneficiary_id);
                 }
-                if($recursos_sociais_15_mais > 0 || ($faixa_etaria == '15-19' && ($subsidio_escolar > 0 || $recursos_antigo > 9)) || $cuidados_pos_violencia_us >0 || $cuidados_pos_violencia_comunidade > 0 || $abordagens_socio_economicas > 0 || $outros_servicos_saaj > 0 || $prep > 0 || $contracepcao > 0){
+                if(($faixa_etaria == '15-19' && ($subsidio_escolar > 0 || $recursos_antigo > 9)) || $cuidados_pos_violencia_us >0 || $cuidados_pos_violencia_comunidade > 0 || $abordagens_socio_economicas > 0 || $outros_servicos_saaj > 0 || $prep > 0 || $contracepcao > 0){
                     $this->addCompletude($desagregationMap, $districtId, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_servico_secundario');
                     array_push($agyw_prev[$districtId], $beneficiary_id);
                 }
@@ -696,7 +696,7 @@ class AgywPrev extends Model {
                     $this->addCompletude($desagregationMap, $districtId, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_servico_violencia');
                     //array_push($agyw_prev[$districtId], $beneficiary_id);
                 }
-                if($sessoes_hiv_vbg > 0 || $prevencao_violencia_15_mais > 0 || ($faixa_etaria == '15-19' && $recursos_antigo > 0 || $cuidados_pos_violencia_us_outros >= 1 || $cuidados_pos_violencia_comunidade_outros >= 1 || $sessoes_hiv_vbg_prep >= 1)){
+                if($recursos_sociais_15_mais > 0 || $sessoes_hiv_vbg > 0 || $prevencao_violencia_15_mais > 0 || ($faixa_etaria == '15-19' && $recursos_antigo > 0 || $cuidados_pos_violencia_us_outros >= 1 || $cuidados_pos_violencia_comunidade_outros >= 1 || $sessoes_hiv_vbg_prep >= 1)){
                     $this->addCompletude($desagregationMap, $districtId, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'iniciaram_servico');
                     array_push($agyw_prev[$districtId], $beneficiary_id);
                 }
@@ -726,7 +726,6 @@ class AgywPrev extends Model {
                 $this->addCompletude($desagregationMap, $districtId, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'tiveram_intervencao_subsidio_escolar');
                 //array_push($agyw_prev[$districtId], $beneficiary_id);
             }
-
         }
 
         foreach($districts as $district){
