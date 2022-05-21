@@ -539,6 +539,10 @@ class AgywPrev extends Model {
                         else 0
                     end) abordagens_socio_economicas,
                     sum(case
+                        when sub_servico_id in (214) then 1
+                        else 0
+                    end) disag_abordagens_socio_economicas,
+                    sum(case
                         when sub_servico_id = 156 then 1
                         else 0
                     end) prep,
@@ -556,7 +560,7 @@ class AgywPrev extends Model {
                     end) prevencao_violencia_15_mais,
                     min(data_servico) data_servico,
                     max(case
-                        when sub_servico_id in (40,82,83,84,85,86,87,214) then data_servico
+                        when sub_servico_id in (214) then data_servico
                     end) data_abordagens
                 from app_dream_vw_agyw_prev
                 where   
@@ -611,6 +615,7 @@ class AgywPrev extends Model {
             $outros_servicos_saaj = $row['outros_servicos_saaj'];
             $recursos_sociais_15_mais = $row['recursos_sociais_15_mais'];
             $abordagens_socio_economicas = $row['abordagens_socio_economicas'];
+            $disag_abordagens_socio_economicas = $row['disag_abordagens_socio_economicas'];
             $prep = $row['prep'];
             $prevencao_violencia_rapariga = $row['prevencao_violencia_rapariga'];
             $prevencao_violencia_estudante = $row['prevencao_violencia_estudante'];
@@ -709,7 +714,7 @@ class AgywPrev extends Model {
                     $this->addCompletude($desagregationMap, $districtId, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_servico_primario');
                     array_push($agyw_prev[$districtId], $beneficiary_id);
                 }
-                if($abordagens_socio_economicas > 0 && $idade_actual <= 25){
+                if($disag_abordagens_socio_economicas > 0 && $idade_actual <= 25){
                     if ($idade_actual == 25){
                         // calcular idade quando recebeu o serviço; se for 25 descartar
                         $idade_servico = date_diff(date_create($data_nascimento), date_create($data_abordagens));
@@ -1067,6 +1072,4 @@ class AgywPrev extends Model {
 
         return $result;
     }
-
-
 }
