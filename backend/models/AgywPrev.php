@@ -627,7 +627,8 @@ class AgywPrev extends Model {
 
             if($faixa_etaria == '9-14'){
                 if($vai_escola == 1){    //Na escola
-                    if($recursos_mandatorios >= 18 && $outros_recursos >= 6 && $sessoes_saaj >= 4 && $literacia_financeira >= 1 && ($sexualmente_activa == 0 || $sexualmente_activa == 1 && ($testagem_hiv > 0 || $preservativos > 0))){
+                    if($recursos_mandatorios >= 18 && $outros_recursos >= 6 && $sessoes_saaj >= 4 && $literacia_financeira >= 1 && ($sexualmente_activa == 0 || $sexualmente_activa == 1 && ($testagem_hiv > 0 && $preservativos > 0))){
+
                         $this->addCompletude($desagregationMap, $districtId, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_pacote_primario');
                         array_push($agyw_prev[$districtId], $beneficiary_id);
                     }
@@ -645,7 +646,7 @@ class AgywPrev extends Model {
                     }
                 }
                 else{   // Fora da escola
-                    if($recursos_mandatorios >= 11 && $outros_recursos >= 5 && $sessoes_saaj >= 4 && $literacia_financeira >= 1 && ($sexualmente_activa == 0 || $sexualmente_activa == 1 && ($testagem_hiv > 0 || $preservativos > 0))){
+                    if($recursos_mandatorios >= 11 && $outros_recursos >= 5 && $sessoes_saaj >= 4 && $literacia_financeira >= 1 && ($sexualmente_activa == 0 || $sexualmente_activa == 1 && ($testagem_hiv > 0 && $preservativos > 0))){
 
                         $this->addCompletude($desagregationMap, $districtId, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_pacote_primario');
                         array_push($agyw_prev[$districtId], $beneficiary_id);
@@ -668,7 +669,7 @@ class AgywPrev extends Model {
                     array_push($agyw_prev[$districtId], $beneficiary_id);
                 }
                 // Antigo curriculo
-                if($recursos_antigo > 9 && $sessoes_saaj >= 4 && ($sexualmente_activa == 1 && ($preservativos > 0 || $testagem_hiv > 0))){
+                if($recursos_antigo > 9 && $sessoes_saaj >= 4 && ($sexualmente_activa == 1 && ($preservativos > 0 && $testagem_hiv > 0))){
                     $this->addCompletude($desagregationMap, $districtId, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_pacote_primario');
                     array_push($agyw_prev[$districtId], $beneficiary_id);
                 }
