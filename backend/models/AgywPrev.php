@@ -668,7 +668,6 @@ class AgywPrev extends Model {
                     $this->addCompletude($desagregationMap, $districtId, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_servico_secundario');
                     array_push($agyw_prev[$districtId], $beneficiary_id);
                 }
-                // Antigo curriculo
                 if($recursos_antigo > 9 && $sessoes_saaj >= 4 && ($sexualmente_activa == 1 && ($preservativos > 0 && $testagem_hiv > 0))){
                     $this->addCompletude($desagregationMap, $districtId, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_pacote_primario');
                     array_push($agyw_prev[$districtId], $beneficiary_id);
