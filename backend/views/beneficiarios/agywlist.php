@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 $indicatorID = $_GET['iID'];
 $enrollmentTime = isset($_GET['eTime'])? str_replace('_', '-',$_GET['eTime']).' meses': "Todos";
-$ageBand = isset($_GET['aBand'])? str_replace('_', '-',$_GET['aBand']).' anos': "Todas";
+$ageBand = isset($_GET['aBand'])? str_replace('9-14', '10-14',str_replace('_', '-',$_GET['aBand'])).' anos': "Todas";
 
 switch($indicatorID){
   case 0: 
