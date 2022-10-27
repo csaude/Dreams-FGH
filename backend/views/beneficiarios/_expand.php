@@ -235,7 +235,7 @@ foreach ($comservicos as $core) {
   if($queryC>0)
   {
   $query = ServicosBeneficiados::find()->where(['=','beneficiario_id',$model->member_id])
-                     ->orderBy('data_beneficio DESC')
+                     ->orderBy('id DESC')
                     ->all();
   foreach($query as $query) {   ?>
 
