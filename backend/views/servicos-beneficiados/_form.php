@@ -114,9 +114,14 @@ use kartik\daterange\DateRangePicker;
   </div>
     <div class="col-lg-4">
       <?php  
-        if(!$model->isNewRecord) { 
+        if(!$model->isNewRecord) {
+          $services = ServicosDream::find()->where(['=','status',1])->andwhere(['=','servico_id',$model->tipo_servico_id])->all();
+          if($model->servicos->status == 0) {
+            array_push($services, $model->servicos);
+          }
+          usort($services, function($a, $b) { return $a->name <=> $b->name; });
           echo $form->field($model, 'servico_id')->widget(DepDrop::classname(), [
-            'data' =>(ArrayHelper::map(ServicosDream::find()->orderBy('name ASC')->where(['=','status',1])->andwhere(['=','servico_id',$model->tipo_servico_id])->all(), 'id', 'name')),
+            'data' =>(ArrayHelper::map($services, 'id', 'name')),
                         'options' => [
                           'id' =>'servico_id',
                           'multiple'=>false,
@@ -169,39 +174,61 @@ use kartik\daterange\DateRangePicker;
     </div>    
 
     <div class="col-lg-4">   
-      <?php 
-          if (isset($_REQUEST['sid'])&&($_REQUEST['sid']>0)) {
-            echo $form->field($model, 'sub_servico_id')->widget(DepDrop::classname(), [
-                'data' =>(ArrayHelper::map(SubServicosDreams::find()->where(['=','status',1])->andwhere(['=','servico_id',$_REQUEST['sid']])->all(), 'id', 'name')),
-                                            
-                'options' => [
-                  'id' =>'sub_servico_id',
-                  'multiple'=>false,
-                  'placeholder' => '--Selecione o Sub-Serviço/Intervenção--'],
-                  'type' => DepDrop::TYPE_SELECT2,
-                  'select2Options' => ['pluginOptions' => ['allowClear' => true]],
-                  'pluginOptions' => [
-                                  'depends' => ['tipo_servico_id','servico_id'],
-                                  'url' => Url::to(['listasubservicos']),
-                                  'loadingText' => 'Lendo Area de Sub-Servicos ...',
-                              ]
-                ])->label('Sub-Serviço/Intervenção'); 
-          } else {
-            echo $form->field($model, 'sub_servico_id')->widget(DepDrop::classname(), [
-                'data' =>(ArrayHelper::map($map, ['id'], ['name'])),
-                'options' => [
-                  'id' =>'sub_servico_id',
-                  'multiple'=>false,
-                  'placeholder' => '--Selecione o Sub-Serviço/Intervenção--'],
-                  'type' => DepDrop::TYPE_SELECT2,
-                  'select2Options' => ['pluginOptions' => ['allowClear' => true]],
-                  'pluginOptions' => [
-                                  'depends' => ['tipo_servico_id','servico_id'],
-                                  'url' => Url::to(['listasubservicos']),
-                                  'loadingText' => 'Lendo Area de Sub-Servicos ...',
-                              ]
-                ])->label('Sub-Serviço/Intervenção');
-            
+      <?php  
+        if(!$model->isNewRecord) {
+          $subServices = SubServicosDreams::find()->where(['=','status',1])->andwhere(['=','servico_id',$model->servico_id])->all();
+          if($model->subServicos->status == 0) {
+            array_push($subServices, $model->subServicos);
+          }
+          usort($services, function($a, $b) { return $a->name <=> $b->name; });
+          echo $form->field($model, 'sub_servico_id')->widget(DepDrop::classname(), [
+            'data' =>(ArrayHelper::map($subServices, 'id', 'name')),
+                        'options' => [
+                          'id' =>'sub_servico_id',
+                          'multiple'=>false,
+                          'placeholder' => '--Selecione o Sub-Serviço/Intervenção--'],
+                          'type' => DepDrop::TYPE_SELECT2,
+                          'select2Options' => ['pluginOptions' => ['allowClear' => true]],
+                          'pluginOptions' => [
+                                          'depends' => ['tipo_servico_id','servico_id'],
+                                          'url' => Url::to(['listasubservicos']),
+                                          'loadingText' => 'Lendo Area de Sub-Servicos ...',
+                                      ]
+                        ])->label('Sub-Serviço/Intervenção');     
+        } else { 
+            if (isset($_REQUEST['sid'])&&($_REQUEST['sid']>0)) {
+              echo $form->field($model, 'sub_servico_id')->widget(DepDrop::classname(), [
+                  'data' =>(ArrayHelper::map(SubServicosDreams::find()->where(['=','status',1])->andwhere(['=','servico_id',$_REQUEST['sid']])->all(), 'id', 'name')),
+                                              
+                  'options' => [
+                    'id' =>'sub_servico_id',
+                    'multiple'=>false,
+                    'placeholder' => '--Selecione o Sub-Serviço/Intervenção--'],
+                    'type' => DepDrop::TYPE_SELECT2,
+                    'select2Options' => ['pluginOptions' => ['allowClear' => true]],
+                    'pluginOptions' => [
+                                    'depends' => ['tipo_servico_id','servico_id'],
+                                    'url' => Url::to(['listasubservicos']),
+                                    'loadingText' => 'Lendo Area de Sub-Servicos ...',
+                                ]
+                  ])->label('Sub-Serviço/Intervenção'); 
+            } else {
+              echo $form->field($model, 'sub_servico_id')->widget(DepDrop::classname(), [
+                  'data' =>(ArrayHelper::map($map, ['id'], ['name'])),
+                  'options' => [
+                    'id' =>'sub_servico_id',
+                    'multiple'=>false,
+                    'placeholder' => '--Selecione o Sub-Serviço/Intervenção--'],
+                    'type' => DepDrop::TYPE_SELECT2,
+                    'select2Options' => ['pluginOptions' => ['allowClear' => true]],
+                    'pluginOptions' => [
+                                    'depends' => ['tipo_servico_id','servico_id'],
+                                    'url' => Url::to(['listasubservicos']),
+                                    'loadingText' => 'Lendo Area de Sub-Servicos ...',
+                                ]
+                  ])->label('Sub-Serviço/Intervenção');
+              
+            }
           }
       ?>
     </div>	
