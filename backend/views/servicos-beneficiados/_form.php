@@ -192,7 +192,7 @@ use kartik\daterange\DateRangePicker;
                           'pluginOptions' => [
                                           'depends' => ['tipo_servico_id','servico_id'],
                                           'url' => Url::to(['listasubservicos']),
-                                          'loadingText' => 'Lendo Area de Servicos ...',
+                                          'loadingText' => 'Lendo Area de Sub-Servicos ...',
                                       ]
                         ])->label('Sub-Serviço/Intervenção');     
         } else { 
