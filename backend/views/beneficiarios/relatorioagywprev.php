@@ -20,7 +20,7 @@ $i=0;
 
 	    <div class="panel panel-primary">
             <div class="panel-heading">
-                <i class="fa fa-dashboard  text-primary"></i> <strong> PEPFAR MER 2.6 Indicador Semi-Annual AGYW_PREV  </strong>
+                <i class="fa fa-dashboard  text-primary"></i> <strong> PEPFAR MER 2.6.1 Indicador Semi-Annual AGYW_PREV  </strong>
             </div>
             <div class="panel-body">
                 <div class="row"> </div>

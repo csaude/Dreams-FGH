@@ -599,7 +599,7 @@ $ben=Beneficiarios::find()->where(['provin_code'=>5])->andWhere(['emp_status'=>1
                                   <i class="fa fa-angle-double-right"></i> FILTROS UTILIZADORES</a>
                                 </li>
                                 <li>
-                                    <?= Html::a(Yii::t('app', '<i class="fa fa-angle-double-right"></i> PEPFAR MER 2.6 AGYW_PREV'), ['/beneficiarios/relatorioagyw']) ?> 
+                                    <?= Html::a(Yii::t('app', '<i class="fa fa-angle-double-right"></i> PEPFAR MER 2.6.1 AGYW_PREV'), ['/beneficiarios/relatorioagyw']) ?> 
                                 </li>
 
                             <?php } ?>  

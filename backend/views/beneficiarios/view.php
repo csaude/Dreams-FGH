@@ -311,7 +311,7 @@ if($idade<10||$idade>24) {
 $sem_idade=true;
 } else { */?>
 
-<a class="label label-primary" href="/backend/web/index.php/servicos-beneficiados/create.dreams?m=<?= $model->id;?>&amp;ts=1.dreams" 
+<a class="label label-primary" href="../servicos-beneficiados/create.dreams?m=<?= $model->id;?>&amp;ts=1.dreams" 
      target="_self"><i class="fa fa-plus-square"></i> Servi&ccedil;o DREAMS</a>&nbsp;
 
 <?php Html::a('<i class="fa fa-plus-square"></i> Servi&ccedil;o DREAMS', ['servicos-beneficiados/create.dreams?m='.$model->id.'&ts=1'], ['data-toggle'=>'modal', 'data-target'=>'#myModal', 'target'=>'_blank','class' => 'label label-primary']) ?>&nbsp;
@@ -395,7 +395,7 @@ echo "<tr>
 					 
 				</table>
 <p align="right">
-	<a class="label label-primary" href="/backend/web/index.php/servicos-beneficiados/create.dreams?m=<?= $model->id;?>&amp;ts=1.dreams" data-toggle="modal"  target="_self"><i class="fa fa-plus-square"></i> Servi&ccedil;o DREAMS</a>&nbsp;
+	<a class="label label-primary" href="../servicos-beneficiados/create.dreams?m=<?= $model->id;?>&amp;ts=1.dreams" data-toggle="modal"  target="_self"><i class="fa fa-plus-square"></i> Servi&ccedil;o DREAMS</a>&nbsp;
 
 <?php Html::a('<i class="fa fa-plus-square"></i> Servi&ccedil;o DREAMS', ['servicos-beneficiados/create.dreams?m='.$model->id.'&ts=1'], ['data-toggle'=>'modal', 'data-target'=>'#myModal', 'class' => 'label label-primary']) ?>&nbsp;
 
