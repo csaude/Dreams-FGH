@@ -714,11 +714,11 @@ class AgywPrev extends Model {
                     array_push($agyw_prev[$districtId], $beneficiary_id);
                 }
             }else{  // 15-24 Anos
-                if($preservativos > 0 && $sessoes_hiv_vbg >= 9 && $testagem_hiv > 0 && ($literacia_financeira >= 1 || $literacia_financeira_aflateen >= 9)) {
+                if($preservativos > 0 && $sessoes_hiv_vbg >= 9 && $testagem_hiv > 0 && ($literacia_financeira >= 1 || $literacia_financeira_aflateen >= 9) && ($data_registo < '2022-09-21 00:00:00' || $sessoes_hiv_vbg_prep >= 1 && $data_registo >= '2022-09-21 00:00:00')) {
                     $this->addCompletude($desagregationMap, $districtId, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_pacote_primario');
                     array_push($agyw_prev[$districtId], $beneficiary_id);
                 }
-                if($preservativos > 0 || $sessoes_hiv_vbg >= 9 || $testagem_hiv > 0 || $literacia_financeira >= 1 || $literacia_financeira_aflateen >= 9) {
+                if($preservativos > 0 || ($sessoes_hiv_vbg >= 9 && ($data_registo < '2022-09-21 00:00:00' || $sessoes_hiv_vbg_prep >= 1 && $data_registo >= '2022-09-21 00:00:00')) || $testagem_hiv > 0 || $literacia_financeira >= 1 || $literacia_financeira_aflateen >= 9) {
                     $this->addCompletude($desagregationMap, $districtId, $enrollmentTime, $beneficiary_id, $faixa_etaria, 'completaram_servico_primario');
                     array_push($agyw_prev[$districtId], $beneficiary_id);
                 }
