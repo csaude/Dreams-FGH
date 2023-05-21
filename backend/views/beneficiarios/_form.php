@@ -287,7 +287,7 @@ isset(Yii::$app->user->identity->localidade_id)&&(Yii::$app->user->identity->loc
 
     <?= 
       $form->field($model, 'district_code')->widget(DepDrop::classname(), [
-      'data' =>(ArrayHelper::map(Distritos::find()->andwhere(['=','province_code',$model->provin_code])->all(), 'district_code', 'district_name')),
+      'data' =>(ArrayHelper::map(Distritos::find()->andwhere(['<>','piloto_dlt',1])->andwhere(['=','province_code',$model->provin_code])->all(), 'district_code', 'district_name')),
                   'options' => [
                     'id' =>'district_code',
                     'multiple'=>false,
