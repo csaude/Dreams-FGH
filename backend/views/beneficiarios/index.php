@@ -252,8 +252,8 @@ function core($k){
         // set your toolbar
         'toolbar'=> [
           [
-            'content'=>Html::a(Yii::t('app', '<i class="glyphicon glyphicon-plus"></i>'), ['create'], ['class' => 'btn btn-success']).' '.
-                      Html::a('<i class="glyphicon glyphicon-repeat"></i>', [''], ['data-pjax'=>0, 'class'=>'btn btn-default', 'title'=>'Reset List'])
+            'content'=>!isset(Yii::$app->user->identity->piloto_dlt) ? Html::a(Yii::t('app', '<i class="glyphicon glyphicon-plus"></i>'), ['create'], ['class' => 'btn btn-success']).' '.
+                      Html::a('<i class="glyphicon glyphicon-repeat"></i>', [''], ['data-pjax'=>0, 'class'=>'btn btn-default', 'title'=>'Reset List']) : ''
           ],
           '{export}',
           '{toggleData}',
@@ -279,7 +279,10 @@ function core($k){
 
   <p>
     <?= Html::a('<i class="glyphicon glyphicon-home"></i>', ['site/index'], ['class' => 'btn btn-danger']) ?>
-      <?= Html::a('<i class="fa fa-plus"></i> Novo Beneficiário', ['create'], ['class' => 'btn btn-success']) ?>
+    <?php
+      if(!isset(Yii::$app->user->identity->piloto_dlt)) { ?>
+        <?= Html::a('<i class="fa fa-plus"></i> Novo Beneficiário', ['create'], ['class' => 'btn btn-success']) ?> 
+        <?php } ?>
   </p>
 
 
