@@ -225,7 +225,7 @@ class BeneficiariosSearch extends Beneficiarios
 $query = Beneficiarios::find()->andFilterWhere(['NOT IN','id',$ids])->andWhere(['emp_status'=>1]);
 */
 
-$query = Beneficiarios::find()->where(['provin_code'=>5])->andWhere(['NOT IN','district_code',[18,30]])->andWhere(['emp_status'=>1]);
+$query = Beneficiarios::find()->andWhere(['NOT IN','district_code',[18,30]])->andWhere(['emp_status'=>1]);
 
 }
 

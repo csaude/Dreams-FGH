@@ -52,7 +52,7 @@ class BeneficiariosDreamsSearch extends BeneficiariosDreams
     } elseif(Yii::$app->user->identity->role==20) {
 
 
-    $query = Beneficiarios::find()->where(['provin_code'=>5])->andWhere(['NOT IN','district_code',[18,30]])->andWhere(['emp_status'=>1])->andWhere(['=','emp_gender',2]);
+    $query = Beneficiarios::find()->where(['NOT IN','district_code',[18,30]])->andWhere(['emp_status'=>1])->andWhere(['=','emp_gender',2]);
 
     }
 
