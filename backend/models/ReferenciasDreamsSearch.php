@@ -59,7 +59,8 @@ class ReferenciasDreamsSearch extends ReferenciasDreams
                 ->innerjoin('user u', '`p`.`user_id` = `u`.`id`')
                 ->innerjoin('profile p1', '`app_dream_referencias`.`notificar_ao` = `p1`.`id`') 
                 ->innerjoin('user u1', '`p1`.`user_id` = `u1`.`id`')
-                ->where(['app_dream_referencias.status' => 1]);
+                ->where(['app_dream_referencias.status' => 1])
+                ->andWhere(['NOT IN','hs_hr_employee.district_code',[18,30]]);
 
             if (!empty($district)) {
                 $bens=Beneficiarios::find()->where(['=','district_code',$district])->andWhere(['emp_status'=>1])->asArray()->all();
@@ -78,7 +79,7 @@ class ReferenciasDreamsSearch extends ReferenciasDreams
             if (isset(Yii::$app->user->identity->provin_code)&&(Yii::$app->user->identity->provin_code>0)) {
                 $prov=Yii::$app->user->identity->provin_code;
                 $provis = Provincias::find()->where(['id'=>$prov])->asArray()->one();
-                $dist= Distritos::find()->where(['province_code'=>$provis])->asArray()->all();
+                $dist= Distritos::find()->where(['province_code'=>$provis])->andwhere(['piloto_dlt'=>null])->asArray()->all();
     
                 $bens=Beneficiarios::find()->where(['IN','district_code',$dist])->andWhere(['emp_status'=>1])->asArray()->all();
                 $ben_id=ArrayHelper::getColumn($bens, 'id');

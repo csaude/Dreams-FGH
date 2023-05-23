@@ -206,11 +206,11 @@ class BeneficiariosSearch extends Beneficiarios
      */
     public function search($params)
     {
-        $query = Beneficiarios::find()->where(['emp_status'=>1]);
+        $query = Beneficiarios::find()->where(['emp_status'=>1])->andWhere(['NOT IN','district_code',[18,30]]);
 		if (isset(Yii::$app->user->identity->role)&&(Yii::$app->user->identity->role>0)) { 
             if(isset(Yii::$app->user->identity->provin_code)&&(Yii::$app->user->identity->provin_code>0)) {
             $prov=(int)Yii::$app->user->identity->provin_code;
-            $query = Beneficiarios::find()->where(['provin_code'=>$prov])->andWhere(['emp_status'=>1]);
+            $query = Beneficiarios::find()->where(['provin_code'=>$prov])->andWhere(['NOT IN','district_code',[18,30]])->andWhere(['emp_status'=>1]);
 
             } elseif(Yii::$app->user->identity->role==20) {
 
@@ -225,12 +225,12 @@ class BeneficiariosSearch extends Beneficiarios
 $query = Beneficiarios::find()->andFilterWhere(['NOT IN','id',$ids])->andWhere(['emp_status'=>1]);
 */
 
-$query = Beneficiarios::find()->where(['provin_code'=>5])->where(['emp_status'=>1]);
+$query = Beneficiarios::find()->where(['provin_code'=>5])->andWhere(['NOT IN','district_code',[18,30]])->andWhere(['emp_status'=>1]);
 
 }
 
 } else {
-$query = Beneficiarios::find()->where(['emp_status'=>1]);
+$query = Beneficiarios::find()->where(['emp_status'=>1])->andWhere(['NOT IN','ditrict_code',[18,30]]);
 }
 		
 
