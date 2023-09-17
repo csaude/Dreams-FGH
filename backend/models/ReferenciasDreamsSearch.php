@@ -60,7 +60,7 @@ class ReferenciasDreamsSearch extends ReferenciasDreams
                 ->innerjoin('profile p1', '`app_dream_referencias`.`notificar_ao` = `p1`.`id`') 
                 ->innerjoin('user u1', '`p1`.`user_id` = `u1`.`id`')
                 ->where(['app_dream_referencias.status' => 1])
-                ->andWhere(['NOT IN','hs_hr_employee.district_code',[18,30]]);
+                ->andWhere(['NOT IN','hs_hr_employee.district_code',[7,18,26,27,29,30]]);
 
             if (!empty($district)) {
                 $bens=Beneficiarios::find()->where(['=','district_code',$district])->andWhere(['emp_status'=>1])->asArray()->all();
