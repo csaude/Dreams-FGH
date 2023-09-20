@@ -405,7 +405,7 @@ class BeneficiariosController extends Controller
         if (isset(Yii::$app->user->identity->provin_code)&&Yii::$app->user->identity->provin_code>0)
         {
 
-            $dists=Distritos::find()->where(['province_code'=>(int)Yii::$app->user->identity->provin_code])->asArray()->all();
+            $dists=Distritos::find()->where(['province_code'=>(int)Yii::$app->user->identity->provin_code])->andwhere(['piloto_dlt'=>null])->asArray()->all();
             $dist=ArrayHelper::getColumn($dists, 'district_code');
 
             $orgs=Organizacoes::find()->where(['IN','distrito_id',$dist])->orderBy('parceria_id ASC')->asArray()->all();
@@ -414,7 +414,7 @@ class BeneficiariosController extends Controller
 
             $orgs=Organizacoes::find()->where(['=', 'status', 1])->orderBy('parceria_id ASC')->asArray()->all();
 
-            $dists=Distritos::find()->asArray()->all();
+            $dists=Distritos::find()->where(['piloto_dlt'=>null])->asArray()->all();
             $dist=ArrayHelper::getColumn($dists, 'district_code');
 
         }
@@ -863,6 +863,7 @@ class BeneficiariosController extends Controller
 
                 $distritos  = Distritos::find() 
                 ->where(['province_code'=>$provinciaId])
+                ->andwhere(['piloto_dlt'=>null])
                 ->all();
 
                 $map = array();
